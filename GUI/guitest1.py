@@ -3,6 +3,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import*
 from PyQt5.QtWidgets import*
 import sys
+import ntpath
+
+from Core.SubsystemSchedule import SubsystemSchedule
+
+from GUI.MyTimelineWidget import MyTimelineWidget
+from GUI.TableView import TableView
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
@@ -38,15 +44,22 @@ class Ui(QtWidgets.QMainWindow):
         print("button was pressed")
         
     def openFileExplorer(self):
-        filename = QFileDialog.getOpenFileName()
-        
-        self.add_new_tab(filename)
-    def add_new_tab(self, filename, label ="blank" ):
-         browser = MyTableWidget(self)
-         browser.filesname = filename
-         i = self.tabs.addTab(browser, label) 
-         print(i)
-         self.tabs.setCurrentIndex(i) 
+        file_path, idk = QFileDialog.getOpenFileName()
+
+        file_name = ntpath.basename(file_path)
+
+        self.add_new_tab(file_path, file_name=file_name)
+
+    def add_new_tab(self, file_path, file_name= "No Name Found"):
+        data = {'col1': ['1', '2', '3', '4'],
+        'col2': ['1', '2', '1', '3'],
+        'col3': ['1', '1', '2', '1']}
+
+        # browser = MyTableWidget(self)
+        browser = TableView(file_path, data, 4, 8)
+        browser.filesname = file_path
+        i = self.tabs.addTab(browser, file_name)
+        self.tabs.setCurrentIndex(i)
     
     def tab_open_doubleclick(self, i): 
   
@@ -59,8 +72,7 @@ class Ui(QtWidgets.QMainWindow):
   
         # get the curl 
         #qurl = self.tabs.currentWidget().url() 
-  
-       
+
         print(i)
         # update the title 
         self.update_title(self.tabs.currentWidget())
@@ -82,105 +94,7 @@ class Ui(QtWidgets.QMainWindow):
   
         # get the page title 
         title = self.tabs.currentWidget().filesname
-  
-        # set the window title 
-        # self.setWindowTitle("% s - Geek PyQt5" % title)
-        # print("% s - Geek PyQt5" % title)
-    
-    
-class MyTableWidget(QtWidgets.QWidget):
-    
-    def __init__(self, parent):
-        self.filesname = "blank"
-        super(MyTableWidget, self).__init__(parent)
-        uic.loadUi('MyTab.ui', self)
-        timeline = MyTimelineWidget(self)
 
-        timeline.addBox(50, 500, 1, "blue")
-        timeline.addBox(50, 200, 2, "red")
-        self.show()
-        # Add tabs
-    
-        
-  #  @pyqtSlot()
-    def on_click(self):
-        print("\n")
-        for currentQTableWidgetItem in self.tableWidget.selectedItems():
-            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
-
-
-class MyTimelineWidget(QtWidgets.QGraphicsView):
-    def __init__(self, parent):
-        print(parent)
-        super(MyTimelineWidget, self).__init__(parent)
-        self.setScene(QtWidgets.QGraphicsScene(self))
-
-        print(parent.geometry().width())
-        self.setGeometry(0, parent.geometry().bottomLeft().y() + 100, 1500, 300)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        brush = QtWidgets.QApplication.palette().brush(QtGui.QPalette.Window)
-        self.setBackgroundBrush(brush)
-
-        for x in range(4):
-            for i in range(100):
-                self.drawLine(100 * i + 100, parent.geometry().topLeft().y(), "black")
-
-    def addBox(self, startTime, endTime, row, color: str):
-
-            xValue = startTime + 100
-            yValue = row * 75
-
-            rect_item = HorizontalItem(
-                QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50))
-            )
-            rect_item.setBrush(QtGui.QBrush(QtGui.QColor(color)))
-            self.scene().addItem(rect_item)
-
-    def drawLine(self, xValue, yValue, color):
-
-            rect_item = HorizontalItem(
-                QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, 300))
-            )
-
-            rect_item.setBrush(QtGui.QBrush(QtGui.QColor(color)))
-            self.scene().addItem(rect_item)
-
-class HorizontalItem(QtWidgets.QGraphicsRectItem):
-    def __init__(self, rect, parent=None):
-        super(HorizontalItem, self).__init__(rect, parent)
-
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsGeometryChanges, True)
-
-    def itemChange(self, change, value):
-        if (
-            change == QtWidgets.QGraphicsItem.ItemPositionChange
-            and self.scene()
-        ):
-
-            # only allow positive x values
-            if not (value.x() < 100):
-                return QtCore.QPointF(value.x(), self.pos().y())
-
-            else:
-                return QtCore.QPointF(0, self.pos().y())
-
-        return super(HorizontalItem, self).itemChange(change, value)
-
-
-class VerticalLine(QtWidgets.QGraphicsRectItem):
-    def __init__(self, rect, parent=None):
-        super(VerticalLine, self).__init__(rect, parent)
-
-    def drawLine(self, xValue, yValue, height):
-
-        rect_item = HorizontalItem(
-            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, height))
-        )
-
-        rect_item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
-        self.scene().addItem(rect_item)
 
 
 if __name__ == '__main__':
