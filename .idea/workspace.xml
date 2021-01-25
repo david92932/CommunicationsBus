@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="added timeline">
-      <change afterPath="$PROJECT_DIR$/Core/Command.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Core/SubsystemSchedule.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GUI/MyTimelineWidget.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GUI/TableView.py" afterDir="false" />
+    <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/guitest1.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/guitest1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TkinterDragAndDrop.py" beforeDir="false" afterPath="$PROJECT_DIR$/TkinterDragAndDrop.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611010063942</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="changed table implementation to coded and added SubsystemSchedule.py and Command.py">
+      <created>1611613075514</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1611613075514</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -153,53 +154,54 @@
     <MESSAGE value="added Rule" />
     <MESSAGE value="added ValueRule and TimeRule" />
     <MESSAGE value="added timeline" />
-    <option name="LAST_COMMIT_MESSAGE" value="added timeline" />
+    <MESSAGE value="changed table implementation to coded and added SubsystemSchedule.py and Command.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed table implementation to coded and added SubsystemSchedule.py and Command.py" />
   </component>
   <component name="WindowStateProjectService">
     <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611597148449">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
     <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1440.822@0.25.1440.822" timestamp="1611597148449" />
-    <state x="338" y="37" key="CommitChangelistDialog2" timestamp="1611595840561">
+    <state x="338" y="37" key="CommitChangelistDialog2" timestamp="1611613075228">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="338" y="37" key="CommitChangelistDialog2/0.25.1440.822@0.25.1440.822" timestamp="1611595840561" />
-    <state width="1419" height="210" key="GridCell.Tab.0.bottom" timestamp="1611612956746">
+    <state x="338" y="37" key="CommitChangelistDialog2/0.25.1440.822@0.25.1440.822" timestamp="1611613075228" />
+    <state width="1419" height="261" key="GridCell.Tab.0.bottom" timestamp="1611613982319">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="210" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1611612956746" />
-    <state width="1419" height="210" key="GridCell.Tab.0.center" timestamp="1611612956745">
+    <state width="1419" height="261" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
+    <state width="1419" height="261" key="GridCell.Tab.0.center" timestamp="1611613982319">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="210" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1611612956745" />
-    <state width="1419" height="210" key="GridCell.Tab.0.left" timestamp="1611612956745">
+    <state width="1419" height="261" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
+    <state width="1419" height="261" key="GridCell.Tab.0.left" timestamp="1611613982318">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="210" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1611612956745" />
-    <state width="1419" height="210" key="GridCell.Tab.0.right" timestamp="1611612956746">
+    <state width="1419" height="261" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1611613982318" />
+    <state width="1419" height="261" key="GridCell.Tab.0.right" timestamp="1611613982319">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="210" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1611612956746" />
-    <state width="1419" height="261" key="GridCell.Tab.1.bottom" timestamp="1611600415545">
+    <state width="1419" height="261" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
+    <state width="1419" height="261" key="GridCell.Tab.1.bottom" timestamp="1611613982320">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.1.bottom/0.25.1440.822@0.25.1440.822" timestamp="1611600415545" />
-    <state width="1419" height="261" key="GridCell.Tab.1.center" timestamp="1611600415544">
+    <state width="1419" height="261" key="GridCell.Tab.1.bottom/0.25.1440.822@0.25.1440.822" timestamp="1611613982320" />
+    <state width="1419" height="261" key="GridCell.Tab.1.center" timestamp="1611613982320">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.1.center/0.25.1440.822@0.25.1440.822" timestamp="1611600415544" />
-    <state width="1419" height="261" key="GridCell.Tab.1.left" timestamp="1611600415544">
+    <state width="1419" height="261" key="GridCell.Tab.1.center/0.25.1440.822@0.25.1440.822" timestamp="1611613982320" />
+    <state width="1419" height="261" key="GridCell.Tab.1.left" timestamp="1611613982319">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.1.left/0.25.1440.822@0.25.1440.822" timestamp="1611600415544" />
-    <state width="1419" height="261" key="GridCell.Tab.1.right" timestamp="1611600415544">
+    <state width="1419" height="261" key="GridCell.Tab.1.left/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
+    <state width="1419" height="261" key="GridCell.Tab.1.right" timestamp="1611613982320">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.1.right/0.25.1440.822@0.25.1440.822" timestamp="1611600415544" />
-    <state x="320" y="173" key="Vcs.Push.Dialog.v2" timestamp="1611010073843">
+    <state width="1419" height="261" key="GridCell.Tab.1.right/0.25.1440.822@0.25.1440.822" timestamp="1611613982320" />
+    <state x="320" y="173" key="Vcs.Push.Dialog.v2" timestamp="1611613088568">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="320" y="173" key="Vcs.Push.Dialog.v2/0.25.1440.822@0.25.1440.822" timestamp="1611010073843" />
+    <state x="320" y="173" key="Vcs.Push.Dialog.v2/0.25.1440.822@0.25.1440.822" timestamp="1611613088568" />
     <state x="506" y="357" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611596334309">
       <screen x="0" y="25" width="1440" height="822" />
     </state>

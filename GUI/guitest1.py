@@ -4,6 +4,7 @@ from PyQt5.QtCore import*
 from PyQt5.QtWidgets import*
 import sys
 import ntpath
+import os
 
 from Core.SubsystemSchedule import SubsystemSchedule
 
@@ -13,7 +14,8 @@ from GUI.TableView import TableView
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
-        uic.loadUi('MainUI.ui', self)
+        main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
+        uic.loadUi(main_ui_path, self)
         self.tabWidget.setTabsClosable(True)
         self.tabs = self.tabWidget
         self.tabs.currentChanged.connect(self.current_tab_changed) 
@@ -97,8 +99,3 @@ class Ui(QtWidgets.QMainWindow):
 
 
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-window = Ui()
-
-app.exec_()
