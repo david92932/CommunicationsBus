@@ -26,6 +26,20 @@ class TableView(QTableWidget):
         self.cellChanged.connect(self.cellUpdated)
         self.show()
 
+    def contextMenuEvent(self, event):
+        menu = QMenu(self)
+        addAboveAction = menu.addAction("Insert Command Above")
+        addBelowAction = menu.addAction("Insert Command Below")
+        deleteRowAction = menu.addAction("Delete Command")
+        action = menu.exec_(self.mapToGlobal(event.pos()))
+        if action == addAboveAction:
+            pass
+            # do function to add row
+        if action == addBelowAction:
+            pass  # do function to add below
+        if action == deleteRowAction:
+            pass  # do function to delete row
+
     def setData(self):
 
         schedule_commands = self.subsystemSchedule.getSchedule()
