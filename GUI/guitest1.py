@@ -25,8 +25,20 @@ class Ui(QtWidgets.QMainWindow):
         self.actionVideoCommand.triggered.connect(lambda: self.openCCMD())
         self.actionRecorderCommand.triggered.connect(lambda: self.openRCMD())
         self.showMaximized()
-
+        option = []
+        option.append("string1")
+        option.append("string2")
+        option.append("string3")
+        self.newMenuOptions(option)
         self.show()
+
+    def newMenuOptions(self, options):
+        #need to pass array here and it will add from code
+        for option in options:
+          self.menuFile.addAction(option)
+        #may need to add connections here so the clicks do stuff
+       # self.menuFile.addAction("this is from code")
+
 
 
     def openTCMD(self):
