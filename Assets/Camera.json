@@ -1,0 +1,58 @@
+{
+  "subsystemName": "Camera",
+  "fileExtension": "ccmd",
+  "commands": [
+    {
+      "name": "Mode",
+      "id": 1,
+      "protocol": "BCRT",
+      "fields": [
+        {
+          "name": "X Direction Units",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "X Direction Radians",
+          "size": 1,
+          "validValues": {
+            "min": -1.570,
+            "max": 1.570,
+            "lsb": 0.00025
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "Radians"
+        },
+        {
+          "name": "Y Direction Units",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "description": "Temp Description for the GUI"
+        }
+      ]
+    }
+  ]
+}

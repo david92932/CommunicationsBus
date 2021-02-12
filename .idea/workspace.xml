@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Camera.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/ApplicationController.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/DefinedValuesRule.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/Field.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/RangeRule.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/Subsystem.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/SubsystemController.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/SubsystemParser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GUI/WindowController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Command.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Command.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Rule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Rule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/SubsystemSchedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/SubsystemSchedule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/guitest1.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/guitest1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/startUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/startUp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +32,22 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="CodedTable" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="CodedTable" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,7 +67,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
   </component>
-  <component name="RunManager" selected="Python.guitest1">
+  <component name="RunManager" selected="Python.startUp">
     <configuration name="TkinterDragAndDrop" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="CommunicationsBus" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -61,7 +89,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="guitest1" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="startUp" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="CommunicationsBus" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -69,11 +97,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/GUI" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GUI/guitest1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/startUp.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -84,7 +112,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.TkinterDragAndDrop" />
-      <item itemvalue="Python.guitest1" />
+      <item itemvalue="Python.startUp" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -145,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611613075514</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added startup.py and changed to relative path">
+      <created>1611617936049</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1611617936049</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -155,33 +190,34 @@
     <MESSAGE value="added ValueRule and TimeRule" />
     <MESSAGE value="added timeline" />
     <MESSAGE value="changed table implementation to coded and added SubsystemSchedule.py and Command.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed table implementation to coded and added SubsystemSchedule.py and Command.py" />
+    <MESSAGE value="added startup.py and changed to relative path" />
+    <option name="LAST_COMMIT_MESSAGE" value="added startup.py and changed to relative path" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611597148449">
+    <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611617964769">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1440.822@0.25.1440.822" timestamp="1611597148449" />
-    <state x="338" y="37" key="CommitChangelistDialog2" timestamp="1611613075228">
+    <state x="184" y="95" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1440.822@0.25.1440.822" timestamp="1611617964769" />
+    <state x="338" y="37" key="CommitChangelistDialog2" timestamp="1611617935863">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="338" y="37" key="CommitChangelistDialog2/0.25.1440.822@0.25.1440.822" timestamp="1611613075228" />
-    <state width="1419" height="261" key="GridCell.Tab.0.bottom" timestamp="1611613982319">
+    <state x="338" y="37" key="CommitChangelistDialog2/0.25.1440.822@0.25.1440.822" timestamp="1611617935863" />
+    <state width="1419" height="209" key="GridCell.Tab.0.bottom" timestamp="1613166169991">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
-    <state width="1419" height="261" key="GridCell.Tab.0.center" timestamp="1611613982319">
+    <state width="1419" height="209" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1613166169991" />
+    <state width="1419" height="209" key="GridCell.Tab.0.center" timestamp="1613166169990">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
-    <state width="1419" height="261" key="GridCell.Tab.0.left" timestamp="1611613982318">
+    <state width="1419" height="209" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1613166169990" />
+    <state width="1419" height="209" key="GridCell.Tab.0.left" timestamp="1613166169989">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1611613982318" />
-    <state width="1419" height="261" key="GridCell.Tab.0.right" timestamp="1611613982319">
+    <state width="1419" height="209" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1613166169989" />
+    <state width="1419" height="209" key="GridCell.Tab.0.right" timestamp="1613166169990">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state width="1419" height="261" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1611613982319" />
+    <state width="1419" height="209" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1613166169990" />
     <state width="1419" height="261" key="GridCell.Tab.1.bottom" timestamp="1611613982320">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
@@ -198,17 +234,25 @@
       <screen x="0" y="25" width="1440" height="822" />
     </state>
     <state width="1419" height="261" key="GridCell.Tab.1.right/0.25.1440.822@0.25.1440.822" timestamp="1611613982320" />
-    <state x="320" y="173" key="Vcs.Push.Dialog.v2" timestamp="1611613088568">
+    <state x="432" y="156" key="MultipleFileMergeDialog" timestamp="1612129099506">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="320" y="173" key="Vcs.Push.Dialog.v2/0.25.1440.822@0.25.1440.822" timestamp="1611613088568" />
-    <state x="506" y="357" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611596334309">
+    <state x="432" y="156" key="MultipleFileMergeDialog/0.25.1440.822@0.25.1440.822" timestamp="1612129099506" />
+    <state x="320" y="173" key="Vcs.Push.Dialog.v2" timestamp="1611617997671">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="506" y="357" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.822@0.25.1440.822" timestamp="1611596334309" />
-    <state x="385" y="171" width="670" height="676" key="search.everywhere.popup" timestamp="1611604258369">
+    <state x="320" y="173" key="Vcs.Push.Dialog.v2/0.25.1440.822@0.25.1440.822" timestamp="1611617997671" />
+    <state x="506" y="357" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1613146392155">
       <screen x="0" y="25" width="1440" height="822" />
     </state>
-    <state x="385" y="171" width="670" height="676" key="search.everywhere.popup/0.25.1440.822@0.25.1440.822" timestamp="1611604258369" />
+    <state x="506" y="357" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.822@0.25.1440.822" timestamp="1613146392155" />
+    <state x="471" y="153" key="git4idea.branch.GitSmartOperationDialog" timestamp="1612129039510">
+      <screen x="0" y="25" width="1440" height="822" />
+    </state>
+    <state x="471" y="153" key="git4idea.branch.GitSmartOperationDialog/0.25.1440.822@0.25.1440.822" timestamp="1612129039510" />
+    <state x="385" y="171" width="670" height="676" key="search.everywhere.popup" timestamp="1613164639900">
+      <screen x="0" y="25" width="1440" height="822" />
+    </state>
+    <state x="385" y="171" width="670" height="676" key="search.everywhere.popup/0.25.1440.822@0.25.1440.822" timestamp="1613164639900" />
   </component>
 </project>

@@ -6,14 +6,15 @@ import sys
 import ntpath
 import os
 
-from Core.SubsystemSchedule import SubsystemSchedule
-
 from GUI.MyTimelineWidget import MyTimelineWidget
 from GUI.TableView import TableView
 
 class Ui(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, application_controller):
         super(Ui, self).__init__()
+
+        self.applicationController = application_controller
+
         main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
         uic.loadUi(main_ui_path, self)
         self.tabWidget.setTabsClosable(True)
@@ -39,8 +40,6 @@ class Ui(QtWidgets.QMainWindow):
         #may need to add connections here so the clicks do stuff
        # self.menuFile.addAction("this is from code")
 
-
-
     def openTCMD(self):
         self.openFileExplorer()
         
@@ -58,6 +57,7 @@ class Ui(QtWidgets.QMainWindow):
         print("button was pressed")
         
     def openFileExplorer(self):
+
         file_path, idk = QFileDialog.getOpenFileName()
 
         file_name = ntpath.basename(file_path)
@@ -69,7 +69,6 @@ class Ui(QtWidgets.QMainWindow):
         'col2': ['1', '2', '1', '3'],
         'col3': ['1', '1', '2', '1']}
 
-        # browser = MyTableWidget(self)
         browser = TableView(file_path, data, 4, 8)
         browser.filesname = file_path
         i = self.tabs.addTab(browser, file_name)

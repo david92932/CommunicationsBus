@@ -1,14 +1,22 @@
-from PyQt5 import QtWidgets, uic
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import*
-from PyQt5.QtWidgets import*
-import sys
-import ntpath
 
-from GUI.guitest1 import Ui
+from Core.SubsystemParser import SubsystemParser
+from GUI.WindowController import WindowController
+
+from Core.ApplicationController import ApplicationController
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = Ui()
 
-    app.exec_()
+    all_subsystem_models = []
+
+    # load subsystems into application
+    file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera.json"
+    subsystem_parser = SubsystemParser(file_path)
+
+    x = subsystem_parser.getSubsystem()
+
+    all_subsystem_models.append(subsystem_parser.getSubsystem())
+
+    application_controller = ApplicationController(all_subsystem_models)
+
+    # start-up GUI
+    WindowController(application_controller)

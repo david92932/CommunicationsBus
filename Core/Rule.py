@@ -1,6 +1,15 @@
+from abc import abstractmethod
+
+
 class Rule:
 
-    def __init__(self, name: str, version_added: str):
+    def __init__(self, version_added: str):
 
-        self.name: str = name
         self.versionAdded: str = version_added
+
+    @abstractmethod
+    def __checkValidValues(self, new_value) -> bool:
+
+        pass
+
+

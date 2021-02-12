@@ -5,10 +5,8 @@ class SubsystemSchedule:
     def __init__(self, file_path):
 
         self.filePath = file_path
-        temp = Command(1,2,3,4,5,6,7,8)
-        temp2 = Command(8,7,6,5,4,3,2,1)
+        self.commands = []
 
-        self.commands = [temp, temp2]
         self.headers = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
                         'Sub Address', 'Word Count', 'Enabled']
 
