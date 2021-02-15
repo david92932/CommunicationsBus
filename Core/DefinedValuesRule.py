@@ -3,7 +3,7 @@ from Core.Rule import Rule
 
 class DefinedValuesRule(Rule):
 
-    def __init__(self, version_added, name, value):
+    def __init__(self, version_added: str, name: str, value):
         super().__init__(version_added)
 
         self.name = name

@@ -2,7 +2,7 @@ from GUI.MyTimelineWidget import MyTimelineWidget
 
 class Command:
 
-    def __init__(self, name, id, protocol, fields):
+    def __init__(self, name: str, id: int, protocol: str, fields: []):
 
         self.name = name
         self.id = id

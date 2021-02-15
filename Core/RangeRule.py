@@ -2,7 +2,7 @@ from Core.Rule import Rule
 
 class RangeRule(Rule):
 
-    def __init__(self, version_added, min_value, max_value, lsb_value):
+    def __init__(self, version_added: str, min_value, max_value, lsb_value):
 
         super().__init__(version_added)
 

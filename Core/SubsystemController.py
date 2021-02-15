@@ -1,13 +1,21 @@
+from Core.Subsystem import Subsystem
+
 import copy
 
 class SubsystemController:
 
-    def __init__(self, all_subsystem_models):
+    def __init__(self, subsystem_name, all_subsystem_models):
+
+        print(f'made subsystemController {subsystem_name}')
+
+        self.headers = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
+                        'Sub Address', 'Word Count', 'Enabled']
 
         self.allSubsystemModels = all_subsystem_models
 
+        self.createSubsystem(subsystem_name)
 
-        self.allActiveSubsystems = []
+        self.mySubsystem: Subsystem
 
     def createSubsystem(self, name):
 
@@ -17,7 +25,29 @@ class SubsystemController:
 
             if sub_name == name:
 
-                new_subsystem = copy.deepcopy(subsystem)
+                self.mySubsystem = copy.deepcopy(subsystem)
+
+    def getSubsystemSchedule(self):
+
+        return self.mySubsystem.getSubsystemSchedule()
+
+    def addCommandAtEnd(self, command_obj):
+
+        self.mySubsystem.addCommandAtEnd(command_obj)
+
+    def addCommandAtIndex(self, command_obj, index):
+
+        self.mySubsystem.addCommandAtIndex(command_obj, index)
+
+    def removeCommandAtIndex(self, index):
+
+        self.mySubsystem.removeCommandAtIndex(index)
+
+    def getAllAvailableCommands(self):
+
+        return self.mySubsystem.getAllAvailableCommands()
+
+
 
 
 

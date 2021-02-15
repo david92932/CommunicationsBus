@@ -26,35 +26,34 @@ class Ui(QtWidgets.QMainWindow):
         self.actionVideoCommand.triggered.connect(lambda: self.openCCMD())
         self.actionRecorderCommand.triggered.connect(lambda: self.openRCMD())
         self.showMaximized()
-        option = []
-        option.append("string1")
-        option.append("string2")
-        option.append("string3")
-        self.newMenuOptions(option)
+
+        all_subsystem_names = self.getAvailableSubsystems()
+        self.setCreateNewMenuOptions(self.menuNew, all_subsystem_names, self.add_new_tab)
+        self.setMenuOptions(self.menuOpen, all_subsystem_names, self.openFile)
         self.show()
 
-    def newMenuOptions(self, options):
-        #need to pass array here and it will add from code
-        for option in options:
-          self.menuFile.addAction(option)
-        #may need to add connections here so the clicks do stuff
-       # self.menuFile.addAction("this is from code")
+    def setMenuOptions(self, menu_obj, options: [], binding_function):
 
-    def openTCMD(self):
+        menu_obj.clear()
+
+        for item in options:
+            menu_obj.addAction(item)
+            menu_obj.triggered.connect(lambda item=item: binding_function())
+
+    def setCreateNewMenuOptions(self, menu_obj, options: [], binding_function):
+
+        menu_obj.clear()
+
+        for item in options:
+            entry_name = item
+            menu_obj.addAction(item)
+            menu_obj.triggered.connect(lambda item=item: binding_function(new_subsystem=entry_name))
+
+    def openFile(self, name):
+
+        print(f'got to openFile: {name}')
+
         self.openFileExplorer()
-        
-        #opentcmdtab
-        print("button was pressed")
-    
-    def openRCMD(self):
-        self.openFileExplorer()
-        #opentcmdtab
-        print("button was pressed")
-        
-    def openCCMD(self):
-        self.openFileExplorer()
-        #opentcmdtab
-        print("button was pressed")
         
     def openFileExplorer(self):
 
@@ -64,15 +63,32 @@ class Ui(QtWidgets.QMainWindow):
 
         self.add_new_tab(file_path, file_name=file_name)
 
-    def add_new_tab(self, file_path, file_name= "No Name Found"):
+    def add_new_tab(self, new_subsystem="None", file_path="None", file_name= "No Name Found"):
+
         data = {'col1': ['1', '2', '3', '4'],
         'col2': ['1', '2', '1', '3'],
         'col3': ['1', '1', '2', '1']}
 
-        browser = TableView(file_path, data, 4, 8)
-        browser.filesname = file_path
-        i = self.tabs.addTab(browser, file_name)
-        self.tabs.setCurrentIndex(i)
+        # if we're creating a new file
+        if file_path == "None":
+
+            browser = TableView(self.applicationController, new_subsystem, file_path, data, 4, 8)
+            browser.filesname = file_path
+            i = self.tabs.addTab(browser, new_subsystem)
+            self.tabs.setCurrentIndex(i)
+
+        # if we're opening an existing file
+        else:
+
+            # doesn't work yet
+            # browser = TableView(self.applicationController, file_path, data, 4, 8)
+            # browser.filesname = file_path
+            # i = self.tabs.addTab(browser, file_path)
+            # self.tabs.setCurrentIndex(i)
+
+            pass
+
+
     
     def tab_open_doubleclick(self, i): 
   
@@ -106,7 +122,18 @@ class Ui(QtWidgets.QMainWindow):
             return
   
         # get the page title 
-        title = self.tabs.currentWidget().filesname
+        # title = self.tabs.currentWidget().filesname
+        title = 'test'
+
+    def getAvailableSubsystems(self):
+
+        all_names = []
+
+        for subsystem in self.applicationController.allSubsystems:
+
+            all_names.append(subsystem.subsystemName)
+
+        return all_names
 
 
 

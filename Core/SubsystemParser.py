@@ -56,6 +56,7 @@ class SubsystemParser:
         for command in all_subsystem_commands:
 
             command_name = self.__getDictField(command, "name")
+            print(command_name)
             command_id = self.__getDictField(command, "id")
             command_protocol = self.__getDictField(command, "protocol")
             command_fields = self.__getDictField(command, "fields")
@@ -64,7 +65,7 @@ class SubsystemParser:
             command_obj = Command(command_name, command_id, command_protocol, command_field_objects)
             all_command_objects.append(command_obj)
 
-            return all_command_objects
+        return all_command_objects
 
     def __parseFields(self, all_command_fields):
 
@@ -83,7 +84,7 @@ class SubsystemParser:
 
             all_command_fields_objs.append(field_obj)
 
-        return all_command_fields
+        return all_command_fields_objs
 
     def __parseFieldRules(self, field_valid_values):
 
