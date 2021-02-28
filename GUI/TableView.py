@@ -27,6 +27,8 @@ class TableView(QTableWidget):
 
         timeline = MyTimelineWidget(self)
 
+        self.detailedView = None
+
 
         timeline.addBox(50, 500, 1, "blue")
         timeline.addBox(50, 200, 2, "red")
@@ -44,19 +46,27 @@ class TableView(QTableWidget):
         deleteRowAction = menu.addAction("Delete Command")
         action = menu.exec_(self.mapToGlobal(event.pos()))
         row = self.rowAt(event.pos().y())
-        print(f'row: {row}')
         if action == addAboveAction:
             pass
             # do function to add row
         if action == addBelowAction:
+            print('add action below called')
             self.openNewCommandWindow()
         if action == deleteRowAction:
             pass  # do function to delete row
 
+    def testFunc(self):
+
+        pass
+
     def setData(self):
+
+        print('Set Data Triggered')
 
         schedule_commands = self.subsystemController.getSubsystemSchedule()
         headers = self.subsystemController.headers
+
+        self.setRowCount(len(schedule_commands))
 
         for row in range(0, len(schedule_commands)):
 
@@ -64,11 +74,11 @@ class TableView(QTableWidget):
 
             for column in range(0, len(headers)):
 
-                cell_data = command_in_row.getCommandPropertyList()[column]
+                cell_data = command_in_row.getCommandFieldsTableView()[column]
                 qt_table_widget_item = QTableWidgetItem()
                 qt_table_widget_item.setText(str(cell_data))
+                # qt_table_widget_item.itemChanged.connect(self.testFunc)
 
-                print(f'Data: {qt_table_widget_item.text()}')
                 self.setItem(row, column, qt_table_widget_item)
 
         self.setHorizontalHeaderLabels(headers)
@@ -82,8 +92,16 @@ class TableView(QTableWidget):
 
     def openNewCommandWindow(self):
 
-        detailedView = DetailedView(self, self.subsystemController)
-        detailedView.show()
+        if self.detailedView is not None:
+            self.detailedView = None
+
+        self.detailedView = DetailedView(self, self.subsystemController)
+        self.detailedView.show()
+
+    def detailedViewChangeEvent(self):
+
+        self.setData()
+
 
 
 

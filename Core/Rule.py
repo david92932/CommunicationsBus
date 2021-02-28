@@ -8,7 +8,7 @@ class Rule:
         self.versionAdded: str = version_added
 
     @abstractmethod
-    def __checkValidValues(self, new_value) -> bool:
+    def checkValidValues(self, new_value):
 
         pass
 

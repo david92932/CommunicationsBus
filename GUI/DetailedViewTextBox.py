@@ -12,6 +12,8 @@ class DetailedViewTextBox(QLineEdit):
 
         super(DetailedViewTextBox, self).__init__(parent)
 
+        self.parent = parent
+
         self.bindingFunction = binding_function
         self.setToolTip(description)
         self.editingFinished.connect(self.onEditingFinished)
@@ -20,6 +22,8 @@ class DetailedViewTextBox(QLineEdit):
         self.setStyleSheet("QCustomLineEdit{color: gray;}")
 
     def onEditingFinished(self):
+
+        self.parent.detailedViewChangeEvent()
 
         self.bindingFunction(self.text())
 

@@ -27,6 +27,29 @@ class SubsystemController:
 
                 self.mySubsystem = copy.deepcopy(subsystem)
 
+    def createCommand(self, command_name):
+
+        new_command = None
+
+        for command in self.mySubsystem.getAllAvailableCommands():
+            print(command.name)
+
+        for command in self.mySubsystem.getAllAvailableCommands():
+
+            if command.name == command_name:
+
+                new_command = copy.deepcopy(command)
+                self.addCommandAtEnd(new_command)
+                break
+
+        if new_command is not None:
+            print(f'New Command {command.name}')
+
+        else:
+            print('new command is None :(')
+
+        return new_command
+
     def getSubsystemSchedule(self):
 
         return self.mySubsystem.getSubsystemSchedule()

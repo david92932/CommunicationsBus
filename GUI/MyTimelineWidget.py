@@ -28,9 +28,7 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
             yValue = row * 75
 
             rect_item = GraphicsRectItem(QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50)))
-            # rect_item = HorizontalItem(
-            #     QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50))
-            # )
+
             rect_item.setBrush(QtGui.QBrush(QtGui.QColor(color)))
             self.scene().addItem(rect_item)
 
@@ -156,6 +154,7 @@ class GraphicsRectItem(QGraphicsRectItem):
             self.interactiveResize(mouseEvent.pos())
         else:
             super().mouseMoveEvent(mouseEvent)
+            super().setY(0)
 
     def mouseReleaseEvent(self, mouseEvent):
         """

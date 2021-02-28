@@ -7,6 +7,7 @@ import sys
 
 from Core.DefinedValuesRule import DefinedValuesRule
 from Core.RangeRule import RangeRule
+from Core.TimeRule import TimeRule
 from GUI.DetailedViewTextBox import DetailedViewTextBox
 
 from PyQt5.QtWidgets import (
@@ -21,8 +22,9 @@ from PyQt5.QtWidgets import (
 class DetailedView(QWidget):
     def __init__(self, parent, subsystem_controller):
 
-        # super().__init__()
         super(DetailedView, self).__init__(parent)
+        self.parent = parent
+
         # Create a QGridLayout instance
         self.layout = QGridLayout()
 
@@ -35,17 +37,7 @@ class DetailedView(QWidget):
 
         comboBox = self.createComboBox(command_strings, self.getSelectedCommand)
         self.layout.addWidget(comboBox, 0, 0)
-        # Add widgets to the layout
-        # layout.addWidget(QPushButton("Button at (0, 0)"), 0, 0)
-        # layout.addWidget(QPushButton("Button at (0, 1)"), 0, 1)
-        # layout.addWidget(QPushButton("Button at (0, 2)"), 0, 2)
-        # layout.addWidget(QPushButton("Button at (1, 0)"), 1, 0)
-        # layout.addWidget(QPushButton("Button at (1, 1)"), 1, 1)
-        # layout.addWidget(QPushButton("Button at (1, 2)"), 1, 2)
-        # layout.addWidget(QPushButton("Button at (2, 0)"), 2, 0)
-        # layout.addWidget(QPushButton("Button at (2, 1)"), 2, 1)
-        # layout.addWidget(QPushButton("Button at (2, 2)"), 2, 2)
-        # Set the layout on the application's window
+
         self.setLayout(self.layout)
 
         self.setGeometry(0, parent.geometry().bottomLeft().y()-300, 1500, 100)
@@ -58,7 +50,9 @@ class DetailedView(QWidget):
 
         for selection in list_of_selections:
             combo_box.addItem(selection)
-            combo_box.activated.connect(binding_function)
+
+            # combo_box.activated.connect(binding_function)
+        combo_box.currentIndexChanged.connect(binding_function)
 
         return combo_box
 
@@ -83,30 +77,36 @@ class DetailedView(QWidget):
         """
 
         print(f'event - {selected_index}')
-        selected_command_obj = self.allCommands[selected_index]
+        selected_command_name = self.allCommands[selected_index].name
+
+        selected_command_obj = self.subsystemController.createCommand(selected_command_name)
+
+        print(selected_command_obj)
+        print(self.subsystemController.getSubsystemSchedule())
 
         self.__constructDetailedView(selected_command_obj)
-
-        #deep copy command and add
 
     def __constructDetailedView(self, command_obj):
 
         all_constructed_boxes = []
 
-        all_fields = command_obj.fields
+        all_fields = command_obj.getCommandFields()
 
         for field in all_fields:
 
             field_display_box = None
 
             is_defined_value_rule_set = False
+            is_time_rule = False
 
             # for every rule, check if its a defined values rule
             for rule in field.fieldRules:
 
                 if isinstance(rule, DefinedValuesRule):
                     is_defined_value_rule_set = True
-                    break
+
+                elif isinstance(rule, TimeRule):
+                    is_time_rule = True
 
             # if the field has defined values, create a dropdown for it
             if is_defined_value_rule_set:
@@ -125,6 +125,24 @@ class DetailedView(QWidget):
 
                 field_display_box = self.createComboBoxWithDescriptions(list_of_selections, field.setFieldValue, list_of_descriptions)
 
+            # start Time Field
+            elif field.fieldRules == []:
+
+                description = f'Field Name: {field.name}\nDescription: {field.fieldDescription}\n' \
+                              f'Units: {field.fieldUnits}'
+
+                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue)
+
+            elif is_time_rule:
+
+                field_rule = field.fieldRules[0]
+
+                description = f'Field Name: {field.name}\n Min Time: {field_rule.processingTime}\n' \
+                              f'Description: {field.fieldDescription}\n' \
+                              f'Units: {field.fieldUnits}'
+
+                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue)
+
             # if the field is min, max, lsb, create a text box
             else:
 
@@ -139,9 +157,14 @@ class DetailedView(QWidget):
 
         for index, box in enumerate(all_constructed_boxes):
 
-            self.layout.addWidget(box, 0, index)
+            self.layout.addWidget(box, index, 0)
 
+    def detailedViewChangeEvent(self):
 
-    def __getSelectedDefinedRule(self, selected_index):
+        self.parent.detailedViewChangeEvent()
 
-        pass
+    def clearDetailedView(self):
+
+        for i in reversed(range(self.layout.count()-1)):
+            self.layout.itemAt(i).widget().setParent(None)
+

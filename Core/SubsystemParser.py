@@ -1,5 +1,6 @@
 from Core.RangeRule import RangeRule
 from Core.DefinedValuesRule import DefinedValuesRule
+from Core.TimeRule import TimeRule
 from Core.Command import Command
 from Core.Field import Field
 from Core.Subsystem import Subsystem
@@ -56,16 +57,30 @@ class SubsystemParser:
         for command in all_subsystem_commands:
 
             command_name = self.__getDictField(command, "name")
-            print(command_name)
             command_id = self.__getDictField(command, "id")
+            command_length = self.__getDictField(command, "processingTime")
+            rt_address = self.__getDictField(command, "RTAddress")
+            sub_address = self.__getDictField(command, "subAddress")
+            word_size_in_bits = self.__getDictField(command, "wordSizeInBits")
             command_protocol = self.__getDictField(command, "protocol")
             command_fields = self.__getDictField(command, "fields")
             command_field_objects = self.__parseFields(command_fields)
+            command_start_field, command_length_field = self.__parseTimeField(command_length)
 
-            command_obj = Command(command_name, command_id, command_protocol, command_field_objects)
+            command_obj = Command(command_name, command_id, command_start_field, command_length_field, rt_address, sub_address,
+                                  word_size_in_bits, command_protocol, command_field_objects)
             all_command_objects.append(command_obj)
 
         return all_command_objects
+
+    def __parseTimeField(self, command_length):
+
+        time_rule = TimeRule(command_length)
+
+        time_start_field = Field("Time Start", 64, "Time To Start Command", [], 'ms')
+        time_length_field = Field("Time Length", 64, "Duration of Command", [time_rule], 'ms')
+
+        return time_start_field, time_length_field
 
     def __parseFields(self, all_command_fields):
 
@@ -78,7 +93,7 @@ class SubsystemParser:
             field_description = self.__getDictField(field, "description")
             field_valid_values = self.__getDictField(field, "validValues")
             field_units = field.get('Units', 'None')
-            field_rules = self.__parseFieldRules(field_valid_values)
+            field_rules = self.__parseFieldRules(field_valid_values, field_byte_size)
 
             field_obj = Field(field_name, field_byte_size, field_description, field_rules, field_units)
 
@@ -86,7 +101,7 @@ class SubsystemParser:
 
         return all_command_fields_objs
 
-    def __parseFieldRules(self, field_valid_values):
+    def __parseFieldRules(self, field_valid_values, field_byte_size):
 
         all_rules = []
 
@@ -106,11 +121,11 @@ class SubsystemParser:
         # if valid values are in a range
         elif "min" in field_valid_values.keys() and "max" in field_valid_values.keys() and "lsb" in field_valid_values.keys():
 
-            min_value = self.__getDictField(field_valid_values, 'min')
-            max_value = self.__getDictField(field_valid_values, 'max')
-            lsb_value = self.__getDictField(field_valid_values, 'lsb')
+            min_value = float(self.__getDictField(field_valid_values, 'min'))
+            max_value = float(self.__getDictField(field_valid_values, 'max'))
+            lsb_value = float(self.__getDictField(field_valid_values, 'lsb'))
 
-            range_rule_obj = RangeRule('0.0.0.0', min_value, max_value, lsb_value)
+            range_rule_obj = RangeRule('0.0.0.0', min_value, max_value, lsb_value, field_byte_size)
             all_rules.append(range_rule_obj)
 
         else:

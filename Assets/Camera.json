@@ -6,6 +6,10 @@
       "name": "Mode",
       "id": 1,
       "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 265,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
       "fields": [
         {
           "name": "X Direction Units",
@@ -22,7 +26,7 @@
               }
             ]
           },
-          "description": "Temp Description for the GUI"
+          "description": "Select The Units For Y Direction Angles"
         },
         {
           "name": "X Direction Radians",
@@ -51,60 +55,146 @@
             ]
           },
           "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Red And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Green And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Blue And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Exposure Delay",
+          "size": 4,
+          "validValues": {
+          "min": 1000,
+          "max": 3000,
+          "lsb": 0.250
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "ms"
+        },
+        {
+          "name": "Exposure Time",
+          "size": 8,
+          "validValues": {
+          "min": 4000000,
+          "max": 2199023255551,
+          "lsb": 0.5
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "ms"
         }
       ]
     },
     {
-      "name": "Mode2",
-      "id": 1,
+      "name": "Capture",
+      "id": 2,
       "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 0,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Update Status",
+      "id": 3,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Change Power State",
+      "id": 4,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
       "fields": [
         {
-          "name": "X Direction Units",
+          "name": "State",
           "size": 1,
           "validValues": {
             "defined": [
               {
-                "name": "Radians",
+                "name": "Shutdown",
                 "value": 0
               },
               {
-                "name": "Degrees",
+                "name": "Standby",
                 "value": 1
+              },
+              {
+                "name": "Operate",
+                "value": 2
               }
             ]
           },
-          "description": "Temp Description for the GUI"
+          "description": "Select The Units For Y Direction Angles"
         },
         {
-          "name": "X Direction Radians",
-          "size": 1,
+          "name": "Delay",
+          "size": 2,
           "validValues": {
-            "min": -1.570,
-            "max": 1.570,
-            "lsb": 0.00025
+            "min": 0,
+            "max": 200000,
+            "lsb": 1
           },
           "description": "Temp Description for the GUI",
           "Units": "Radians"
-        },
-        {
-          "name": "Y Direction Units",
-          "size": 1,
-          "validValues": {
-            "defined": [
-              {
-                "name": "Radians",
-                "value": 0
-              },
-              {
-                "name": "Degrees",
-                "value": 1
-              }
-            ]
-          },
-          "description": "Temp Description for the GUI"
         }
+
       ]
     }
+
   ]
 }

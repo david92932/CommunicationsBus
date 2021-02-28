@@ -9,7 +9,7 @@ class DefinedValuesRule(Rule):
         self.name = name
         self.definedValue = value
 
-    def __checkValidValues(self, new_value):
+    def checkValidValues(self, new_value):
         value_is_valid = False
 
         if self.definedValue == new_value:
