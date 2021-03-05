@@ -1,4 +1,6 @@
-from GUI.MyTimelineWidget import MyTimelineWidget
+
+from Core.TimelineBox import GraphicsRectItem
+from PyQt5 import QtCore, QtGui
 
 class Command:
 
@@ -15,6 +17,7 @@ class Command:
         self.protocol = protocol
         self.fields = fields
         self.enabled = True
+        self.timelineBox = None
 
     def getCommandFields(self):
 
@@ -45,4 +48,31 @@ class Command:
 
             print(f'New Value {new_value} for attribute {attribute} does not match existing type ({type(new_value)})')
 
+    def setStartTime(self, value):
 
+        print('setstart time')
+
+        self.commandStartField.setFieldValue(value)
+
+    def setLengthTime(self, value):
+
+        print('sets length time')
+
+        self.commandLengthField.setFieldValue(value)
+
+        self.setTimelineBox()
+
+    def setTimelineBox(self):
+
+        self.addBox(self.commandStartField.fieldValue, self.commandLengthField.fieldValue, 1, 'red')
+
+    def addBox(self, startTime, endTime, row, color: str):
+
+        print('add box')
+        xValue = startTime + 100
+        yValue = row * 75
+
+        self.timelineBox = GraphicsRectItem(
+            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50)))
+
+        self.timelineBox.setBrush(QtGui.QBrush(QtGui.QColor(color)))

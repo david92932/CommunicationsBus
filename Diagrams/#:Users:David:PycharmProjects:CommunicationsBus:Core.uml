@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/David/PycharmProjects/CommunicationsBus/Core</OriginalElement>
+  <nodes>
+    <node x="0.0" y="1175.0">Core.Field.Field</node>
+    <node x="0.0" y="855.0">Core.SubsystemController.SubsystemController</node>
+    <node x="1030.0" y="1175.0">Core.ApplicationController.ApplicationController</node>
+    <node x="0.0" y="447.0">Core.Command.Command</node>
+    <node x="987.0" y="855.0">Core.Subsystem.Subsystem</node>
+    <node x="641.0" y="1175.0">Core.SubsystemSchedule.SubsystemSchedule</node>
+    <node x="270.0" y="149.0">Core.RangeRule.RangeRule</node>
+    <node x="539.0" y="855.0">Core.SubsystemParser.SubsystemParser</node>
+    <node x="807.0" y="215.0">Core.DefinedValuesRule.DefinedValuesRule</node>
+    <node x="403.5" y="0.0">Core.Rule.Rule</node>
+    <node x="0.0" y="226.0">Core.TimeRule.TimeRule</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Core.RangeRule.RangeRule" target="Core.Rule.Rule">
+      <point x="0.0" y="-126.5" />
+      <point x="0.0" y="49.5" />
+    </edge>
+    <edge source="Core.TimeRule.TimeRule" target="Core.Rule.Rule">
+      <point x="0.0" y="-49.5" />
+      <point x="125.0" y="124.0" />
+      <point x="445.16666666666663" y="124.0" />
+      <point x="-83.33333333333337" y="49.5" />
+    </edge>
+    <edge source="Core.DefinedValuesRule.DefinedValuesRule" target="Core.Rule.Rule">
+      <point x="0.0" y="-60.5" />
+      <point x="980.0" y="124.0" />
+      <point x="611.8333333333333" y="124.0" />
+      <point x="83.33333333333326" y="49.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6203703703703703" x="696.5" y="520.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+

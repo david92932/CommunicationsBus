@@ -25,19 +25,14 @@ class TableView(QTableWidget):
         self.data = None
         self.setData()
 
-        timeline = MyTimelineWidget(self)
+        self.timeline = MyTimelineWidget(self, self.subsystemController)
 
         self.detailedView = None
 
-
-        timeline.addBox(50, 500, 1, "blue")
-        timeline.addBox(50, 200, 2, "red")
         self.cellChanged.connect(self.cellUpdated)
-
 
         self.show()
         # detailed.show()
-
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
@@ -86,7 +81,7 @@ class TableView(QTableWidget):
     def cellUpdated(self, row, column):
 
         new_value = self.item(row, column).text()
-        print(f'changed: {row} {column} {new_value}')
+        # print(f'changed: {row} {column} {new_value}')
 
         # self.subsystemSchedule.updateCommand(row, column, new_value)
 
@@ -101,6 +96,7 @@ class TableView(QTableWidget):
     def detailedViewChangeEvent(self):
 
         self.setData()
+        self.timeline.setTimeline()
 
 
 

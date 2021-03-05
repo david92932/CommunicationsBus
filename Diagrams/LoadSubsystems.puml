@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+
+StartUp -> SubsystemParser: Creates(file_path)
+SubsystemParser -> SubsystemParser: __parseJSON(file_json: dict)
+SubsystemParser -> Rules: Creates
+SubsystemParser -> Field: Creates ([Rule])
+SubsystemParser -> Command: Creates ([Field])
+SubsystemParser -> Subsystem: Creates ([Command])
+StartUp <-- SubsystemParser: Subsystem
+
+
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor
+
+Actor -> GUI.MainWindow: Presses 'New' Button
+GUI.MainWindow-> Core.SubsystemController: getAllSubsystemModels()
+GUI.MainWindow <-- Core.SubsystemController: [Subsystem]
+GUI.MainWindow -> GUI.MainWindow: setMenuOptions(options:[str])
+Actor <-- GUI.MainWindow: Dropdown All Subsystem Names
+Actor -> GUI.MainWindow: Selects Subsystem
+GUI.MainWindow -> Core.SubsystemController: createSubsystem(name: str)
+
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor
+
+Actor -> GUI.MainWindow: Presses 'New Scenario' Button
+GUI.MainWindow-> Core.ScenarioController: createScenario()
+Core.ScenarioController -> Core.SubsystemController: Create
+
+
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor
+Actor -> GUI.DetailedView: Adds Field Value
+GUI.DetailedView -> Core.Field: setFieldValue(new_value)
+loop Each Core.Rule
+            Core.Field -> Core.Rule: checkValidValues(new_value)
+            Core.Field <-- Core.Rule: Value is Valid/Invalid
+end
+
+GUI.DetailedView <-- Core.Field: Value Is Valid
+
+
+@enduml

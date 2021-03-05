@@ -1,3 +1,5 @@
+
+
 class Field:
 
 
@@ -9,13 +11,11 @@ class Field:
         self.fieldDescription = field_description
         self.fieldRules = field_rules
         self.fieldUnits = field_units
-        # self.minValue = min_value
-        # self.maxValue = max_value
-        # self.lsbValue = lsb_value
+
 
         self.fieldValue = 0
 
-    def setFieldValue(self, value):
+    def setFieldValue(self, value: float) -> (bool, str):
 
         field_value = float(value)
 

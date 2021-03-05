@@ -1,2 +1,8 @@
-def convertEngineeringToRaw(value, min, max, lsb):
+def convertEngineeringToRaw(raw, lsb):
+
+    return raw / lsb
+
+def convertRawToEngineering(raw, lsb):
+
+    return raw * lsb
 

@@ -1,23 +1,24 @@
 from Core.Subsystem import Subsystem
+from Core.Command import Command
 
 import copy
 
 class SubsystemController:
 
-    def __init__(self, subsystem_name, all_subsystem_models):
+    def __init__(self, subsystem_name: str, all_subsystem_models: [Subsystem]):
 
         print(f'made subsystemController {subsystem_name}')
 
-        self.headers = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
+        self.headers: [str] = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
                         'Sub Address', 'Word Count', 'Enabled']
 
-        self.allSubsystemModels = all_subsystem_models
+        self.allSubsystemModels: [Subsystem] = all_subsystem_models
 
         self.createSubsystem(subsystem_name)
 
         self.mySubsystem: Subsystem
 
-    def createSubsystem(self, name):
+    def createSubsystem(self, name: str):
 
         for subsystem in self.allSubsystemModels:
 
@@ -27,7 +28,7 @@ class SubsystemController:
 
                 self.mySubsystem = copy.deepcopy(subsystem)
 
-    def createCommand(self, command_name):
+    def createCommand(self, command_name: str) -> Command:
 
         new_command = None
 
@@ -50,25 +51,27 @@ class SubsystemController:
 
         return new_command
 
-    def getSubsystemSchedule(self):
+    def getSubsystemSchedule(self) -> Subsystem:
 
         return self.mySubsystem.getSubsystemSchedule()
 
-    def addCommandAtEnd(self, command_obj):
+    def addCommandAtEnd(self, command_obj: Command):
 
         self.mySubsystem.addCommandAtEnd(command_obj)
 
-    def addCommandAtIndex(self, command_obj, index):
+    def addCommandAtIndex(self, command_obj: Command, index: int):
 
         self.mySubsystem.addCommandAtIndex(command_obj, index)
 
-    def removeCommandAtIndex(self, index):
+    def removeCommandAtIndex(self, index: int):
 
         self.mySubsystem.removeCommandAtIndex(index)
 
-    def getAllAvailableCommands(self):
+    def getAllAvailableCommands(self) -> [Command]:
 
         return self.mySubsystem.getAllAvailableCommands()
+
+
 
 
 

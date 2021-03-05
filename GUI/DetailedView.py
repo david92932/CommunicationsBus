@@ -131,8 +131,9 @@ class DetailedView(QWidget):
                 description = f'Field Name: {field.name}\nDescription: {field.fieldDescription}\n' \
                               f'Units: {field.fieldUnits}'
 
-                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue)
+                field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setStartTime)
 
+            # length field
             elif is_time_rule:
 
                 field_rule = field.fieldRules[0]
@@ -141,7 +142,7 @@ class DetailedView(QWidget):
                               f'Description: {field.fieldDescription}\n' \
                               f'Units: {field.fieldUnits}'
 
-                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue)
+                field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setLengthTime)
 
             # if the field is min, max, lsb, create a text box
             else:
