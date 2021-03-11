@@ -78,6 +78,8 @@ class SubsystemController:
         command_file.writeCommandFile()
 
     def readCommandFile(self, file_path):
+        command_file = CommandFile(self, file_path)
+        command_file.readCommandFile()
 
 
 

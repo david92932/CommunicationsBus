@@ -22,9 +22,42 @@ class CommandFile:
     def readCommandFile(self):
 
         available_commands = self.subsystemController.getAllAvailableCommands()
+        inFile = open(self.filePath, 'w')
+        Lines = inFile.readlines()
+        outFile.close()
+
+        for line in Lines:
+            #these are all the values separated by commas
+           chunks = line.split(", ")
+           readInCommand = 0
+           #line.replace("\n", "")
+           commandname = chunks[0]
+           commandID = chunks[1]
+           commandTime = chunks[2]
+           commandNumWords = chunks[3]
+           chunks.pop(0)
+           chunks.pop(1)
+           chunks.pop(2)
+           chunks.pop(3)
+
+           commandstring1 = line.partition(" ")[2]
+           hexnumbers = commandstring1.split(", ")
+           i = 0
+           for command in available_commands:
+                if command.name == commandname:
+                    readInCommand = command
+                    break
+
+           for field in readInCommand:
+
+                field.value = int(chunks[i], 16)
+
+                i = i + 1
+           self.subsystemController.addCommandAtEnd(readInCommand)
+
 
         # to actually create a command,
-        # self.subsystemController.addCommandAtEnd(command_obj)
+
 
     def writeToFile(self, file_string):
 
