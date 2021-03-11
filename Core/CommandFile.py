@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 """
 Created on Tue Feb  9 13:51:43 2021
 
 @author: jemac
 """
 
-fieldstring = ""
 
 class CommandFile:
     def __init__(self, subsystem_controller, file_path):
@@ -22,41 +21,41 @@ class CommandFile:
     def readCommandFile(self):
 
         available_commands = self.subsystemController.getAllAvailableCommands()
-        inFile = open(self.filePath, 'w')
+        inFile = open(self.filePath, 'r')
         Lines = inFile.readlines()
-        outFile.close()
+        inFile.close()
 
         for line in Lines:
             #these are all the values separated by commas
-           chunks = line.split(", ")
-           readInCommand = 0
-           #line.replace("\n", "")
-           commandname = chunks[0]
-           commandID = chunks[1]
-           commandTime = chunks[2]
-           commandNumWords = chunks[3]
-           chunks.pop(0)
-           chunks.pop(1)
-           chunks.pop(2)
-           chunks.pop(3)
+            chunks = line.split(", ")
+            readInCommand = 0
+            #line.replace("\n", "")
+            commandname = chunks[0]
+            commandID = chunks[1]
+            commandTime = chunks[2]
+            commandNumWords = chunks[3]
+            chunks.pop(0)
+            chunks.pop(0)
+            chunks.pop(0)
+            chunks.pop(0)
 
-           commandstring1 = line.partition(" ")[2]
-           hexnumbers = commandstring1.split(", ")
-           i = 0
-           for command in available_commands:
-                if command.name == commandname:
-                    readInCommand = command
-                    break
+            commandstring1 = line.partition(" ")[2]
+            hexnumbers = commandstring1.split(", ")
+            i = 0
+            new_command = self.subsystemController.createCommand(commandname)
 
-           for field in readInCommand:
+            # handle fields with only start/length values
+            # handle invalid command names
+            # handle command time
+            for field in new_command.fields:
 
-                field.value = int(chunks[i], 16)
+                field.setFieldValue(int(chunks[i], 16))
 
                 i = i + 1
-           self.subsystemController.addCommandAtEnd(readInCommand)
+                self.subsystemController.addCommandAtEnd(new_command)
 
 
-        # to actually create a command,
+            # to actually create a command,
 
 
     def writeToFile(self, file_string):
@@ -77,7 +76,7 @@ class CommandFile:
                 # thisfield = bytes(field.byte_size)
                 commandstring += "0x" + fieldstringhex + ", "
 
-            commandMainstring = commandMainstring + commandstring[:-2] + "\n"
+                commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
         return commandMainstring
 
@@ -135,25 +134,25 @@ class CommandFile:
     #
     #     return thiscommand
 
-# def main():
-#     field1 = fields("haha", 1, 1, 32)
-#     field2 = fields("haha1", 2, 2, 200)
-#     fieldlist = []
-#     fieldlist.append(field1)
-#     fieldlist.append(field2)
-#     command1 = []
-#     command = Command("cameracommand", fieldlist)
-#     command2 = []
-#     command21 = Command("notcameracommand", fieldlist)
-#     command1.append(command)
-#     command1.append(command21)
-#     commandfile = CommandFile("commandfile", command1)
-#
-#     commandtxt = commandfile.makeCommandString(commandfile)
-#
-#     print(commandfile.makeCommandString(commandfile))
-#     print(commandfile.readCommandString(commandtxt))
+    # def main():
+    #     field1 = fields("haha", 1, 1, 32)
+    #     field2 = fields("haha1", 2, 2, 200)
+    #     fieldlist = []
+    #     fieldlist.append(field1)
+    #     fieldlist.append(field2)
+    #     command1 = []
+    #     command = Command("cameracommand", fieldlist)
+    #     command2 = []
+    #     command21 = Command("notcameracommand", fieldlist)
+    #     command1.append(command)
+    #     command1.append(command21)
+    #     commandfile = CommandFile("commandfile", command1)
+    #
+    #     commandtxt = commandfile.makeCommandString(commandfile)
+    #
+    #     print(commandfile.makeCommandString(commandfile))
+    #     print(commandfile.readCommandString(commandtxt))
 
 
-# if __name__ == "__main__":
-#     main()
+    # if __name__ == "__main__":
+    #     main()

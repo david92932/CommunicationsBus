@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Core/CommandFile.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/commands.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/CommandFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/CommandFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Field.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Field.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/SubsystemController.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/SubsystemController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI/TableView.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/TableView.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands.txt" beforeDir="false" afterPath="$PROJECT_DIR$/commands.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,6 +162,8 @@
       <workItem from="1614970298134" duration="62000" />
       <workItem from="1615330750588" duration="3189000" />
       <workItem from="1615405072753" duration="21000" />
+      <workItem from="1615489630868" duration="196000" />
+      <workItem from="1615498295313" duration="1669000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1607390682320</created>
@@ -232,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614970331467</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="merged command file builder">
+      <created>1615489650812</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1615489650812</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,9 +260,10 @@
     <MESSAGE value="added resizable timeline boxes and continued work on integrating core with GUI" />
     <MESSAGE value="Connect Core to GUI Tables" />
     <MESSAGE value="reworked timeline to be connected to DetailedView" />
-    <option name="LAST_COMMIT_MESSAGE" value="reworked timeline to be connected to DetailedView" />
+    <MESSAGE value="merged command file builder" />
+    <option name="LAST_COMMIT_MESSAGE" value="merged command file builder" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CommunicationsBus$startUp.coverage" NAME="startUp Coverage Results" MODIFIED="1615332874420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CommunicationsBus$startUp.coverage" NAME="startUp Coverage Results" MODIFIED="1615499648110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

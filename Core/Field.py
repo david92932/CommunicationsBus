@@ -15,7 +15,7 @@ class Field:
 
         self.fieldValue = 0
 
-    def setFieldValue(self, value: float) -> (bool, str):
+    def setFieldValue(self, value) -> (bool, str):
 
         field_value = float(value)
 

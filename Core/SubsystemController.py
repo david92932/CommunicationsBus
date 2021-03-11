@@ -44,15 +44,15 @@ class SubsystemController:
                 self.addCommandAtEnd(new_command)
                 break
 
-        if new_command is not None:
-            print(f'New Command {command.name}')
-
-        else:
-            print('new command is None :(')
+        # if new_command is not None:
+        #     print(f'New Command {command.name}')
+        #
+        # else:
+        #     print('new command is None :(')
 
         return new_command
 
-    def getSubsystemSchedule(self) -> Subsystem:
+    def getSubsystemSchedule(self):
 
         return self.mySubsystem.getSubsystemSchedule()
 
@@ -78,8 +78,13 @@ class SubsystemController:
         command_file.writeCommandFile()
 
     def readCommandFile(self, file_path):
+        print('reading')
         command_file = CommandFile(self, file_path)
         command_file.readCommandFile()
+
+        for command in self.getSubsystemSchedule():
+            print(command.name)
+
 
 
 
