@@ -36,11 +36,14 @@ class TableView(QTableWidget):
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
+        exportCommandsAction = menu.addAction("Export File")
         addAboveAction = menu.addAction("Insert Command Above")
         addBelowAction = menu.addAction("Insert Command Below")
         deleteRowAction = menu.addAction("Delete Command")
         action = menu.exec_(self.mapToGlobal(event.pos()))
         row = self.rowAt(event.pos().y())
+        if action == exportCommandsAction:
+            self.subsystemController.buildCommandFile('commands.txt')
         if action == addAboveAction:
             pass
             # do function to add row

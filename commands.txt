@@ -1,0 +1,2 @@
+Change Power State, 4, 0.0, 16, 0x00, 0x03e8
+Capture, 2, 200.0, 16

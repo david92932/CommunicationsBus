@@ -1,5 +1,6 @@
 from Core.Subsystem import Subsystem
 from Core.Command import Command
+from Core.CommandFile import CommandFile
 
 import copy
 
@@ -70,6 +71,14 @@ class SubsystemController:
     def getAllAvailableCommands(self) -> [Command]:
 
         return self.mySubsystem.getAllAvailableCommands()
+
+    def buildCommandFile(self, file_path):
+
+        command_file = CommandFile(self, file_path)
+        command_file.writeCommandFile()
+
+    def readCommandFile(self, file_path):
+
 
 
 
