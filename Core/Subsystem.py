@@ -10,6 +10,8 @@ class Subsystem:
 
         self.__subsystemSchedule = []
 
+        self.timelineRow = 0
+
     def getSubsystemSchedule(self) -> [Command]:
 
         return self.__subsystemSchedule
@@ -29,3 +31,7 @@ class Subsystem:
     def removeCommandAtIndex(self, index: int):
 
         del self.__subsystemSchedule[index]
+
+    def setTimelineRow(self, row: int):
+
+        self.timelineRow = row

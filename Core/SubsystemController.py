@@ -6,28 +6,14 @@ import copy
 
 class SubsystemController:
 
-    def __init__(self, subsystem_name: str, all_subsystem_models: [Subsystem]):
+    def __init__(self, subsystem_obj):
 
-        print(f'made subsystemController {subsystem_name}')
+        print(f'made subsystemController {subsystem_obj.subsystemName}')
 
         self.headers: [str] = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
                         'Sub Address', 'Word Count', 'Enabled']
 
-        self.allSubsystemModels: [Subsystem] = all_subsystem_models
-
-        self.createSubsystem(subsystem_name)
-
-        self.mySubsystem: Subsystem
-
-    def createSubsystem(self, name: str):
-
-        for subsystem in self.allSubsystemModels:
-
-            sub_name = subsystem.subsystemName
-
-            if sub_name == name:
-
-                self.mySubsystem = copy.deepcopy(subsystem)
+        self.mySubsystem: Subsystem = subsystem_obj
 
     def createCommand(self, command_name: str) -> Command:
 

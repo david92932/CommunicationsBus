@@ -19,15 +19,23 @@ from PyQt5.QtWidgets import (
     QLineEdit
 )
 
+from PyQt5.QtWidgets import*
+
 class DetailedView(QWidget):
-    def __init__(self, parent, subsystem_controller):
+    def __init__(self, parent, table_view, subsystem_controller):
 
         super(DetailedView, self).__init__(parent)
         self.parent = parent
+        self.tableView = table_view
+
+        self.screen = QDesktopWidget().screenGeometry()
+        self.setGeometry(self.screen.width()/1.5, parent.geometry().topLeft().y(), self.screen.width(), self.screen.height()/2)
+
 
         # Create a QGridLayout instance
         self.layout = QGridLayout()
-
+        # rectangle = QRect(self.geometry().topLeft().x(), self.geometry().topLeft().y(), screen.width()/2, screen.height()/2)
+        # self.layout.setGeometry(rectangle)
         self.subsystemController = subsystem_controller
         self.allCommands = self.subsystemController.getAllAvailableCommands()
 
@@ -36,11 +44,11 @@ class DetailedView(QWidget):
             command_strings.append(command.name)
 
         comboBox = self.createComboBox(command_strings, self.getSelectedCommand)
+        comboBox.setFixedWidth(self.screen.width() / 2)
+
         self.layout.addWidget(comboBox, 0, 0)
 
         self.setLayout(self.layout)
-
-        self.setGeometry(0, parent.geometry().bottomLeft().y()-300, 1500, 100)
 
         # self.show()
 
@@ -162,7 +170,7 @@ class DetailedView(QWidget):
 
     def detailedViewChangeEvent(self):
 
-        self.parent.detailedViewChangeEvent()
+        self.tableView.detailedViewChangeEvent()
 
     def clearDetailedView(self):
 

@@ -10,13 +10,14 @@ from GUI.MyTimelineWidget import MyTimelineWidget
 from GUI.TableView import TableView
 
 class Ui(QtWidgets.QMainWindow):
-    def __init__(self, application_controller):
+    def __init__(self, scenario_controller):
         super(Ui, self).__init__()
 
-        self.applicationController = application_controller
-
+        self.scenarioController = scenario_controller
         main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
         uic.loadUi(main_ui_path, self)
+
+        self.timeline = MyTimelineWidget(self, self.scenarioController)
         self.tabWidget.setTabsClosable(True)
         self.tabs = self.tabWidget
         self.tabs.currentChanged.connect(self.current_tab_changed) 
@@ -27,10 +28,12 @@ class Ui(QtWidgets.QMainWindow):
         self.actionRecorderCommand.triggered.connect(lambda: self.openRCMD())
         self.showMaximized()
 
-        all_subsystem_names = self.getAvailableSubsystems()
+        all_subsystem_names = self.scenarioController.getAvailableSubsystemNames()
         self.setCreateNewMenuOptions(self.menuNew, all_subsystem_names, self.add_new_tab)
         self.setMenuOptions(self.menuOpen, all_subsystem_names, self.openFile)
+
         self.show()
+        self.timeline.show()
 
     def setMenuOptions(self, menu_obj, options: [], binding_function):
 
@@ -63,16 +66,14 @@ class Ui(QtWidgets.QMainWindow):
 
         self.add_new_tab(file_path, file_name=file_name)
 
-    def add_new_tab(self, new_subsystem="None", file_path="None", file_name= "No Name Found"):
-
-        data = {'col1': ['1', '2', '3', '4'],
-        'col2': ['1', '2', '1', '3'],
-        'col3': ['1', '1', '2', '1']}
+    def add_new_tab(self, new_subsystem="None", file_path="None", file_name="No Name Found"):
 
         # if we're creating a new file
         if file_path == "None":
 
-            browser = TableView(self.applicationController, new_subsystem, file_path, data, 4, 8)
+            new_subsystem_controller = self.scenarioController.createSubsystem(new_subsystem)
+
+            browser = TableView(self, new_subsystem_controller)
             browser.filesname = file_path
             i = self.tabs.addTab(browser, new_subsystem)
             self.tabs.setCurrentIndex(i)
@@ -125,15 +126,10 @@ class Ui(QtWidgets.QMainWindow):
         # title = self.tabs.currentWidget().filesname
         title = 'test'
 
-    def getAvailableSubsystems(self):
+    def setTimeline(self):
 
-        all_names = []
+        self.timeline.setTimeline()
 
-        for subsystem in self.applicationController.allSubsystems:
-
-            all_names.append(subsystem.subsystemName)
-
-        return all_names
 
 
 

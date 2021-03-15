@@ -2,7 +2,7 @@
 from Core.SubsystemParser import SubsystemParser
 from GUI.WindowController import WindowController
 
-from Core.ApplicationController import ApplicationController
+from Core.ScenarioController import ScenarioController
 
 if __name__ == '__main__':
 
@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     all_subsystem_models.append(subsystem_parser.getSubsystem())
 
-    application_controller = ApplicationController(all_subsystem_models)
+    scenario_controller = ScenarioController(all_subsystem_models)
 
     # start-up GUI
-    WindowController(application_controller)
+    WindowController(scenario_controller)

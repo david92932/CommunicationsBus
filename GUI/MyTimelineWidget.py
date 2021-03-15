@@ -1,33 +1,38 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from PyQt5.QtWidgets import*
 from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem
 
 class MyTimelineWidget(QtWidgets.QGraphicsView):
-    def __init__(self, parent, subsystem_controller):
+    def __init__(self, parent, scenario_controller):
         super(MyTimelineWidget, self).__init__(parent)
         self.setScene(QtWidgets.QGraphicsScene(self))
 
-        self.setGeometry(0, parent.geometry().bottomLeft().y(), 1500, 300)
+        self.screen = QDesktopWidget().screenGeometry()
+        self.setGeometry(0, self.screen.height()/2, self.screen.width(),
+                         self.screen.height())
+
+        # self.setGeometry(0, parent.geometry().bottomLeft().y(), 1500, 300)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         brush = QtWidgets.QApplication.palette().brush(QtGui.QPalette.Window)
         self.setBackgroundBrush(brush)
 
-        self.subsystemController = subsystem_controller
+        self.scenarioController = scenario_controller
 
         for x in range(4):
             for i in range(100):
-                self.drawLine(100 * i + 100, parent.geometry().topLeft().y(), "black")
+                self.drawLine(100 * i + 100, self.geometry().topLeft().y(), "black")
 
         self.setTimeline()
 
     def drawLine(self, xValue, yValue, color):
 
         rect_item = HorizontalItem(
-            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, 300))
+            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, self.screen.height()/2))
         )
 
         rect_item.setBrush(QtGui.QBrush(QtGui.QColor(color)))
@@ -37,11 +42,17 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
 
         self.clearTimelineBoxes()
 
-        schedule = self.subsystemController.getSubsystemSchedule()
+        subsystem_controllers = self.scenarioController.getActiveSubsystems()
 
-        for command in schedule:
-            timeline_box = command.timelineBox
-            self.scene().addItem(timeline_box)
+        for subsystem_controller in subsystem_controllers:
+
+
+            schedule = subsystem_controller.getSubsystemSchedule()
+            for command in schedule:
+                timeline_box = command.timelineBox
+                print('timeline type')
+                print(type(timeline_box))
+                self.scene().addItem(timeline_box)
 
     def clearTimelineBoxes(self):
 

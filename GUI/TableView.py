@@ -11,26 +11,30 @@ from Core.SubsystemController import SubsystemController
 from GUI.DetailedView import DetailedView
 
 class TableView(QTableWidget):
-    def __init__(self, application_controller, new_subsystem, file_path, data, *args):
+    def __init__(self, parent, subsystem_controller, file_path=None, *args):
 
         QTableWidget.__init__(self, *args)
 
+        self.parentObj = parent
         self.setRowCount(1)
         self.setColumnCount(8)
 
-        self.applicationController = application_controller
+        self.subsystemController = subsystem_controller
 
-
-        self.subsystemController = SubsystemController(new_subsystem, application_controller.allSubsystems)
-        self.data = None
         self.setData()
-
-        self.timeline = MyTimelineWidget(self, self.subsystemController)
 
         self.detailedView = None
 
         self.cellChanged.connect(self.cellUpdated)
 
+        screen = QDesktopWidget().screenGeometry()
+        print(screen.height())
+        print(screen.width())
+        print(dir(screen))
+        self.setMinimumHeight(screen.height()/2)
+        self.setMaximumHeight(screen.height() / 2)
+
+        self.setMaximumWidth(screen.width()/1.5)
         self.show()
         # detailed.show()
 
@@ -96,13 +100,13 @@ class TableView(QTableWidget):
         if self.detailedView is not None:
             self.detailedView = None
 
-        self.detailedView = DetailedView(self, self.subsystemController)
+        self.detailedView = DetailedView(self.parent(), self, self.subsystemController)
         self.detailedView.show()
 
     def detailedViewChangeEvent(self):
 
         self.setData()
-        self.timeline.setTimeline()
+        self.parentObj.setTimeline()
 
 
 
