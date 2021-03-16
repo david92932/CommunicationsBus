@@ -4,7 +4,8 @@ Created on Tue Feb  9 13:51:43 2021
 
 @author: jemac
 """
-
+from io import StringIO
+import pandas as pd
 
 class CommandFile:
     def __init__(self, subsystem_controller, file_path):
@@ -17,6 +18,7 @@ class CommandFile:
         subsystem_schedule = self.subsystemController.getSubsystemSchedule()
         file_string = self.makeCommandString(subsystem_schedule)
         self.writeToFile(file_string)
+
 
     def readCommandFile(self):
 
@@ -81,7 +83,22 @@ class CommandFile:
                 commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
         return commandMainstring
+    def makeCommandCSV(self, all_commands):
+        commandMainstring = ""
+        for command in all_commands:
 
+            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, {command.wordSizeBits}, '
+            for field in command.fields:
+                #this is where value needs to be raw
+                #fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
+                field_string = field.getFieldValueEngineeringUnits()
+                # thisfield = bytes(field.byte_size)
+                commandstring += "0x" + fieldstring + ", "
+
+                commandMainstring = commandMainstring + commandstring[:-2] + "\n"
+            csv_string = StringIO(commandMainstring)
+            df = pd.read_csv(csv_string, sep=", ")
+        #df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
     # def readCommandString(self, commandstring):
     #     # get/openfile
     #     # remakecommandpart
