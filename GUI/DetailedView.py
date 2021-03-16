@@ -31,11 +31,9 @@ class DetailedView(QWidget):
         self.screen = QDesktopWidget().screenGeometry()
         self.setGeometry(self.screen.width()/1.5, parent.geometry().topLeft().y(), self.screen.width(), self.screen.height()/2)
 
-
         # Create a QGridLayout instance
-        self.layout = QGridLayout()
-        # rectangle = QRect(self.geometry().topLeft().x(), self.geometry().topLeft().y(), screen.width()/2, screen.height()/2)
-        # self.layout.setGeometry(rectangle)
+        self.layout = QFormLayout()
+
         self.subsystemController = subsystem_controller
         self.allCommands = self.subsystemController.getAllAvailableCommands()
 
@@ -46,7 +44,8 @@ class DetailedView(QWidget):
         comboBox = self.createComboBox(command_strings, self.getSelectedCommand)
         comboBox.setFixedWidth(self.screen.width() / 2)
 
-        self.layout.addWidget(comboBox, 0, 0)
+        # self.layout.addWidget(comboBox, 0, 0)
+        self.layout.addWidget(comboBox)
 
         self.setLayout(self.layout)
 
@@ -166,7 +165,8 @@ class DetailedView(QWidget):
 
         for index, box in enumerate(all_constructed_boxes):
 
-            self.layout.addWidget(box, index, 0)
+            # self.layout.addWidget(box, index, 0)
+            self.layout.addWidget(box)
 
     def detailedViewChangeEvent(self):
 

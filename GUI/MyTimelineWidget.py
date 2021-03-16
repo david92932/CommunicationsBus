@@ -15,7 +15,6 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
         self.setGeometry(0, self.screen.height()/2, self.screen.width(),
                          self.screen.height())
 
-        # self.setGeometry(0, parent.geometry().bottomLeft().y(), 1500, 300)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         brush = QtWidgets.QApplication.palette().brush(QtGui.QPalette.Window)
@@ -46,12 +45,10 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
 
         for subsystem_controller in subsystem_controllers:
 
-
             schedule = subsystem_controller.getSubsystemSchedule()
             for command in schedule:
                 timeline_box = command.timelineBox
-                print('timeline type')
-                print(type(timeline_box))
+
                 self.scene().addItem(timeline_box)
 
     def clearTimelineBoxes(self):

@@ -14,6 +14,7 @@ class SubsystemController:
                         'Sub Address', 'Word Count', 'Enabled']
 
         self.mySubsystem: Subsystem = subsystem_obj
+        self.filePath = None
 
     def createCommand(self, command_name: str) -> Command:
 
@@ -57,8 +58,11 @@ class SubsystemController:
         command_file = CommandFile(self, file_path)
         command_file.writeCommandFile()
 
+    def setFilePath(self, file_path: str):
+
+        self.filePath = file_path
+
     def readCommandFile(self, file_path):
-        print('reading')
         command_file = CommandFile(self, file_path)
         command_file.readCommandFile()
 

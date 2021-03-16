@@ -18,11 +18,13 @@ class GraphicsRectItem(QGraphicsRectItem):
         handleMiddleRight: Qt.SizeHorCursor
     }
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """
         Initialize the shape.
         """
         super().__init__(*args)
+        self.ownerCommand = kwargs['command']
+
         self.handles = {}
         self.handleSelected = None
         self.mousePressPos = None
@@ -34,6 +36,7 @@ class GraphicsRectItem(QGraphicsRectItem):
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
         self.updateHandlesPos()
 
+        self.setToolTip()
 
     def handleAt(self, point):
         """
@@ -53,6 +56,7 @@ class GraphicsRectItem(QGraphicsRectItem):
             cursor = Qt.ArrowCursor if handle is None else self.handleCursors[handle]
             self.setCursor(cursor)
         super().hoverMoveEvent(moveEvent)
+
 
     def hoverLeaveEvent(self, moveEvent):
         """
@@ -165,3 +169,19 @@ class GraphicsRectItem(QGraphicsRectItem):
         for handle, rect in self.handles.items():
             if self.handleSelected is None or handle == self.handleSelected:
                 painter.drawEllipse(rect)
+
+    def setToolTip(self):
+
+        super().setToolTip(self.buildToolTip())
+
+    def buildToolTip(self):
+
+        command_name = self.ownerCommand.name
+        start_time = self.ownerCommand.commandStartField.getFieldValueEngineeringUnits()
+        length_time = self.ownerCommand.commandLengthField.getFieldValueEngineeringUnits()
+        end_time = start_time + length_time
+
+        return f'Command Name: {command_name}\n' \
+               f'Start Time: {start_time}\n' \
+               f'End Time: {end_time}\n' \
+               f'Command Length: {length_time}'

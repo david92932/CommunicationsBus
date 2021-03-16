@@ -29,21 +29,24 @@ class Ui(QtWidgets.QMainWindow):
         self.showMaximized()
 
         all_subsystem_names = self.scenarioController.getAvailableSubsystemNames()
-        file_menu_options = ['Save As']
-        self.setMenuOptions(self.menuFile, file_menu_options, self.saveHandler)
+
+        self.clearMenuOptions(self.menuOpen)
+        self.clearMenuOptions(self.menuFile)
+        self.setMenuOptions(self.menuFile, ['Save', 'Save As'], self.saveMenuHandler)
         self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.add_new_tab)
         self.setMenuOptions(self.menuOpen, all_subsystem_names, self.openFile)
 
         self.show()
         self.timeline.show()
 
-    def setMenuOptions(self, menu_obj, options: [], binding_function):
-
+    def clearMenuOptions(self, menu_obj):
         menu_obj.clear()
+
+    def setMenuOptions(self, menu_obj, options: [], binding_function):
 
         for item in options:
             menu_obj.addAction(item)
-            menu_obj.triggered.connect(lambda item=item: binding_function())
+            menu_obj.triggered.connect(binding_function)
 
     def setMenuOptionsWithParams(self, menu_obj, options: [], binding_function):
 
@@ -125,8 +128,10 @@ class Ui(QtWidgets.QMainWindow):
   
         # if there is only one tab 
       
-        # else remove the tab 
-        self.tabs.removeTab(i) 
+        # else remove the tab
+        self.saveHandler()
+        self.tabs.removeTab(i)
+
         
     def update_title(self, browser): 
   
@@ -146,16 +151,53 @@ class Ui(QtWidgets.QMainWindow):
     def getCurrentSubsystemController(self):
 
         current_index = self.tabs.currentIndex()
-        return self.allSubsystemControllers[current_index]
+        return self.scenarioController.activeSubsystems[current_index]
+
+    def saveAsHandler(self):
+
+        print('save as')
+        file_path = self.saveFileExplorer()
+        subsystem_controller = self.getCurrentSubsystemController()
+        subsystem_controller.setFilePath(file_path)
+        subsystem_controller.buildCommandFile(subsystem_controller.filePath)
 
     def saveHandler(self):
 
-        file_path = self.saveFileExplorer()
-        print(file_path)
+        subsystem_controller = self.getCurrentSubsystemController()
+        if subsystem_controller.filePath == None:
+            self.saveAsHandler()
 
+        else:
+            subsystem_controller.buildCommandFile(subsystem_controller.filePath)
 
+    def openSaveWarningDialog(self):
 
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
 
+        msg.setText("The current file has not been saved")
+        msg.setWindowTitle("File Not Saved")
+
+        msg.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
+        msg.buttonClicked.connect(self.warningDialogBinding)
+
+        retval = msg.exec_()
+
+    def warningDialogBinding(self, button_pressed):
+
+        print(f'button pressed: {(button_pressed.text())}')
+        if button_pressed.text() == 'Save':
+            self.saveHandler()
+
+        else:
+            pass
+
+    def saveMenuHandler(self, action):
+        button_text = action.text()
+        if button_text == 'Save As':
+            self.saveAsHandler()
+        elif button_text == 'Save':
+            self.saveHandler()
 
 
 

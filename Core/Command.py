@@ -1,6 +1,7 @@
 
 from Core.TimelineBox import GraphicsRectItem
 from PyQt5 import QtCore, QtGui
+from Core.TimelineConfiguration import TimelineConfiguration
 
 class Command:
 
@@ -8,7 +9,6 @@ class Command:
 
         self.name = name
         self.id = id
-        self.startTime = 0
         self.commandStartField = command_start_field
         self.commandLengthField = command_length_field
         self.rtAddress = rt_address
@@ -19,6 +19,7 @@ class Command:
         self.enabled = True
         self.timelineBox = None
         self.timelineRow = 0
+        self.timelineConfiguration = TimelineConfiguration()
 
     def getCommandFields(self):
 
@@ -69,12 +70,13 @@ class Command:
 
     def addBox(self, startTime, endTime, row, color: str):
 
-        print('add box')
-        xValue = startTime
-        yValue = row * 75
+        xStartValue = startTime * self.timelineConfiguration.pixelsPerMillisecond
+        xEndValue = endTime * self.timelineConfiguration.pixelsPerMillisecond + xStartValue
+
+        yValue = row * (self.timelineConfiguration.boxHeight + self.timelineConfiguration.rowSpacing)
 
         self.timelineBox = GraphicsRectItem(
-            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50)))
+            QtCore.QRectF(QtCore.QPointF(xStartValue, yValue), QtCore.QSizeF(xEndValue - xStartValue, self.timelineConfiguration.boxHeight)), command=self)
 
         self.timelineBox.setBrush(QtGui.QBrush(QtGui.QColor(color)))
 
