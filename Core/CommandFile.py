@@ -42,17 +42,19 @@ class CommandFile:
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
-            new_command = self.subsystemController.createCommand(commandname)
-
+            if new_command not in self.subsystemController.getAllAvailableCommands():
+                new_command = self.subsystemController.createCommand(commandname)
+                #new_command.setTime(commandTime)
             # handle fields with only start/length values
             # handle invalid command names
             # handle command time
-            for field in new_command.fields:
+                if len(chunks) != 0:
+                    for field in new_command.fields:
 
-                field.setFieldValue(int(chunks[i], 16))
+                     field.setFieldValue(int(chunks[i], 16))
 
-                i = i + 1
-                self.subsystemController.addCommandAtEnd(new_command)
+                     i = i + 1
+                     self.subsystemController.addCommandAtEnd(new_command)
 
 
             # to actually create a command,
