@@ -6,7 +6,7 @@ class Subsystem:
 
         self.subsystemName: str = name
         self.__fileExtension: str = file_extension
-        self.__commands: Command = commands
+        self.__commands = commands
 
         self.__subsystemSchedule = []
 
@@ -35,3 +35,7 @@ class Subsystem:
     def setTimelineRow(self, row: int):
 
         self.timelineRow = row
+
+        for command in self.getAllAvailableCommands():
+
+            command.setTimelineRow(row)

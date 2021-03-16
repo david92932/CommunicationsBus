@@ -30,12 +30,6 @@ class SubsystemController:
                 self.addCommandAtEnd(new_command)
                 break
 
-        # if new_command is not None:
-        #     print(f'New Command {command.name}')
-        #
-        # else:
-        #     print('new command is None :(')
-
         return new_command
 
     def getSubsystemSchedule(self):

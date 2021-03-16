@@ -10,6 +10,8 @@ class ScenarioController:
 
     def createSubsystem(self, name: str):
 
+        subsystem_controller = None
+
         for subsystem in self.subsystemModels:
 
             sub_name = subsystem.subsystemName

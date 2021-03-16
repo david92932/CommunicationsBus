@@ -43,3 +43,11 @@ class Field:
             print(response_message)
 
         return value_is_valid, response_message
+
+    def getFieldValueEngineeringUnits(self):
+
+        return self.fieldValue
+
+    def getFieldValueRawUnits(self):
+
+        return self.fieldValue

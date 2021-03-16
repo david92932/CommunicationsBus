@@ -18,6 +18,7 @@ class Command:
         self.fields = fields
         self.enabled = True
         self.timelineBox = None
+        self.timelineRow = 0
 
     def getCommandFields(self):
 
@@ -64,15 +65,19 @@ class Command:
 
     def setTimelineBox(self):
 
-        self.addBox(self.commandStartField.fieldValue, self.commandLengthField.fieldValue, 1, 'red')
+        self.addBox(self.commandStartField.fieldValue, self.commandLengthField.fieldValue, self.timelineRow, 'red')
 
     def addBox(self, startTime, endTime, row, color: str):
 
         print('add box')
-        xValue = startTime + 100
+        xValue = startTime
         yValue = row * 75
 
         self.timelineBox = GraphicsRectItem(
             QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(endTime - startTime, 50)))
 
         self.timelineBox.setBrush(QtGui.QBrush(QtGui.QColor(color)))
+
+    def setTimelineRow(self, row):
+
+        self.timelineRow = row

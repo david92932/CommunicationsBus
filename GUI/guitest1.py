@@ -22,14 +22,16 @@ class Ui(QtWidgets.QMainWindow):
         self.tabs = self.tabWidget
         self.tabs.currentChanged.connect(self.current_tab_changed) 
         self.tabs.tabCloseRequested.connect(self.close_current_tab)
-        #self.tab = self.findChild(QtWidgets.tabWidget)
+
         self.actionTempCommand.triggered.connect(lambda: self.openTCMD())
         self.actionVideoCommand.triggered.connect(lambda: self.openCCMD())
         self.actionRecorderCommand.triggered.connect(lambda: self.openRCMD())
         self.showMaximized()
 
         all_subsystem_names = self.scenarioController.getAvailableSubsystemNames()
-        self.setCreateNewMenuOptions(self.menuNew, all_subsystem_names, self.add_new_tab)
+        file_menu_options = ['Save As']
+        self.setMenuOptions(self.menuFile, file_menu_options, self.saveHandler)
+        self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.add_new_tab)
         self.setMenuOptions(self.menuOpen, all_subsystem_names, self.openFile)
 
         self.show()
@@ -43,7 +45,7 @@ class Ui(QtWidgets.QMainWindow):
             menu_obj.addAction(item)
             menu_obj.triggered.connect(lambda item=item: binding_function())
 
-    def setCreateNewMenuOptions(self, menu_obj, options: [], binding_function):
+    def setMenuOptionsWithParams(self, menu_obj, options: [], binding_function):
 
         menu_obj.clear()
 
@@ -56,15 +58,26 @@ class Ui(QtWidgets.QMainWindow):
 
         print(f'got to openFile: {name}')
 
-        self.openFileExplorer()
+        file_path = self.openFileExplorer()
+        file_name = self.getFileNameFromPath(file_path)
+
+        self.add_new_tab(file_path, file_name=file_name)
         
     def openFileExplorer(self):
 
         file_path, idk = QFileDialog.getOpenFileName()
 
-        file_name = ntpath.basename(file_path)
+        return file_path
 
-        self.add_new_tab(file_path, file_name=file_name)
+    def saveFileExplorer(self):
+
+        file_path, idk = QFileDialog.getSaveFileName()
+
+        return file_path
+
+    def getFileNameFromPath(self, file_path):
+
+        return ntpath.basename(file_path)
 
     def add_new_tab(self, new_subsystem="None", file_path="None", file_name="No Name Found"):
 
@@ -129,6 +142,19 @@ class Ui(QtWidgets.QMainWindow):
     def setTimeline(self):
 
         self.timeline.setTimeline()
+
+    def getCurrentSubsystemController(self):
+
+        current_index = self.tabs.currentIndex()
+        return self.allSubsystemControllers[current_index]
+
+    def saveHandler(self):
+
+        file_path = self.saveFileExplorer()
+        print(file_path)
+
+
+
 
 
 
