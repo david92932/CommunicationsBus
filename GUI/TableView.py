@@ -27,6 +27,8 @@ class TableView(QTableWidget):
 
         self.cellChanged.connect(self.cellUpdated)
 
+        #this might be the detailed view thing we need
+        #self.clicked.connect(self.changeDetailedView(self.detailedView))
         screen = QDesktopWidget().screenGeometry()
         print(screen.height())
         print(screen.width())
@@ -103,6 +105,9 @@ class TableView(QTableWidget):
         self.detailedView = DetailedView(self.parent(), self, self.subsystemController)
         self.detailedView.show()
 
+    #def changeDetailedView(self, command):
+
+       # command.detailedView.show()
     def detailedViewChangeEvent(self):
 
         self.setData()
