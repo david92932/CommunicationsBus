@@ -23,22 +23,18 @@ class TableView(QTableWidget):
 
         self.setData()
 
-        self.detailedView = None
+        self.createDetailedView()
 
         self.cellChanged.connect(self.cellUpdated)
+        self.doubleClicked.connect(self.detailedViewExistingCommand)
 
-        #this might be the detailed view thing we need
-        # self.clicked.connect(self.changeDetailedView)
         screen = QDesktopWidget().screenGeometry()
-        print(screen.height())
-        print(screen.width())
-        print(dir(screen))
+
         self.setMinimumHeight(screen.height()/2)
         self.setMaximumHeight(screen.height() / 2)
 
         self.setMaximumWidth(screen.width()/1.5)
         self.show()
-        # detailed.show()
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
@@ -57,7 +53,6 @@ class TableView(QTableWidget):
             pass
             # do function to add row
         if action == addBelowAction:
-            print('add action below called')
             self.openNewCommandWindow()
         if action == deleteRowAction:
             pass  # do function to delete row
@@ -67,8 +62,6 @@ class TableView(QTableWidget):
         pass
 
     def setData(self):
-
-        print('Set Data Triggered')
 
         schedule_commands = self.subsystemController.getSubsystemSchedule()
         headers = self.subsystemController.headers
@@ -99,21 +92,39 @@ class TableView(QTableWidget):
 
     def openNewCommandWindow(self):
 
-        if self.detailedView is not None:
-            self.detailedView = None
+        self.clearDetailedView()
+        self.createDetailedView()
 
-        self.detailedView = DetailedView(self.parent(), self, self.subsystemController)
-        self.detailedView.show()
+        self.detailedView.createSelectCommand()
+        self.showDetailedView()
 
-    # def changeDetailedView(self):
-    #
-    #    self.detailedView.show()
 
     def detailedViewChangeEvent(self):
 
         self.setData()
         self.parentObj.setTimeline()
 
+    def showDetailedView(self):
 
+        self.detailedView.show()
 
+    def detailedViewExistingCommand(self, event):
 
+        self.clearDetailedView()
+        self.createDetailedView()
+
+        row = event.row()
+        command_at_row = self.subsystemController.getSubsystemSchedule()[row]
+
+        self.detailedView.constructDetailedView(command_at_row)
+
+        self.showDetailedView()
+
+    def createDetailedView(self):
+
+        self.detailedView = DetailedView(self.parentObj, self, self.subsystemController)
+
+    def clearDetailedView(self):
+
+        self.detailedView.hide()
+        self.detailedView = None

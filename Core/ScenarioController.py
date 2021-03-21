@@ -40,3 +40,44 @@ class ScenarioController:
     def getActiveSubsystems(self):
 
         return self.activeSubsystems
+
+    def getSubsystemFromFileExtension(self, file_extension: str):
+
+        subsystem_name = None
+        for subsystem in self.subsystemModels:
+
+            subsystem_extension = subsystem.fileExtension
+
+            if subsystem_extension == file_extension:
+                subsystem_name = subsystem.subsystemName
+                break
+
+        if subsystem_name is not None:
+            new_subsystem_controller = self.createSubsystem(subsystem_name)
+
+        return new_subsystem_controller
+
+    def removeActiveSubystemAtIndex(self, index: int):
+
+        self.activeSubsystems.pop(index)
+
+    def writeScenarioFile(self, scenario_file_path: str):
+
+        with open(scenario_file_path, 'w') as outFile:
+            for subsystem_controller in self.getActiveSubsystems():
+                subsystem_file_path = subsystem_controller.filePath
+            outFile.write(f'{subsystem_file_path}\n')
+
+        outFile.close()
+
+    def openScenarioFile(self, scenario_file_path: str):
+
+        with open(scenario_file_path, 'r') as inFile:
+            command_file_paths = inFile.readlines()
+        inFile.close()
+
+        for command_file_path in command_file_paths:
+
+            file_extension = command_file_path.split('.')[1]
+            new_subsystem_controller = self.getSubsystemFromFileExtension(file_extension)
+            new_subsystem_controller.readCommandFile(command_file_path)

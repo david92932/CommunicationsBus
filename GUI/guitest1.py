@@ -23,18 +23,15 @@ class Ui(QtWidgets.QMainWindow):
         self.tabs.currentChanged.connect(self.current_tab_changed) 
         self.tabs.tabCloseRequested.connect(self.close_current_tab)
 
-        self.actionTempCommand.triggered.connect(lambda: self.openTCMD())
-        self.actionVideoCommand.triggered.connect(lambda: self.openCCMD())
-        self.actionRecorderCommand.triggered.connect(lambda: self.openRCMD())
         self.showMaximized()
 
         all_subsystem_names = self.scenarioController.getAvailableSubsystemNames()
 
         self.clearMenuOptions(self.menuOpen)
         self.clearMenuOptions(self.menuFile)
-        self.setMenuOptions(self.menuFile, ['Save', 'Save As'], self.saveMenuHandler)
+        self.setMenuOptions(self.menuFile, ['Save', 'Save As', 'Save As Scenario'], self.saveMenuHandler)
         self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.add_new_tab)
-        self.setMenuOptions(self.menuOpen, all_subsystem_names, self.openFile)
+        self.setMenuOptions(self.menuOpen, ['Open Command File', 'Open Scenario'], self.openFile)
 
         self.show()
         self.timeline.show()
@@ -46,7 +43,7 @@ class Ui(QtWidgets.QMainWindow):
 
         for item in options:
             menu_obj.addAction(item)
-            menu_obj.triggered.connect(binding_function)
+        menu_obj.triggered.connect(binding_function)
 
     def setMenuOptionsWithParams(self, menu_obj, options: [], binding_function):
 
@@ -55,26 +52,25 @@ class Ui(QtWidgets.QMainWindow):
         for item in options:
             entry_name = item
             menu_obj.addAction(item)
-            menu_obj.triggered.connect(lambda item=item: binding_function(new_subsystem=entry_name))
+            menu_obj.triggered.connect(lambda item=item: binding_function(new_subsystem_name=entry_name))
 
-    def openFile(self, name):
-
-        print(f'got to openFile: {name}')
+    def openFile(self):
 
         file_path = self.openFileExplorer()
         file_name = self.getFileNameFromPath(file_path)
 
-        self.add_new_tab(file_path, file_name=file_name)
+        self.add_new_tab(file_path=file_path, file_name=file_name)
         
-    def openFileExplorer(self):
-
-        file_path, idk = QFileDialog.getOpenFileName()
+    def openFileExplorer(self, caption=''):
+        file_path = None
+        file_path, idk = QFileDialog.getOpenFileName(caption=caption)
 
         return file_path
 
-    def saveFileExplorer(self):
+    def saveFileExplorer(self, caption=''):
 
-        file_path, idk = QFileDialog.getSaveFileName()
+        file_path = None
+        file_path, idk = QFileDialog.getSaveFileName(caption=caption)
 
         return file_path
 
@@ -82,30 +78,41 @@ class Ui(QtWidgets.QMainWindow):
 
         return ntpath.basename(file_path)
 
-    def add_new_tab(self, new_subsystem="None", file_path="None", file_name="No Name Found"):
+    def add_new_tab(self, new_subsystem_name="None", file_path="None", file_name="No Name Found", opening_scenario=False):
+
+        # if we're opening a scenario
+        if opening_scenario:
+
+            # Creating subsystem controller for scenarios is handled by ScenarioController,
+            # so get all of the active subsystems and create tabs for all of the files
+            for subsystem_controller in self.scenarioController.getActiveSubsystems():
+
+                browser = TableView(self, subsystem_controller)
+
+                i = self.tabs.addTab(browser, file_name)
+                self.tabs.setCurrentIndex(i)
 
         # if we're creating a new file
-        if file_path == "None":
+        elif file_path == "None":
 
-            new_subsystem_controller = self.scenarioController.createSubsystem(new_subsystem)
+            new_subsystem_controller = self.scenarioController.createSubsystem(new_subsystem_name)
 
             browser = TableView(self, new_subsystem_controller)
             browser.filesname = file_path
-            i = self.tabs.addTab(browser, new_subsystem)
+            i = self.tabs.addTab(browser, new_subsystem_name)
             self.tabs.setCurrentIndex(i)
 
         # if we're opening an existing file
         else:
 
-            # doesn't work yet
-            # browser = TableView(self.applicationController, file_path, data, 4, 8)
-            # browser.filesname = file_path
-            # i = self.tabs.addTab(browser, file_path)
-            # self.tabs.setCurrentIndex(i)
+            file_extension = file_path.split('.')[1]
+            new_subsystem_controller = self.scenarioController.getSubsystemFromFileExtension(file_extension)
 
-            pass
+            new_subsystem_controller.readCommandFile(file_path)
+            browser = TableView(self, new_subsystem_controller)
 
-
+            i = self.tabs.addTab(browser, file_name)
+            self.tabs.setCurrentIndex(i)
     
     def tab_open_doubleclick(self, i): 
   
@@ -115,24 +122,18 @@ class Ui(QtWidgets.QMainWindow):
             # creating a new tab 
             self.add_new_tab()
     def current_tab_changed(self, i): 
-  
-        # get the curl 
-        #qurl = self.tabs.currentWidget().url() 
 
-        print(i)
         # update the title 
         self.update_title(self.tabs.currentWidget())
        # self.update_title(self.tabs.currentWidget()) 
         
     def close_current_tab(self, i): 
-  
-        # if there is only one tab 
-      
-        # else remove the tab
-        self.saveHandler()
+
+        subsystem_controller = self.getCurrentSubsystemController()
+        self.saveHandler(subsystem_controller)
+        self.scenarioController.removeActiveSubystemAtIndex(i)
         self.tabs.removeTab(i)
 
-        
     def update_title(self, browser): 
   
         # if signal is not from the current tab 
@@ -153,22 +154,41 @@ class Ui(QtWidgets.QMainWindow):
         current_index = self.tabs.currentIndex()
         return self.scenarioController.activeSubsystems[current_index]
 
-    def saveAsHandler(self):
+    def saveAsHandler(self, subsystem_controller):
 
-        print('save as')
-        file_path = self.saveFileExplorer()
-        subsystem_controller = self.getCurrentSubsystemController()
-        subsystem_controller.setFilePath(file_path)
-        subsystem_controller.buildCommandFile(subsystem_controller.filePath)
+        subystem_name = subsystem_controller.mySubsystem.subsystemName
+        file_path = self.saveFileExplorer(caption=f'Enter file path for {subystem_name} subsystem')
 
-    def saveHandler(self):
+        print(f'file path : {type(file_path)}')
+        if file_path != '':
 
-        subsystem_controller = self.getCurrentSubsystemController()
+            subsystem_controller.setFilePath(file_path)
+            subsystem_controller.buildCommandFile(subsystem_controller.filePath)
+
+        else:
+
+            self.openWarningDialog('File Not Saved', f'Invalid File Path: {file_path}',
+                                   self.saveAsHandler(subsystem_controller))
+
+    def saveHandler(self, subsystem_controller):
+
         if subsystem_controller.filePath == None:
-            self.saveAsHandler()
+            self.saveAsHandler(subsystem_controller)
 
         else:
             subsystem_controller.buildCommandFile(subsystem_controller.filePath)
+
+    def saveScenarioHandler(self):
+
+        file_path = self.saveFileExplorer(caption="Enter File Path for Scenario")
+
+        # save all active command files
+        active_subsystems = self.scenarioController.getActiveSubsystems()
+        for subsystem_controller in active_subsystems:
+
+            self.saveHandler(subsystem_controller)
+
+        self.scenarioController.writeScenarioFile(file_path)
 
     def openSaveWarningDialog(self):
 
@@ -183,21 +203,59 @@ class Ui(QtWidgets.QMainWindow):
 
         retval = msg.exec_()
 
+    def openWarningDialog(self, title, text, binding_function):
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+
+        msg.setText(title)
+        msg.setWindowTitle(text)
+
+        msg.setStandardButtons(QMessageBox.Ok|QMessageBox.Cancel)
+
+        msg.buttonClicked.connect(binding_function)
+
+        retval = msg.exec_()
+
     def warningDialogBinding(self, button_pressed):
 
         print(f'button pressed: {(button_pressed.text())}')
         if button_pressed.text() == 'Save':
-            self.saveHandler()
+            subsystem_controller = self.getCurrentSubsystemController()
+            self.saveHandler(subsystem_controller)
 
         else:
             pass
 
     def saveMenuHandler(self, action):
         button_text = action.text()
-        if button_text == 'Save As':
-            self.saveAsHandler()
-        elif button_text == 'Save':
-            self.saveHandler()
 
+        if button_text == 'Save As':
+            subsystem_controller = self.getCurrentSubsystemController()
+            self.saveAsHandler(subsystem_controller)
+
+        elif button_text == 'Save':
+            subsystem_controller = self.getCurrentSubsystemController()
+            self.saveHandler(subsystem_controller)
+
+        elif button_text == 'Save As Scenario':
+            self.saveScenarioHandler()
+
+    def openMenuHandler(self, action):
+
+        button_text = action.text()
+
+        if button_text == 'Open Command File':
+            self.openFile()
+
+        elif button_text == 'Open Scenario':
+            self.openScenarioFile()
+
+    def openScenarioFile(self):
+
+        file_path = self.openFileExplorer(caption=f'Select scenario file to open')
+        self.scenarioController.openScenarioFile(file_path)
+
+        self.add_new_tab(opening_scenario=True)
 
 

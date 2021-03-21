@@ -69,6 +69,8 @@ class SubsystemController:
         for command in self.getSubsystemSchedule():
             print(command.name)
 
+        self.setFilePath(file_path)
+
 
 
 

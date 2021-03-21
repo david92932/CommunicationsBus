@@ -19,7 +19,6 @@ class CommandFile:
         file_string = self.makeCommandString(subsystem_schedule)
         self.writeToFile(file_string)
 
-
     def readCommandFile(self):
 
         available_commands = self.subsystemController.getAllAvailableCommands()
@@ -58,10 +57,6 @@ class CommandFile:
                      i = i + 1
                      self.subsystemController.addCommandAtEnd(new_command)
 
-
-            # to actually create a command,
-
-
     def writeToFile(self, file_string):
 
         outFile = open(self.filePath, 'w')
@@ -73,16 +68,47 @@ class CommandFile:
 
         for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, {command.wordSizeBits}, '
+            commandstring = f'{command.name}, {command.id}, {command.wordSizeBits}, '
+            fieldstrings = ""
             for field in command.fields:
-
                 fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
-                # thisfield = bytes(field.byte_size)
                 commandstring += "0x" + fieldstringhex + ", "
+                fieldstrings += fieldstringhex
 
-                commandMainstring = commandMainstring + commandstring[:-2] + "\n"
+
+            # makechecksum
+            remainingByte = None
+            hexfill = 255
+
+            bytes = bytearray.fromhex(fieldstrings)
+            sum = bytearray.fromhex("25")
+            count = 0
+            for byte in bytes[:bytes.__len__() - 1]:
+                sum.insert(0, (byte + bytes[count + 1] & 255))
+                count = count + 1
+            checksum = hex(sum[0] ^ 0xFF)[2:].zfill(2)
+            print("checksum = 0x" + checksum)
+            print("checksum and fields  = 0x" + checksum + fieldstrings)
+            # format this sting
+            formatline = checksum + fieldstrings
+            print("checksum and fields  = 0x" + formatline)
+            # for i in range(len(formatline)):
+
+            # make 0X separatedfields here
+            formattedfields = ""
+            n = 4  # chunk length
+            chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
+            for chunks2 in chunks1:
+                if len(chunks2) != 4:
+                    chunks2 = chunks2 + "00"
+                else:
+                    chunks2 = chunks2 + ", "
+                formattedfields += "0x" + chunks2
+
+            commandMainstring += commandstring + formattedfields + "\n"
 
         return commandMainstring
+
     def makeCommandCSV(self, all_commands):
         commandMainstring = ""
         for command in all_commands:
@@ -93,85 +119,10 @@ class CommandFile:
                 #fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
                 field_string = field.getFieldValueEngineeringUnits()
                 # thisfield = bytes(field.byte_size)
-                commandstring += "0x" + fieldstring + ", "
+                commandstring += "0x" + field_string + ", "
 
                 commandMainstring = commandMainstring + commandstring[:-2] + "\n"
             csv_string = StringIO(commandMainstring)
             df = pd.read_csv(csv_string, sep=", ")
-        #df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
-    # def readCommandString(self, commandstring):
-    #     # get/openfile
-    #     # remakecommandpart
-    #     commandstring1 = commandstring.replace("0x20,", "0x30,")
-    #     print(commandstring1)
-    #     field1 = fields("haha", 1, 1, 32)
-    #     field2 = fields("haha1", 2, 2, 200)
-    #     fieldlist = []
-    #     fieldlist.append(field1)
-    #     fieldlist.append(field2)
-    #     command1 = []
-    #     command = Command("cameracommand", fieldlist)
-    #     command2 = []
-    #     command21 = Command("notcameracommand", fieldlist)
-    #     command1.append(command)
-    #     command1.append(command21)
-    #     commandfile = CommandFile("commandfile", command1)
-    #
-    #     # get commandtype so you now possible fields
-    #     # make the command
-    #     file1 = open('myfile.tcmd', 'w')
-    #     file1.writelines(commandstring1)
-    #     file1.close()
-    #     file1 = open('myfile.txt', 'r')
-    #     Lines = file1.readlines()
-    #     # commandname = firstline;
-    #     # commandstring2 = commandstring.readlines()
-    #     for line in Lines:
-    #         line.replace("\n", "")
-    #         commandname = line.partition(" ")[0]
-    #         commandstring1 = line.partition(" ")[2]
-    #         hexnumbers = commandstring1.split(", ")
-    #         i = 0
-    #         for field in command.fields:
-    #             # hexnumbers = commandstring1.split(", ")
-    #             field.value = int(hexnumbers[i], 16)
-    #
-    #             i = i + 1
-    #     print(commandfile.commands[0].fields[0].value)
-    #     # for values in hexnumbers:
-    #     #  field = command.fields[i]
-    #     #   field.value = int(values, 16)
-    #     # commandfile.commands.fields[i].value = int(values,16)
-    #
-    #     # i = i+1
-    #     # need firstline
-    #     # read rest of lines look up command name
-    #     # parse fields by comma
-    #     # put fields into commmand in order
-    #
-    #     thiscommand = 1
-    #
-    #     return thiscommand
+        df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
 
-    # def main():
-    #     field1 = fields("haha", 1, 1, 32)
-    #     field2 = fields("haha1", 2, 2, 200)
-    #     fieldlist = []
-    #     fieldlist.append(field1)
-    #     fieldlist.append(field2)
-    #     command1 = []
-    #     command = Command("cameracommand", fieldlist)
-    #     command2 = []
-    #     command21 = Command("notcameracommand", fieldlist)
-    #     command1.append(command)
-    #     command1.append(command21)
-    #     commandfile = CommandFile("commandfile", command1)
-    #
-    #     commandtxt = commandfile.makeCommandString(commandfile)
-    #
-    #     print(commandfile.makeCommandString(commandfile))
-    #     print(commandfile.readCommandString(commandtxt))
-
-
-    # if __name__ == "__main__":
-    #     main()

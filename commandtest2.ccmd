@@ -1,2 +1,1 @@
-Change Power State, 4, 0.0, 16, 0x00
-Change Power State, 4, 0.0, 16, 0x00, 0x0064
+Change Power State, 4, 16, 0x00, 0x0064, 0x9b00, 0x0064, 

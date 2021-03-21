@@ -27,12 +27,14 @@ class Command:
 
         command_fields.extend(self.fields)
 
+        print(f'commands returned: {command_fields}')
+
         return command_fields
 
     def getCommandFieldsTableView(self):
 
-        command_fields = [self.id, self.commandStartField.fieldValue, self.commandLengthField.fieldValue, self.name,
-                          self.rtAddress, self.subAddress, self.wordSizeBits, self.enabled]
+        command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.commandLengthField.getFieldValueEngineeringUnits(),
+                          self.name, self.rtAddress, self.subAddress, self.wordSizeBits, self.enabled]
 
         return command_fields
 

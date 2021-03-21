@@ -5,7 +5,7 @@ class Subsystem:
     def __init__(self, name: str, file_extension: str, commands: [Command]):
 
         self.subsystemName: str = name
-        self.__fileExtension: str = file_extension
+        self.fileExtension: str = file_extension
         self.__commands = commands
 
         self.__subsystemSchedule = []

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
 )
 
 class DetailedViewTextBox(QLineEdit):
-    def __init__(self, parent, field_name, description, binding_function):
+    def __init__(self, parent, field_name, description, binding_function, field_changed, field_value):
 
         super(DetailedViewTextBox, self).__init__(parent)
 
@@ -18,8 +18,12 @@ class DetailedViewTextBox(QLineEdit):
         self.setToolTip(description)
         self.editingFinished.connect(self.onEditingFinished)
 
-        self.setPlaceholderText(field_name)
-        self.setStyleSheet("QCustomLineEdit{color: gray;}")
+        if not field_changed:
+            self.setPlaceholderText(field_name)
+            self.setStyleSheet("QCustomLineEdit{color: gray;}")
+
+        else:
+            self.setText(str(field_value))
 
     def onEditingFinished(self):
 
