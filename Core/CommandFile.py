@@ -27,35 +27,44 @@ class CommandFile:
         inFile.close()
 
         for line in Lines:
-            #these are all the values separated by commas
+            # these are all the values separated by commas
             chunks = line.split(", ")
             readInCommand = 0
-            #line.replace("\n", "")
+            # line.replace("\n", "")
             commandname = chunks[0]
             commandID = chunks[1]
-            commandTime = chunks[2]
+            # commandTime = chunks[2]
             commandNumWords = chunks[3]
-            chunks.pop(0)
-            chunks.pop(0)
-            chunks.pop(0)
-            chunks.pop(0)
 
+            chunks.pop(0)
+            chunks.pop(0)
+            chunks.pop(0)
+            # chunks.pop(0)
+            field_values_string = "".join(chunks)
+            field_values_string = field_values_string.replace("0x", "")
+            field_values_string = field_values_string.replace("\n", "")
+            bytearray1 = bytearray.fromhex(field_values_string)
+            #print("this is string chunks |" + field_values_string + "|")
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
+            #im not sure what this is from but it hsould check to make sure there isnt a command name error
+
             if new_command not in self.subsystemController.getAllAvailableCommands():
                 new_command = self.subsystemController.createCommand(commandname)
-                #new_command.setTime(commandTime)
-            # handle fields with only start/length values
-            # handle invalid command names
-            # handle command time
+                # new_command.setTime(commandTime)
+                # handle fields with only start/length values
+                # handle invalid command names
+                # handle command time
+                y = 0
                 if len(chunks) != 0:
                     for field in new_command.fields:
+                        field_byte_size = field.byteSize
+                        field.setFieldValue(int(bytearray1[y:y + field_byte_size], 16))
+                        y += field_byte_size
 
-                     field.setFieldValue(int(chunks[i], 16))
-
-                     i = i + 1
-                     self.subsystemController.addCommandAtEnd(new_command)
+                    i = i + 1
+                    self.subsystemController.addCommandAtEnd(new_command)
 
     def writeToFile(self, file_string):
 
