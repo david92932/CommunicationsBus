@@ -48,6 +48,8 @@ class CommandFile:
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
+            checksum = bytearray1[0]
+            del bytearray1[0]
             #im not sure what this is from but it hsould check to make sure there isnt a command name error
 
             if new_command not in self.subsystemController.getAllAvailableCommands():
