@@ -44,14 +44,10 @@ class CommandFile:
             field_values_string = field_values_string.replace("0x", "")
             field_values_string = field_values_string.replace("\n", "")
             bytearray1 = bytearray.fromhex(field_values_string)
-            #print("this is string chunks |" + field_values_string + "|")
+            print("this is string chunks |" + field_values_string + "|")
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
-            checksum = bytearray1[0]
-            del bytearray1[0]
-            #im not sure what this is from but it hsould check to make sure there isnt a command name error
-
             if new_command not in self.subsystemController.getAllAvailableCommands():
                 new_command = self.subsystemController.createCommand(commandname)
                 # new_command.setTime(commandTime)
@@ -66,8 +62,9 @@ class CommandFile:
                         y += field_byte_size
 
                     i = i + 1
-                    self.subsystemController.addCommandAtEnd(new_command)
+                self.subsystemController.addCommandAtEnd(new_command)
 
+    # to actually create a command,
     def writeToFile(self, file_string):
 
         outFile = open(self.filePath, 'w')
@@ -83,8 +80,10 @@ class CommandFile:
             fieldstrings = ""
             for field in command.fields:
                 fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
-                commandstring += "0x" + fieldstringhex + ", "
+                # thisfield = bytes(field.byte_size)
+                # commandstring += "0x" + fieldstringhex + ", "
                 fieldstrings += fieldstringhex
+                # commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
 
             # makechecksum
@@ -92,12 +91,12 @@ class CommandFile:
             hexfill = 255
 
             bytes = bytearray.fromhex(fieldstrings)
-            sum = bytearray.fromhex("25")
+            sum = 0
             count = 0
-            for byte in bytes[:bytes.__len__() - 1]:
-                sum.insert(0, (byte + bytes[count + 1] & 255))
+            for byte in bytes[:bytes.__len__()]:
+                sum = (sum + byte) % 255
                 count = count + 1
-            checksum = hex(sum[0] ^ 0xFF)[2:].zfill(2)
+            checksum = hex(sum ^ 0xFF)[2:].zfill(2)
             print("checksum = 0x" + checksum)
             print("checksum and fields  = 0x" + checksum + fieldstrings)
             # format this sting
@@ -105,7 +104,7 @@ class CommandFile:
             print("checksum and fields  = 0x" + formatline)
             # for i in range(len(formatline)):
 
-            # make 0X separatedfields here
+            # make 0Xseparatedfields here
             formattedfields = ""
             n = 4  # chunk length
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
@@ -115,9 +114,13 @@ class CommandFile:
                 else:
                     chunks2 = chunks2 + ", "
                 formattedfields += "0x" + chunks2
+            print(formattedfields)
+
+            # if len(fieldstrings) %2 ==0:
+            # print(fieldstrings)
 
             commandMainstring += commandstring + formattedfields + "\n"
-
+            # print(commandMainstring)
         return commandMainstring
 
     def makeCommandCSV(self, all_commands):
