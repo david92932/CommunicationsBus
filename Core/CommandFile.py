@@ -76,7 +76,7 @@ class CommandFile:
 
         for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.wordSizeBits}, '
+            commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
             fieldstrings = ""
             for field in command.fields:
                 fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
@@ -91,35 +91,41 @@ class CommandFile:
             hexfill = 255
 
             bytes = bytearray.fromhex(fieldstrings)
+
             sum = 0
             count = 0
             for byte in bytes[:bytes.__len__()]:
                 sum = (sum + byte) % 255
                 count = count + 1
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
-            print("checksum = 0x" + checksum)
-            print("checksum and fields  = 0x" + checksum + fieldstrings)
+
             # format this sting
-            formatline = checksum + fieldstrings
+            formatline = fieldstings + checksum
+            commandID_hex = hex(int(command.id))[2:]
+            commandID_hex = hex(int(command.id))[2:].zfill(2)
+
+            formatline = commandID_hex + formatline
             print("checksum and fields  = 0x" + formatline)
             # for i in range(len(formatline)):
-
+            countbits = 0
             # make 0Xseparatedfields here
             formattedfields = ""
             n = 4  # chunk length
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
             for chunks2 in chunks1:
                 if len(chunks2) != 4:
-                    chunks2 = chunks2 + "00"
+                    chunks2 = "00" + chunks2
+                    countbits += 1
                 else:
                     chunks2 = chunks2 + ", "
+                    countbits += 1
                 formattedfields += "0x" + chunks2
             print(formattedfields)
 
             # if len(fieldstrings) %2 ==0:
             # print(fieldstrings)
 
-            commandMainstring += commandstring + formattedfields + "\n"
+            commandMainstring += commandstring + str(countbits) + ", " + formattedfields + "\n"
             # print(commandMainstring)
         return commandMainstring
 
