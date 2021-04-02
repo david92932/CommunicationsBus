@@ -59,7 +59,10 @@ class ScenarioController:
 
     def removeActiveSubystemAtIndex(self, index: int):
 
-        self.activeSubsystems.pop(index)
+        try:
+            self.activeSubsystems.pop(index)
+        except:
+            pass
 
     def writeScenarioFile(self, scenario_file_path: str):
 

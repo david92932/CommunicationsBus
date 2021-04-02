@@ -22,15 +22,24 @@ class Subsystem:
 
     def addCommandAtEnd(self, command_obj: Command):
 
-        self.__subsystemSchedule.append(command_obj)
+        if isinstance(command_obj, Command):
+            self.__subsystemSchedule.append(command_obj)
 
     def addCommandAtIndex(self, command_obj: Command, index: int):
 
-        self.__subsystemSchedule.insert(index, command_obj)
+        if isinstance(command_obj, Command):
+
+            try:
+                self.__subsystemSchedule.insert(index, command_obj)
+            except:
+                pass
 
     def removeCommandAtIndex(self, index: int):
 
-        del self.__subsystemSchedule[index]
+        try:
+            del self.__subsystemSchedule[index]
+        except:
+            pass
 
     def setTimelineRow(self, row: int):
 
@@ -39,3 +48,7 @@ class Subsystem:
         for command in self.getAllAvailableCommands():
 
             command.setTimelineRow(row)
+
+    def clearSchedule(self):
+
+        self.__subsystemSchedule = []

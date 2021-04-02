@@ -27,8 +27,6 @@ class Command:
 
         command_fields.extend(self.fields)
 
-        print(f'commands returned: {command_fields}')
-
         return command_fields
 
     def getCommandFieldsTableView(self):
@@ -38,33 +36,17 @@ class Command:
 
         return command_fields
 
-    def setAttribute(self, attribute_name, new_value):
-
-        attribute = getattr(self, attribute_name)
-
-        attribute_type = type(attribute)
-
-        if isinstance(new_value, attribute_type):
-
-            attribute = new_value
-
-        else:
-
-            print(f'New Value {new_value} for attribute {attribute} does not match existing type ({type(new_value)})')
-
     def setStartTime(self, value):
 
-        print('setstart time')
-
-        self.commandStartField.setFieldValue(value)
+        return self.commandStartField.setFieldValue(value)
 
     def setLengthTime(self, value):
 
-        print('sets length time')
-
-        self.commandLengthField.setFieldValue(value)
+        field_set_tuple = self.commandLengthField.setFieldValue(value)
 
         self.setTimelineBox()
+
+        return field_set_tuple
 
     def setTimelineBox(self):
 

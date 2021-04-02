@@ -27,7 +27,9 @@ class DetailedViewTextBox(QLineEdit):
 
     def onEditingFinished(self):
 
-        self.parent.detailedViewChangeEvent()
+        value = self.text()
+        value_is_valid, message = self.bindingFunction(self.text())
+        # x = self.bindingFunction(self.text())
 
-        self.bindingFunction(self.text())
-
+        # print(f'X: {x}')
+        self.parent.detailedViewChangeEvent(value_is_valid, message, self.bindingFunction, value)

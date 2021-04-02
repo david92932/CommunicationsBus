@@ -14,7 +14,8 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
 
         self.scenarioController = scenario_controller
-        main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
+        # main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
+        main_ui_path = r'/Users/David/PycharmProjects/CommunicationsBus/GUI/MainUI.ui'
         uic.loadUi(main_ui_path, self)
 
         self.timeline = MyTimelineWidget(self, self.scenarioController)

@@ -17,7 +17,8 @@ class RangeRule(Rule):
 
         min_valid, min_message = self.__checkMinValue(new_value)
         max_valid, max_message = self.__checkMaxValue(new_value)
-        # lsb_valid, lsb_message = self.__checkDivisible(new_value)
+        lsb_valid, lsb_message = self.__checkDivisible(new_value)
+        fits_in_field_valid, ff_message = self.__checkValueFitsInField(new_value)
 
         if not min_valid:
             return min_valid, min_message
@@ -25,8 +26,11 @@ class RangeRule(Rule):
         if not max_valid:
             return max_valid, max_message
 
-        # if not lsb_valid:
-        #     return lsb_valid, lsb_message
+        if not lsb_valid:
+            return lsb_valid, lsb_message
+
+        if not fits_in_field_valid:
+            return fits_in_field_valid, ff_message
 
         return (True, "Value Is Valid")
 
@@ -62,10 +66,10 @@ class RangeRule(Rule):
 
         value_is_valid = False
 
-        lsb_division_value = new_value / self.lsbValue
+        lsb_division_value = new_value % self.lsbValue
 
         # if new value not divisible (as int) by lsb
-        if not isinstance(lsb_division_value, int):
+        if not lsb_division_value == 0:
 
             return (value_is_valid, f"New value {new_value} is not divisible into LSB increment {self.lsbValue}")
 
@@ -81,14 +85,10 @@ class RangeRule(Rule):
         number_of_bits = self.byteSize * 8
         max_allowed_value_in_space = pow(2, number_of_bits)
 
-        number_of_combinations = (self.maxValue - self.minValue)/self.lsbValue
-
-        lsb_division_value = new_value / self.lsbValue
-
         # if new value not divisible (as int) by lsb
-        if not isinstance(lsb_division_value, int):
+        if max_allowed_value_in_space < new_value:
 
-            return (value_is_valid, f"New value {new_value} is not divisible into LSB increment {self.lsbValue}")
+            return (value_is_valid, f"New value {new_value} is does not fit in field of size {self.byteSize}")
 
         # else
         else:

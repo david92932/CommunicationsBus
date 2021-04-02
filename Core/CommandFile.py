@@ -6,6 +6,7 @@ Created on Tue Feb  9 13:51:43 2021
 """
 from io import StringIO
 import pandas as pd
+from Core.RangeRule import RangeRule
 
 class CommandFile:
     def __init__(self, subsystem_controller, file_path):
@@ -76,7 +77,7 @@ class CommandFile:
 
         for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
+            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, '
             fieldstrings = ""
             for field in command.fields:
                 fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
@@ -100,7 +101,7 @@ class CommandFile:
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
 
             # format this sting
-            formatline = fieldstings + checksum
+            formatline = fieldstrings + checksum
             commandID_hex = hex(int(command.id))[2:]
             commandID_hex = hex(int(command.id))[2:].zfill(2)
 
@@ -146,3 +147,7 @@ class CommandFile:
             df = pd.read_csv(csv_string, sep=", ")
         df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
 
+# if isinstance(object, type)
+#get isSigned
+#
+# isinstance(field_obj, RangeRule)

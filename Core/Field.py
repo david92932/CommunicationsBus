@@ -1,6 +1,7 @@
 from Core.RangeRule import RangeRule
 from Core.TimeRule import TimeRule
 from Core.DefinedValuesRule import DefinedValuesRule
+from Core.TypeConverter import TypeConverter
 
 class Field:
 
@@ -15,63 +16,95 @@ class Field:
 
         self.fieldValue = 0
         self.fieldValueChanged = False
+        self.typeConverter = TypeConverter()
+        self.valueLSB = None
 
-    def setFieldValue(self, value) -> (bool, str):
+    def setFieldValue(self, value, override_rule_check=False) -> (bool, str):
 
+        print(f'setting {self.name}')
         defined_values_rule = False
-        field_value = float(value)
+        value_to_set = 0
 
         value_is_valid = True
-        response_message = ''
+        response_message = 'Value Is Valid'
 
-        # # add rule checks
-        # define_values_rule_objs = []
-        # for rule in self.fieldRules:
-        #
-        #     if isinstance(rule, DefinedValuesRule):
-        #         defined_values_rule = True
-        #         define_values_rule_objs.append(rule)
-        #
-        #
-        # # in a defined values rule, only one needs to be valid
-        # if defined_values_rule:
-        #
-        #     field_valid = False
-        #
-        #     for rule in self.fieldRules:
-        #         if isinstance(rule, DefinedValuesRule):
-        #
-        #             value_is_valid, response_message = rule.checkValidValues(value)
-        #             if value_is_valid:
-        #                 field_valid = True
-        #                 break
-        #
-        #     # if the definedvalues are not valid, stop here and return message
-        #     if not value_is_valid:
-        #         return False, response_message
-        #
-        # # check every other type of rule
-        # for rule in self.fieldRules:
-        #
-        #     if isinstance(rule, TimeRule):
-        #         value_is_valid, response_message = rule.checkValidValues(value)
-        #
-        #     elif isinstance(rule, RangeRule):
-        #         value_is_valid, response_message = rule.checkValidValues(value)
+        if override_rule_check:
 
-        if value_is_valid:
-            print(f'setting field {self.name} to {field_value}')
-            self.fieldValue = field_value
-            self.fieldValueChanged = True
+            if self.valueLSB is not None:
+                self.fieldValue = self.typeConverter.convertEngineeringToRaw(float(value), self.valueLSB)
+
+            else:
+                self.fieldValue = int(value)
+
+            return True, "Value Set Successfully"
 
         else:
-            print(response_message)
+            # add rule checks
+            define_values_rule_objs = []
+            for rule in self.fieldRules:
 
-        return value_is_valid, response_message
+                if isinstance(rule, DefinedValuesRule):
+                    defined_values_rule = True
+                    define_values_rule_objs.append(rule)
+
+
+            # in a defined values rule, only one needs to be valid
+            if defined_values_rule:
+
+                field_valid = False
+
+                value_to_set = int(value)
+
+                for rule in self.fieldRules:
+                    if isinstance(rule, DefinedValuesRule):
+
+                        value_is_valid, response_message = rule.checkValidValues(value_to_set)
+                        if value_is_valid:
+                            field_valid = True
+                            break
+
+                # if the definedvalues are not valid, stop here and return message
+                if not value_is_valid:
+                    return False, response_message
+
+            # check every other type of rule
+            for rule in self.fieldRules:
+
+                if isinstance(rule, TimeRule):
+                    print('Time Rule')
+                    value_to_set = int(value)
+                    value_is_valid, response_message = rule.checkValidValues(value_to_set)
+                    print(f'RESPONSE: {value_is_valid, response_message}')
+
+                elif isinstance(rule, RangeRule):
+                    lsb_value_from_rule = rule.lsbValue
+                    self.valueLSB = lsb_value_from_rule
+                    value_to_set = self.typeConverter.convertEngineeringToRaw(float(value), lsb_value_from_rule)
+                    value_is_valid, response_message = rule.checkValidValues(value_to_set)
+
+            if value_is_valid:
+                print(f'setting field {self.name} to {value_to_set}')
+                self.fieldValue = value_to_set
+                self.fieldValueChanged = True
+
+            else:
+                print(response_message)
+
+        i = (value_is_valid, response_message)
+        print(f'type: {type(i)}')
+        print(f'qwe: {i}')
+
+        return i
 
     def getFieldValueEngineeringUnits(self):
 
-        return self.fieldValue
+        if self.valueLSB is not None:
+            engineering_value = self.typeConverter.convertRawToEngineering(self.fieldValue, self.valueLSB)
+
+        else:
+            engineering_value = self.fieldValue
+
+        return engineering_value
 
     def getFieldValueRawUnits(self):
 

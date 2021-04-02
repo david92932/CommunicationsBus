@@ -49,6 +49,10 @@ class SubsystemController:
 
         self.mySubsystem.removeCommandAtIndex(index)
 
+    def clearSubsystemSchedule(self):
+
+        self.mySubsystem.clearSchedule()
+
     def getAllAvailableCommands(self) -> [Command]:
 
         return self.mySubsystem.getAllAvailableCommands()
@@ -60,7 +64,8 @@ class SubsystemController:
 
     def setFilePath(self, file_path: str):
 
-        self.filePath = file_path
+        if isinstance(file_path, str):
+            self.filePath = file_path
 
     def readCommandFile(self, file_path):
         command_file = CommandFile(self, file_path)

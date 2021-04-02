@@ -99,10 +99,13 @@ class TableView(QTableWidget):
         self.showDetailedView()
 
 
-    def detailedViewChangeEvent(self):
+    def detailedViewChangeEvent(self, value_is_valid, message, binding_function, value):
 
-        self.setData()
-        self.parentObj.setTimeline()
+        if value_is_valid:
+            self.setData()
+            self.parentObj.setTimeline()
+        else:
+            self.InvalidErrorBox(message, binding_function, value)
 
     def showDetailedView(self):
 
@@ -128,3 +131,23 @@ class TableView(QTableWidget):
 
         self.detailedView.hide()
         self.detailedView = None
+
+    def InvalidErrorBox(self, message, binding_function, value):
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+
+        msg.setText(f"Invalid Command Value: {message}")
+        msg.setWindowTitle(f"Invalid Command Value: {message}")
+
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        msg.buttonClicked.connect(self.errorBoxHandler)
+
+        retval = msg.exec_()
+
+        # print(f'RETVAL: {retval}')
+
+    def errorBoxHandler(self, value):
+
+        print(f"Value: {value.text()}")

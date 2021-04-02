@@ -173,8 +173,7 @@ class DetailedView(QWidget):
 
         self.setLayout(self.layout)
 
-    def detailedViewChangeEvent(self):
+    def detailedViewChangeEvent(self, value_is_valid, message, binding_function, value):
 
-        self.tableView.detailedViewChangeEvent()
-
+        self.tableView.detailedViewChangeEvent(value_is_valid, message, binding_function, value)
 
