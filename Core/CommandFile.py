@@ -91,7 +91,7 @@ class CommandFile:
             # makechecksum
             remainingByte = None
             hexfill = 255
-
+            fieldstrings = hex(int(command.id))[2:].zfill(2) + fieldstrings
             bytes = bytearray.fromhex(fieldstrings)
 
             sum = 0
@@ -103,10 +103,10 @@ class CommandFile:
 
             # format this sting
             formatline = fieldstings + checksum
-            commandID_hex = hex(int(command.id))[2:]
-            commandID_hex = hex(int(command.id))[2:].zfill(2)
+            #commandID_hex = hex(int(command.id))[2:]
+            #commandID_hex = hex(int(command.id))[2:].zfill(2)
 
-            formatline = commandID_hex + formatline
+            #formatline = commandID_hex + formatline
             print("checksum and fields  = 0x" + formatline)
             # for i in range(len(formatline)):
             countbits = 0
