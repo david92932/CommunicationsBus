@@ -33,17 +33,19 @@ class CommandFile:
             # line.replace("\n", "")
             commandname = chunks[0]
             commandID = chunks[1]
-            # commandTime = chunks[2]
+            commandTime = chunks[2]
             commandNumWords = chunks[3]
 
             chunks.pop(0)
             chunks.pop(0)
             chunks.pop(0)
-            # chunks.pop(0)
+            chunks.pop(0)
             field_values_string = "".join(chunks)
             field_values_string = field_values_string.replace("0x", "")
             field_values_string = field_values_string.replace("\n", "")
             bytearray1 = bytearray.fromhex(field_values_string)
+            #remove commandid and checksum from message.
+            bytearray1 = bytearray1[1:-1]
             print("this is string chunks |" + field_values_string + "|")
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
