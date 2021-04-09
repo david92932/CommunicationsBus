@@ -9,7 +9,7 @@ if __name__ == '__main__':
     all_subsystem_models = []
 
     # load subsystems into application
-    file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera.json"
+    file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json"
     subsystem_parser = SubsystemParser(file_path)
 
     x = subsystem_parser.getSubsystem()

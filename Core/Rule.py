@@ -12,4 +12,8 @@ class Rule:
 
         pass
 
+    @abstractmethod
+    def getTimeLength(self):
+        pass
+
 

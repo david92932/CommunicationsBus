@@ -96,6 +96,7 @@ class DetailedView(QWidget):
 
     def constructDetailedView(self, command_obj):
 
+        all_constructed_boxes_names = []
         all_constructed_boxes = []
 
         all_fields = command_obj.getCommandFields()
@@ -103,6 +104,7 @@ class DetailedView(QWidget):
         for field in all_fields:
 
             field_display_box = None
+            field_name_field = None
 
             is_defined_value_rule_set = False
             is_time_rule = False
@@ -165,11 +167,16 @@ class DetailedView(QWidget):
                 field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_changed, field_value)
 
             field_display_box.setFixedWidth(self.screen.width() / 2)
+            all_constructed_boxes_names.append(field.name)
             all_constructed_boxes.append(field_display_box)
 
         for index, box in enumerate(all_constructed_boxes):
 
-            self.layout.addWidget(box)
+            label = QLabel(all_constructed_boxes_names[index])
+            # label.setFixedWidth(self.screen.width() / 4)
+            # box.setFixedWidth(self.screen.width() / 4)
+            self.layout.addRow(label, box)
+            # self.layout.addWidget(box)
 
         self.setLayout(self.layout)
 

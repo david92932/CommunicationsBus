@@ -4,6 +4,8 @@ class TimeRule(Rule):
 
     def __init__(self, processing_time):
 
+        super().__init__("0")
+
         self.processingTime = processing_time
 
     def checkValidValues(self, new_value):
@@ -13,3 +15,7 @@ class TimeRule(Rule):
 
        else:
            return (False, f"{new_value} is not long enough - must be {self.processingTime}")
+
+    def getTimeLength(self):
+
+        return 0

@@ -5,15 +5,16 @@ from Core.TimelineConfiguration import TimelineConfiguration
 
 class Command:
 
-    def __init__(self, name: str, id: int, command_start_field, command_length_field, rt_address: int, sub_address: int, word_size_bits: int, protocol: str, fields: []):
+    def __init__(self, name: str, id: int, command_start_field, command_processing_time, rt_address: int, sub_address: int, word_size_bits: int, protocol: str, fields: []):
 
         self.name = name
         self.id = id
         self.commandStartField = command_start_field
-        self.commandLengthField = command_length_field
+        self.commandTimeLength: int = 0
         self.rtAddress = rt_address
         self.subAddress = sub_address
         self.wordSizeBits = word_size_bits
+        self.processingTime = command_processing_time
         self.protocol = protocol
         self.fields = fields
         self.enabled = True
@@ -21,9 +22,11 @@ class Command:
         self.timelineRow = 0
         self.timelineConfiguration = TimelineConfiguration()
 
+        self.__assignFieldsToCommand()
+
     def getCommandFields(self):
 
-        command_fields = [self.commandStartField, self.commandLengthField]
+        command_fields = [self.commandStartField]
 
         command_fields.extend(self.fields)
 
@@ -31,26 +34,42 @@ class Command:
 
     def getCommandFieldsTableView(self):
 
-        command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.commandLengthField.getFieldValueEngineeringUnits(),
+        command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.commandTimeLength,
                           self.name, self.rtAddress, self.subAddress, self.wordSizeBits, self.enabled]
 
         return command_fields
 
     def setStartTime(self, value):
 
-        return self.commandStartField.setFieldValue(value)
-
-    def setLengthTime(self, value):
-
-        field_set_tuple = self.commandLengthField.setFieldValue(value)
-
+        print(f'Setting start time: {value}')
+        start_time = self.commandStartField.setFieldValue(value, override_rule_check=True)
+        self.calculateLengthTime()
         self.setTimelineBox()
 
-        return field_set_tuple
+        return start_time
+
+    def calculateLengthTime(self):
+
+        total_command_length = self.processingTime
+
+        # print(f'processing time: {self.processingTime}')
+
+        for field in self.fields:
+            time_length = field.calculateTimeLength()
+            # print(f'Field {field.name} - {time_length}')
+            total_command_length += time_length
+
+        # print(f'Calculated Time Length: {total_command_length}')
+
+        self.commandTimeLength = total_command_length
+
+    def getTimeLength(self):
+
+        return self.commandTimeLength
 
     def setTimelineBox(self):
 
-        self.addBox(self.commandStartField.fieldValue, self.commandLengthField.fieldValue, self.timelineRow, 'red')
+        self.addBox(self.commandStartField.fieldValue, self.commandTimeLength, self.timelineRow, 'red')
 
     def addBox(self, startTime, endTime, row, color: str):
 
@@ -67,3 +86,15 @@ class Command:
     def setTimelineRow(self, row):
 
         self.timelineRow = row
+
+    def __assignFieldsToCommand(self):
+        for field in self.getCommandFields():
+            field.ownerCommand = self
+
+    def fieldChangeEvent(self):
+
+        print('field change event')
+        self.calculateLengthTime()
+        self.setTimelineBox()
+
+        pass

@@ -178,7 +178,7 @@ class GraphicsRectItem(QGraphicsRectItem):
 
         command_name = self.ownerCommand.name
         start_time = self.ownerCommand.commandStartField.getFieldValueEngineeringUnits()
-        length_time = self.ownerCommand.commandLengthField.getFieldValueEngineeringUnits()
+        length_time = self.ownerCommand.commandTimeLength
         end_time = start_time + length_time
 
         return f'Command Name: {command_name}\n' \

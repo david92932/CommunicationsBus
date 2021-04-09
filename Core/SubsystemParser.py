@@ -65,22 +65,19 @@ class SubsystemParser:
             command_protocol = self.__getDictField(command, "protocol")
             command_fields = self.__getDictField(command, "fields")
             command_field_objects = self.__parseFields(command_fields)
-            command_start_field, command_length_field = self.__parseTimeField(command_length)
+            command_start_field = self.__parseTimeField()
 
-            command_obj = Command(command_name, command_id, command_start_field, command_length_field, rt_address, sub_address,
+            command_obj = Command(command_name, command_id, command_start_field, command_length, rt_address, sub_address,
                                   word_size_in_bits, command_protocol, command_field_objects)
             all_command_objects.append(command_obj)
 
         return all_command_objects
 
-    def __parseTimeField(self, command_length):
+    def __parseTimeField(self):
 
-        time_rule = TimeRule(command_length)
+        time_start_field = Field("Time Start", 64, "Time To Start Command", [], 'ms', False)
 
-        time_start_field = Field("Time Start", 64, "Time To Start Command", [], 'ms')
-        time_length_field = Field("Time Length", 64, "Duration of Command", [time_rule], 'ms')
-
-        return time_start_field, time_length_field
+        return time_start_field
 
     def __parseFields(self, all_command_fields):
 
@@ -93,9 +90,12 @@ class SubsystemParser:
             field_description = self.__getDictField(field, "description")
             field_valid_values = self.__getDictField(field, "validValues")
             field_units = field.get('Units', 'None')
+            fields_time = field.get('time')
+            field_affects_length = fields_time.get('affectsTime')
+
             field_rules = self.__parseFieldRules(field_valid_values, field_byte_size)
 
-            field_obj = Field(field_name, field_byte_size, field_description, field_rules, field_units)
+            field_obj = Field(field_name, field_byte_size, field_description, field_rules, field_units, field_affects_length)
 
             all_command_fields_objs.append(field_obj)
 
@@ -114,9 +114,42 @@ class SubsystemParser:
 
                 defined_value_name = self.__getDictField(defined_value, 'name')
                 defined_value_value = self.__getDictField(defined_value, 'value')
+                defined_rule_time_length = defined_value.get('processingTime')
 
-                defined_value_rule_obj = DefinedValuesRule('0.0.0.0', defined_value_name, defined_value_value)
+                defined_value_rule_obj = DefinedValuesRule('0.0.0.0', defined_value_name, defined_value_value, defined_rule_time_length)
                 all_rules.append(defined_value_rule_obj)
+
+        if "iterator" in field_valid_values.keys():
+
+            iterator_valid_values = field_valid_values.get('iterator', {})
+            iterator1 = iterator_valid_values.get('value1', 0)
+            iterator2 = iterator_valid_values.get('value2', 0)
+            all_iterator_values = []
+
+            print('iterator')
+            print(iterator1)
+            print(iterator2)
+
+            for value in range(iterator1):
+
+                for value2 in range(iterator2):
+
+                    all_iterator_values.append(f'{value}_{value2}')
+
+            defined_rule_time_length = field_valid_values.get('processingTime')
+            counter = 0
+
+            print(all_iterator_values)
+
+            for rule in all_iterator_values:
+
+                value_name = rule
+
+                defined_value_rule_obj = DefinedValuesRule('0.0.0.0', value_name, counter, defined_rule_time_length)
+                all_rules.append(defined_value_rule_obj)
+
+                counter += 1
+
 
         # if valid values are in a range
         elif "min" in field_valid_values.keys() and "max" in field_valid_values.keys() and "lsb" in field_valid_values.keys():

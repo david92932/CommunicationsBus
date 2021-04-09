@@ -6,18 +6,20 @@ from Core.TypeConverter import TypeConverter
 class Field:
 
 
-    def __init__(self, name: str, byte_size: int, field_description: str, field_rules: [], field_units: str):
+    def __init__(self, name: str, byte_size: int, field_description: str, field_rules: [], field_units: str, field_affects_time_length):
 
         self.name = name
         self.byteSize = byte_size
         self.fieldDescription = field_description
         self.fieldRules = field_rules
         self.fieldUnits = field_units
+        self.fieldAffectsTimeLength = field_affects_time_length
 
         self.fieldValue = 0
         self.fieldValueChanged = False
         self.typeConverter = TypeConverter()
         self.valueLSB = None
+        self.ownerCommand = None
 
     def setFieldValue(self, value, override_rule_check=False) -> (bool, str):
 
@@ -90,6 +92,9 @@ class Field:
             else:
                 print(response_message)
 
+        if value_is_valid:
+            self.ownerCommand.fieldChangeEvent()
+
         i = (value_is_valid, response_message)
         print(f'type: {type(i)}')
         print(f'qwe: {i}')
@@ -109,3 +114,23 @@ class Field:
     def getFieldValueRawUnits(self):
 
         return self.fieldValue
+
+    def calculateTimeLength(self):
+
+        total_field_length = 0
+        is_not_defined_range_rule = True
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, DefinedValuesRule):
+                if rule.definedValue == self.fieldValue:
+                    total_field_length += rule.getTimeLength()
+                    is_not_defined_range_rule = False
+
+            else:
+                pass
+
+        if is_not_defined_range_rule and self.fieldAffectsTimeLength:
+            total_field_length += self.getFieldValueEngineeringUnits()
+
+        return total_field_length

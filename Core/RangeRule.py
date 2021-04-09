@@ -20,6 +20,9 @@ class RangeRule(Rule):
         lsb_valid, lsb_message = self.__checkDivisible(new_value)
         fits_in_field_valid, ff_message = self.__checkValueFitsInField(new_value)
 
+        if not fits_in_field_valid:
+            return fits_in_field_valid, ff_message
+
         if not min_valid:
             return min_valid, min_message
 
@@ -29,8 +32,7 @@ class RangeRule(Rule):
         if not lsb_valid:
             return lsb_valid, lsb_message
 
-        if not fits_in_field_valid:
-            return fits_in_field_valid, ff_message
+
 
         return (True, "Value Is Valid")
 
@@ -94,3 +96,7 @@ class RangeRule(Rule):
         else:
             value_is_valid = True
             return (value_is_valid, f"Value is valid")
+
+    def getTimeLength(self):
+
+        return 0
