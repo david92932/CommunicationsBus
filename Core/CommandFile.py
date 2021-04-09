@@ -6,7 +6,6 @@ Created on Tue Feb  9 13:51:43 2021
 """
 from io import StringIO
 import pandas as pd
-from Core.RangeRule import RangeRule
 
 class CommandFile:
     def __init__(self, subsystem_controller, file_path):
@@ -34,17 +33,19 @@ class CommandFile:
             # line.replace("\n", "")
             commandname = chunks[0]
             commandID = chunks[1]
-            # commandTime = chunks[2]
+            commandTime = chunks[2]
             commandNumWords = chunks[3]
 
             chunks.pop(0)
             chunks.pop(0)
             chunks.pop(0)
-            # chunks.pop(0)
+            chunks.pop(0)
             field_values_string = "".join(chunks)
             field_values_string = field_values_string.replace("0x", "")
             field_values_string = field_values_string.replace("\n", "")
             bytearray1 = bytearray.fromhex(field_values_string)
+            #remove commandid and checksum from message.
+            bytearray1 = bytearray1[1:-1]
             print("this is string chunks |" + field_values_string + "|")
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
@@ -77,7 +78,7 @@ class CommandFile:
 
         for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, '
+            commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
             fieldstrings = ""
             for field in command.fields:
                 fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
@@ -90,7 +91,7 @@ class CommandFile:
             # makechecksum
             remainingByte = None
             hexfill = 255
-
+            fieldstrings = hex(int(command.id))[2:].zfill(2) + fieldstrings
             bytes = bytearray.fromhex(fieldstrings)
 
             sum = 0
@@ -101,11 +102,11 @@ class CommandFile:
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
 
             # format this sting
-            formatline = fieldstrings + checksum
-            commandID_hex = hex(int(command.id))[2:]
-            commandID_hex = hex(int(command.id))[2:].zfill(2)
+            formatline = fieldstings + checksum
+            #commandID_hex = hex(int(command.id))[2:]
+            #commandID_hex = hex(int(command.id))[2:].zfill(2)
 
-            formatline = commandID_hex + formatline
+            #formatline = commandID_hex + formatline
             print("checksum and fields  = 0x" + formatline)
             # for i in range(len(formatline)):
             countbits = 0
@@ -147,7 +148,3 @@ class CommandFile:
             df = pd.read_csv(csv_string, sep=", ")
         df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
 
-# if isinstance(object, type)
-#get isSigned
-#
-# isinstance(field_obj, RangeRule)
