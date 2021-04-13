@@ -59,8 +59,11 @@ class CommandFile:
                 y = 0
                 if len(chunks) != 0:
                     for field in new_command.fields:
-                        field_byte_size = field.byteSize
-                        field.setFieldValue(int(bytearray1[y:y + field_byte_size], 16))
+                        if field.minimum_value < 0:
+                            field.setFieldValue(
+                                int.from_bytes(bytearray1[y:y + field_byte_size], byteorder='big', signed=True))
+                        else:
+                            field.setFieldValue(int(bytearray1[y:y + field_byte_size], 16))
                         y += field_byte_size
 
                     i = i + 1
@@ -81,9 +84,21 @@ class CommandFile:
             commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
             fieldstrings = ""
             for field in command.fields:
-                fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
-                # thisfield = bytes(field.byte_size)
-                # commandstring += "0x" + fieldstringhex + ", "
+                and_value = ""
+                formatstring = ""
+                intformat = 0
+                #this should be field.minumvalue or whatever
+                if(field.fieldValue <0):
+                    and_value = "0x"
+
+                    for i in range(field.byteSize):
+                      and_value += "ffff"
+                      intformat += 4
+                    string_format = "0" + str(intformat) + "x"
+                    fieldstringhex = format(field.fieldValue & int(and_value, 16), string_format)
+                else:
+                    fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
+                #
                 fieldstrings += fieldstringhex
                 # commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
