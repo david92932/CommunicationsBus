@@ -47,9 +47,13 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
 
             schedule = subsystem_controller.getSubsystemSchedule()
             for command in schedule:
+
                 timeline_box = command.timelineBox
+                print(f'tB: {timeline_box}')
 
                 self.scene().addItem(timeline_box)
+
+                print(self.scene().items())
 
     def clearTimelineBoxes(self):
 

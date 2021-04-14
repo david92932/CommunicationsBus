@@ -98,14 +98,30 @@ class TableView(QTableWidget):
         self.detailedView.createSelectCommand()
         self.showDetailedView()
 
+    def detailedViewChangeEvent(self, rule_violations_list):
 
-    def detailedViewChangeEvent(self, value_is_valid, message, binding_function, value):
+        for field in rule_violations_list:
 
-        if value_is_valid:
-            self.setData()
-            self.parentObj.setTimeline()
-        else:
-            self.InvalidErrorBox(message, binding_function, value)
+            field_name = field.get('fieldName')
+            rule_violations = field.get('violations', [])
+            field_obj = field.get('fieldObj')
+
+            if rule_violations == []:
+                self.setData()
+                self.parentObj.setTimeline()
+
+            else:
+
+                for violation in rule_violations:
+
+                    field_valid = violation.get('Valid', False)
+                    attempted_value = violation.get('attemptedValue', 0)
+                    overridable = violation.get('overridable', False)
+                    message = violation.get('message', '')
+
+                    self.InvalidErrorBox(field_name, field_obj, attempted_value, overridable, message)
+
+            self.clearDetailedView()
 
     def showDetailedView(self):
 
@@ -119,7 +135,7 @@ class TableView(QTableWidget):
         row = event.row()
         command_at_row = self.subsystemController.getSubsystemSchedule()[row]
 
-        self.detailedView.constructDetailedView(command_at_row)
+        self.detailedView.constructDetailedView(command_at_row, command_exist=True)
 
         self.showDetailedView()
 
@@ -129,25 +145,33 @@ class TableView(QTableWidget):
 
     def clearDetailedView(self):
 
-        self.detailedView.hide()
-        self.detailedView = None
+        # if self.detailedView is not None:
+        self.detailedView.clearDetailedView()
+            # self.detailedView = None
 
-    def InvalidErrorBox(self, message, binding_function, value):
+    def InvalidErrorBox(self, field_name, field_obj, attempted_value, overridable, message):
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
 
-        msg.setText(f"Invalid Command Value: {message}")
-        msg.setWindowTitle(f"Invalid Command Value: {message}")
+        msg.setText(f"Invalid field value for field: \'{field_name}\' \n {message}")
+
+        msg.setWindowTitle(f"Invalid Field Value")
 
         msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
-        msg.buttonClicked.connect(self.errorBoxHandler)
+        if msg.exec() == QMessageBox.Ok:
 
-        retval = msg.exec_()
+            if overridable:
+                field_obj.setFieldValue(attempted_value, override_rule_check=True)
 
-        # print(f'RETVAL: {retval}')
+        else:
+            print('selected cancel')
 
-    def errorBoxHandler(self, value):
+    def errorBoxHandler(self, msg_button, attempted_value, overridable, field_obj):
 
-        print(f"Value: {value.text()}")
+        retval = msg_button.exec_()
+        print('error Box Handler')
+        print(retval)
+
+

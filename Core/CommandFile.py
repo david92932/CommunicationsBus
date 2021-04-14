@@ -61,10 +61,10 @@ class CommandFile:
                     for field in new_command.fields:
                         if field.minimum_value < 0:
                             field.setFieldValue(
-                                int.from_bytes(bytearray1[y:y + field_byte_size], byteorder='big', signed=True))
+                                int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
                         else:
-                            field.setFieldValue(int(bytearray1[y:y + field_byte_size], 16))
-                        y += field_byte_size
+                            field.setFieldValue(int(bytearray1[y:y + field.byteSize], 16))
+                        y += field.byteSize
 
                     i = i + 1
                 self.subsystemController.addCommandAtEnd(new_command)
@@ -88,7 +88,9 @@ class CommandFile:
                 formatstring = ""
                 intformat = 0
                 #this should be field.minumvalue or whatever
-                if(field.fieldValue <0):
+
+
+                if(field.fieldValue < 0):
                     and_value = "0x"
 
                     for i in range(field.byteSize):
