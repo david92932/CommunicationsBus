@@ -117,7 +117,7 @@ class CommandFile:
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
 
             # format this sting
-            formatline = fieldstings + checksum
+            formatline = fieldstrings + checksum
             #commandID_hex = hex(int(command.id))[2:]
             #commandID_hex = hex(int(command.id))[2:].zfill(2)
 
