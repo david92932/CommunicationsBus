@@ -41,10 +41,9 @@ class Command:
 
     def setStartTime(self, value):
 
-        print(f'Setting start time: {value}')
         start_time = self.commandStartField.setFieldValue(value, override_rule_check=True)
         self.calculateLengthTime()
-        self.setTimelineBox()
+        # self.setTimelineBox()
 
         return start_time
 
@@ -52,14 +51,9 @@ class Command:
 
         total_command_length = self.processingTime
 
-        # print(f'processing time: {self.processingTime}')
-
         for field in self.fields:
             time_length = field.calculateTimeLength()
-            # print(f'Field {field.name} - {time_length}')
             total_command_length += time_length
-
-        # print(f'Calculated Time Length: {total_command_length}')
 
         self.commandTimeLength = total_command_length
 
@@ -78,6 +72,7 @@ class Command:
 
         yValue = row * (self.timelineConfiguration.boxHeight + self.timelineConfiguration.rowSpacing)
 
+        print(f'start {xStartValue}, end {xEndValue}')
         self.timelineBox = GraphicsRectItem(
             QtCore.QRectF(QtCore.QPointF(xStartValue, yValue), QtCore.QSizeF(xEndValue - xStartValue, self.timelineConfiguration.boxHeight)), command=self)
 
@@ -93,8 +88,13 @@ class Command:
 
     def fieldChangeEvent(self):
 
-        print('field change event')
         self.calculateLengthTime()
         self.setTimelineBox()
 
-        pass
+    def validateFields(self):
+
+        rule_violations = []
+        for field in self.fields:
+            rule_violations.extend(field.validateFieldValue())
+
+        return rule_violations

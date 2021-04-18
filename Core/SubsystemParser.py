@@ -119,16 +119,12 @@ class SubsystemParser:
                 defined_value_rule_obj = DefinedValuesRule('0.0.0.0', defined_value_name, defined_value_value, defined_rule_time_length)
                 all_rules.append(defined_value_rule_obj)
 
-        if "iterator" in field_valid_values.keys():
+        elif "iterator" in field_valid_values.keys():
 
             iterator_valid_values = field_valid_values.get('iterator', {})
             iterator1 = iterator_valid_values.get('value1', 0)
             iterator2 = iterator_valid_values.get('value2', 0)
             all_iterator_values = []
-
-            print('iterator')
-            print(iterator1)
-            print(iterator2)
 
             for value in range(iterator1):
 
@@ -138,8 +134,6 @@ class SubsystemParser:
 
             defined_rule_time_length = field_valid_values.get('processingTime')
             counter = 0
-
-            print(all_iterator_values)
 
             for rule in all_iterator_values:
 

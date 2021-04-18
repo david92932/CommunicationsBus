@@ -11,16 +11,22 @@ class DefinedValuesRule(Rule):
         self.processingTime = processing_time
 
     def checkValidValues(self, new_value):
+        rule_violations = []
         value_is_valid = False
 
         if self.definedValue == new_value:
             value_is_valid = True
 
         if value_is_valid:
-            return (True, "Value is valid")
+            message = 'value is valid'
+
 
         else:
-            return (False, f"Value {new_value} is not valid")
+            message = f"Value {new_value} is not valid"
+
+            rule_violations.append({'Valid': value_is_valid, 'attemptedValue': new_value, 'overridable': False, 'message': message})
+
+        return rule_violations
 
     def getTimeLength(self):
 

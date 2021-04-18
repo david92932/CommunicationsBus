@@ -150,6 +150,11 @@ class Ui(QtWidgets.QMainWindow):
 
         self.timeline.setTimeline()
 
+        print('--------------')
+        print(self.timeline.scene().items())
+
+        self.timeline.show()
+
     def getCurrentSubsystemController(self):
 
         current_index = self.tabs.currentIndex()
