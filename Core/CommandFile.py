@@ -102,7 +102,7 @@ class CommandFile:
                 intformat = 0
                 #this should be field.minumvalue or whatever
 
-
+                field.
                 if(field.fieldValue < 0):
                     and_value = "0x"
 
