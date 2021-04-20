@@ -9,6 +9,7 @@ from Core.DefinedValuesRule import DefinedValuesRule
 from Core.RangeRule import RangeRule
 from Core.TimeRule import TimeRule
 from GUI.DetailedViewTextBox import DetailedViewTextBox
+from Core.RegexRule import RegexRule
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -37,6 +38,9 @@ class DetailedView(QWidget):
         self.subsystemController = subsystem_controller
         self.allCommands = self.subsystemController.getAllAvailableCommands()
 
+        self.constructedBoxes = []
+        self.constructedBoxFieldObjs = []
+
 
     def createSelectCommand(self):
 
@@ -52,7 +56,7 @@ class DetailedView(QWidget):
 
         self.setLayout(self.layout)
 
-    def createComboBox(self, list_of_selections, binding_function):
+    def createComboBox(self, list_of_selections, binding_function=None):
 
         combo_box = QComboBox()
 
@@ -60,13 +64,14 @@ class DetailedView(QWidget):
             combo_box.addItem(selection)
 
             # combo_box.activated.connect(binding_function)
-        combo_box.currentIndexChanged.connect(binding_function)
+        if binding_function is not None:
+            combo_box.currentIndexChanged.connect(binding_function)
 
         return combo_box
 
-    def createComboBoxWithDescriptions(self, list_of_selections, binding_function, list_of_descriptions, field_changed, field_value):
+    def createComboBoxWithDescriptions(self, list_of_selections, binding_function, list_of_descriptions, field_value, field_changed):
 
-        combo_box = self.createComboBox(list_of_selections, binding_function)
+        combo_box = self.createComboBox(list_of_selections)
 
         if field_changed:
 
@@ -88,16 +93,23 @@ class DetailedView(QWidget):
         :return:
         """
 
-        selected_command_name = self.allCommands[selected_index].name
+        self.clearDetailedView()
 
-        selected_command_obj = self.subsystemController.createCommand(selected_command_name)
+        selected_command_obj = self.allCommands[selected_index]
+        selected_command_name = selected_command_obj.name
 
-        self.constructDetailedView(selected_command_obj)
+        self.selectedCommandObj = self.subsystemController.createCommandWithoutAdding(selected_command_name)
 
-    def constructDetailedView(self, command_obj):
+        self.constructDetailedView(self.selectedCommandObj)
 
-        all_constructed_boxes_names = []
-        all_constructed_boxes = []
+    def constructDetailedView(self, command_obj, command_exist=False):
+
+        if command_exist:
+
+            self.selectedCommandObj = command_obj
+
+        self.constructedBoxes = []
+        self.constructedBoxFieldObjs = []
 
         all_fields = command_obj.getCommandFields()
 
@@ -108,6 +120,7 @@ class DetailedView(QWidget):
 
             is_defined_value_rule_set = False
             is_time_rule = False
+            is_regex_rule = False
 
             field_value = field.getFieldValueEngineeringUnits()
             field_changed = field.fieldValueChanged
@@ -120,6 +133,9 @@ class DetailedView(QWidget):
 
                 elif isinstance(rule, TimeRule):
                     is_time_rule = True
+
+                elif isinstance(rule, RegexRule):
+                    is_regex_rule = True
 
             # if the field has defined values, create a dropdown for it
             if is_defined_value_rule_set:
@@ -135,7 +151,7 @@ class DetailedView(QWidget):
                                   f'Description: {field.fieldDescription} \nUnits: {field.fieldUnits}'
                     list_of_descriptions.append(description)
 
-                field_display_box = self.createComboBoxWithDescriptions(list_of_selections, field.setFieldValue, list_of_descriptions, field_changed, field_value)
+                field_display_box = self.createComboBoxWithDescriptions(list_of_selections, field.setFieldValue, list_of_descriptions, field_value, command_exist)
 
             # start Time Field
             elif field.fieldRules == []:
@@ -143,18 +159,15 @@ class DetailedView(QWidget):
                 description = f'Field Name: {field.name}\nDescription: {field.fieldDescription}\n' \
                               f'Units: {field.fieldUnits}'
 
-                field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setStartTime, field_changed, field_value)
+                field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setStartTime, field_value, command_exist)
 
-            # length field
-            elif is_time_rule:
+            elif isinstance(field.fieldRules[0], RegexRule):
 
                 field_rule = field.fieldRules[0]
+                description = f'Field Name: {field.name}\nDescription: {field.fieldDescription} \n Regex Expression: {field_rule.regexExpression} '
 
-                description = f'Field Name: {field.name}\n Min Time: {field_rule.processingTime}\n' \
-                              f'Description: {field.fieldDescription}\n' \
-                              f'Units: {field.fieldUnits}'
-
-                field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setLengthTime, field_changed, field_value)
+                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_value,
+                                                        command_exist)
 
             # if the field is min, max, lsb, create a text box
             else:
@@ -164,23 +177,78 @@ class DetailedView(QWidget):
                 description = f'Field Name: {field.name}\nDescription: {field.fieldDescription} \nMin: {field_rule.minValue} \n'\
                               f'Max: {field_rule.maxValue} \nLSB: {field_rule.lsbValue} \nUnits: {field.fieldUnits} '
 
-                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_changed, field_value)
+                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_value, command_exist)
 
             field_display_box.setFixedWidth(self.screen.width() / 2)
-            all_constructed_boxes_names.append(field.name)
-            all_constructed_boxes.append(field_display_box)
+            self.constructedBoxFieldObjs.append(field)
+            self.constructedBoxes.append(field_display_box)
 
-        for index, box in enumerate(all_constructed_boxes):
+        for index, box in enumerate(self.constructedBoxes):
 
-            label = QLabel(all_constructed_boxes_names[index])
+            label = QLabel(self.constructedBoxFieldObjs[index].name)
             # label.setFixedWidth(self.screen.width() / 4)
             # box.setFixedWidth(self.screen.width() / 4)
             self.layout.addRow(label, box)
             # self.layout.addWidget(box)
 
+        cancel_button = QPushButton(text='Cancel')
+        cancel_button.clicked.connect(self.clearDetailedView)
+        confirm_button = QPushButton(text='Confirm')
+        confirm_button.clicked.connect(lambda: self.confirmDetailedView(command_exist))
+
+        self.layout.addRow(cancel_button, confirm_button)
         self.setLayout(self.layout)
 
-    def detailedViewChangeEvent(self, value_is_valid, message, binding_function, value):
+    def detailedViewChangeEvent(self, rule_violations_list):
 
-        self.tableView.detailedViewChangeEvent(value_is_valid, message, binding_function, value)
+        self.tableView.detailedViewChangeEvent(rule_violations_list)
 
+    def clearDetailedView(self):
+
+        self.constructedBoxes = []
+        self.constructedBoxFieldObjs = []
+        self.selectedCommandObj = None
+
+        self.clearLayout()
+
+    def confirmDetailedView(self, command_exists: bool):
+
+        selected_command_name = self.selectedCommandObj.name
+
+        all_rule_violations = []
+
+        # add command if it doesn't exist
+        if not command_exists:
+            self.subsystemController.addCommandAtEnd(self.selectedCommandObj)
+
+        for index, field_box in enumerate(self.constructedBoxFieldObjs):
+
+            qt_form_box = self.constructedBoxes[index]
+
+            if isinstance(qt_form_box, QComboBox):
+
+                text = qt_form_box.currentIndex()
+
+            else:
+
+                text = qt_form_box.text()
+
+            field_rule_violations_dict = field_box.setFieldValue(text)
+
+            all_rule_violations.append(field_rule_violations_dict)
+
+        self.selectedCommandObj.fieldChangeEvent()
+        self.selectedCommandObj.setTimelineBox()
+
+        self.detailedViewChangeEvent(all_rule_violations)
+
+    def clearLayout(self):
+        while self.layout.count() > 0:
+            item = self.layout.takeAt(0)
+
+            if not item:
+                continue
+
+            w = item.widget()
+            if w:
+                w.deleteLater()

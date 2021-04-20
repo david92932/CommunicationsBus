@@ -22,6 +22,7 @@ class CommandFile:
     def readCommandFile(self):
 
         available_commands = self.subsystemController.getAllAvailableCommands()
+
         inFile = open(self.filePath, 'r')
         Lines = inFile.readlines()
         inFile.close()
@@ -50,7 +51,16 @@ class CommandFile:
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
-            if new_command not in self.subsystemController.getAllAvailableCommands():
+
+            # if new ca
+
+            command_exists = False
+            for command in available_commands:
+                if commandname == command.name:
+                    command_exists = True
+                    break
+
+            if command_exists:
                 new_command = self.subsystemController.createCommand(commandname)
                 # new_command.setTime(commandTime)
                 # handle fields with only start/length values
@@ -59,12 +69,23 @@ class CommandFile:
                 y = 0
                 if len(chunks) != 0:
                     for field in new_command.fields:
-                        field_byte_size = field.byteSize
-                        field.setFieldValue(int(bytearray1[y:y + field_byte_size], 16))
-                        y += field_byte_size
+                       # if field.minimum_value < 0:
+                       #     field.setFieldValue(
+                       #         int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
+                       # else:
+                       if field.fieldSigned:
+                           field.setFieldValue(int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
+                       else:
+                           field.setFieldValue(
+                               int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=False))
+
+                           y += field.byteSize
 
                     i = i + 1
-                self.subsystemController.addCommandAtEnd(new_command)
+                #self.subsystemController.addCommandAtEnd(new_command)
+
+            else:
+                raise Exception('Command does not exist')
 
     # to actually create a command,
     def writeToFile(self, file_string):
@@ -81,9 +102,23 @@ class CommandFile:
             commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
             fieldstrings = ""
             for field in command.fields:
-                fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
-                # thisfield = bytes(field.byte_size)
-                # commandstring += "0x" + fieldstringhex + ", "
+                and_value = ""
+                formatstring = ""
+                intformat = 0
+                #this should be field.minumvalue or whatever
+
+
+                if(field.fieldSigned):
+                    and_value = "0x"
+
+                    for i in range(field.byteSize):
+                        and_value += "ff"
+                        intformat += 2
+                    string_format = "0" + str(intformat) + "x"
+                    fieldstringhex = format(field.fieldValue & int(and_value, 16), string_format)
+                else:
+                    fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
+                #
                 fieldstrings += fieldstringhex
                 # commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
@@ -97,12 +132,12 @@ class CommandFile:
             sum = 0
             count = 0
             for byte in bytes[:bytes.__len__()]:
-                sum = (sum + byte) % 255
+                sum = (sum + byte) % 256
                 count = count + 1
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
 
             # format this sting
-            formatline = fieldstings + checksum
+            formatline = fieldstrings + checksum
             #commandID_hex = hex(int(command.id))[2:]
             #commandID_hex = hex(int(command.id))[2:].zfill(2)
 
@@ -115,13 +150,14 @@ class CommandFile:
             n = 4  # chunk length
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
             for chunks2 in chunks1:
-                if len(chunks2) != 4:
-                    chunks2 = "00" + chunks2
+                if len(chunks2) == 2:
+                    chunks2 = "00" + chunks2 + ", "
                     countbits += 1
                 else:
                     chunks2 = chunks2 + ", "
                     countbits += 1
                 formattedfields += "0x" + chunks2
+            formattedfields = formattedfields[:-2]
             print(formattedfields)
 
             # if len(fieldstrings) %2 ==0:

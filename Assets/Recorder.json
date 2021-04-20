@@ -1,0 +1,561 @@
+{
+  "subsystemName": "Recorder",
+  "fileExtension": "rcmd",
+  "commands": [
+    {
+      "name": "Start Recording",
+      "id": 1,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 100,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Stop Recording",
+      "id": 2,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 200,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Set File Name",
+      "id": 3,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 20,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "X Direction Units",
+          "size": 256,
+          "validValues": {
+            "regex": "^[a-zA-Z0-9\\_\/]*$"
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "The fully qualified path of the destination file"
+        }
+      ]
+    },
+    {
+      "name": "Get Status",
+      "id": 4,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 1000,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "Drive Map",
+          "size": 1,
+          "validValues": {
+            "min": 0,
+            "max": 255,
+            "lsb": 1
+          },
+          "description": "Each bit maps to one of the 7 drives in the recorder. If the bit is 1, status of that drive will be reported.",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Data Requested",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "0x1 - Space Used",
+                "value": "0x1"
+              },
+              {
+                "name": "0x2 - Space Remaining",
+                "value": "0x2"
+              },
+              {
+                "name": "0x4 - Number of Files",
+                "value": "0x4"
+              },
+              {
+                "name": "0x08 - Number of Errors",
+                "value": "0x08"
+              },
+              {
+                "name": "0x10 - Number of Warnings",
+                "value": "0x10"
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Select Data Requested From Recorder"
+        }
+      ]
+    },
+    {
+      "name": "Encoding Select",
+      "id": 5,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "Standard",
+          "size": 2,
+          "validValues": {
+            "defined": [
+              {
+                "name": "0x1 - Option 1",
+                "value": "0x1"
+              },
+              {
+                "name": "0x3 - Option 2",
+                "value": "0x3"
+              },
+              {
+                "name": "0x12 - Option 3",
+                "value": "0x12"
+              },
+              {
+                "name": "0x15 - Option 4",
+                "value": "0x15"
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Select Data Requested From Recorder"
+        },
+        {
+          "name": "Parameter 1 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 1"
+        },
+        {
+          "name": "Parameter 1 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 1 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Parameter 2 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 2"
+        },
+        {
+          "name": "Parameter 2 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 2 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Parameter 3 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 3"
+        },
+        {
+          "name": "Parameter 3 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 3 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Parameter 4 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 4"
+        },
+        {
+          "name": "Parameter 4 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 4 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Parameter 5 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 5"
+        },
+        {
+          "name": "Parameter 5 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 5 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Parameter 6 Enable",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Yes",
+                "value": 1,
+                "processingTime": 10
+              },
+              {
+                "name": "No",
+                "value": 0,
+                "processingTime": 0
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Enable Parameter 6"
+        },
+        {
+          "name": "Parameter 6 Value",
+          "size": 4,
+          "validValues": {
+            "min": -4294967295,
+            "max": 4294967294,
+            "lsb": 1
+          },
+          "description": "Parameter 6 Value",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        }
+      ]
+    },
+    {
+      "name": "Change Power State",
+      "id": 6,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "State",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Shutdown",
+                "value": 0,
+                "processingTime": 250
+              },
+              {
+                "name": "Standby",
+                "value": 1,
+                "processingTime": 500
+              },
+              {
+                "name": "Operate",
+                "value": 2,
+                "processingTime": 770
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "The target power state. All are valid targets not matter what the current state is."
+        },
+        {
+          "name": "Delay",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 200000,
+            "lsb": 1
+          },
+          "description": "Number of ms to wait between receiving this message and starting to change state",
+          "time": {
+            "affectsTime": true
+          },
+          "Units": "Radians"
+        }
+      ]
+    },
+    {
+      "name": "Delete File",
+      "id": 7,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 125,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "File name",
+          "size": 256,
+          "validValues": {
+            "regex": "^[a-zA-Z0-9\\_\/]*$"
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "The fully qualified path of the file"
+        }
+      ]
+    },
+    {
+      "name": "Offload File",
+      "id": 7,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 125,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "File name",
+          "size": 256,
+          "validValues": {
+            "regex": "^[a-zA-Z0-9\\_\/]*$"
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "The fully qualified path of the file"
+        }
+      ]
+    },
+    {
+      "name": "Get Results",
+      "id": 200,
+      "protocol": "RTBC",
+      "subAddress": 5,
+      "processingTime": 125,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Telemetry",
+      "id": 201,
+      "protocol": "RTBC",
+      "subAddress": 5,
+      "processingTime": 125,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "Status",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Not Recording",
+                "value": 0
+              },
+              {
+                "name": "Recording",
+                "value": 1
+              },
+              {
+                "name": "Error",
+                "value": 2
+              },
+              {
+                "name": "Booting",
+                "value": 4
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Telemetry Command"
+        },
+        {
+          "name": "Temp Sensor 1",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 600,
+            "lsb": 1
+          },
+          "description": "Temp Description",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Temp Sensor 2",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 600,
+            "lsb": 1
+          },
+          "description": "Temp Description",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Temp Sensor 3",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 600,
+            "lsb": 1
+          },
+          "description": "Temp Description",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        },
+        {
+          "name": "Temp Sensor 4",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 600,
+            "lsb": 1
+          },
+          "description": "Temp Description",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "None"
+        }
+      ]
+    }
+  ]
+}

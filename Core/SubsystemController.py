@@ -8,8 +8,6 @@ class SubsystemController:
 
     def __init__(self, subsystem_obj):
 
-        print(f'made subsystemController {subsystem_obj.subsystemName}')
-
         self.headers: [str] = ['BusEm Id', 'BusEm Start', 'BusEm Length', 'Command Name', 'RT Address',
                         'Sub Address', 'Word Count', 'Enabled']
 
@@ -21,14 +19,23 @@ class SubsystemController:
         new_command = None
 
         for command in self.mySubsystem.getAllAvailableCommands():
-            print(command.name)
-
-        for command in self.mySubsystem.getAllAvailableCommands():
 
             if command.name == command_name:
 
                 new_command = copy.deepcopy(command)
                 self.addCommandAtEnd(new_command)
+                break
+
+        return new_command
+
+    def createCommandWithoutAdding(self, command_name: str):
+
+        new_command = None
+        for command in self.mySubsystem.getAllAvailableCommands():
+
+            if command.name == command_name:
+
+                new_command = copy.deepcopy(command)
                 break
 
         return new_command
@@ -75,6 +82,8 @@ class SubsystemController:
             print(command.name)
 
         self.setFilePath(file_path)
+
+
 
 
 

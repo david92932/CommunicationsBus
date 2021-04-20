@@ -2,6 +2,7 @@ from Core.RangeRule import RangeRule
 from Core.TimeRule import TimeRule
 from Core.DefinedValuesRule import DefinedValuesRule
 from Core.TypeConverter import TypeConverter
+from Core.RegexRule import RegexRule
 
 class Field:
 
@@ -20,90 +21,108 @@ class Field:
         self.typeConverter = TypeConverter()
         self.valueLSB = None
         self.ownerCommand = None
+        self.fieldSigned = self.__determineIfFieldIsSigned()
+
+    def validateFieldValue(self):
+
+        rule_violations = []
+
+        if self.fieldValue is not None:
+            rule_violations = self.__validate(self.fieldValue)
+
+        return rule_violations
+
+    def __validate(self, new_value):
+
+        all_violations = []
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, DefinedValuesRule):
+
+                defined_value_valid = False
+                defined_value_violations = []
+                for defined_rule in self.fieldRules:
+
+                    value_is_valid_tuple_list = defined_rule.checkValidValues(new_value)
+
+                    #empty list means value is valid
+                    if value_is_valid_tuple_list == []:
+                        defined_value_valid = True
+                        break
+
+                    else:
+                        defined_value_violations = value_is_valid_tuple_list
+
+                if not defined_value_valid:
+                    all_violations.extend(defined_value_violations)
+
+            else:
+
+                validation_response = rule.checkValidValues(new_value)
+
+                if validation_response != []:
+
+                    all_violations.extend(validation_response)
+
+        return all_violations
 
     def setFieldValue(self, value, override_rule_check=False) -> (bool, str):
 
-        print(f'setting {self.name}')
-        defined_values_rule = False
-        value_to_set = 0
-
-        value_is_valid = True
-        response_message = 'Value Is Valid'
+        rule_violations = []
+        value_to_set = self.convertToRawValue(value)
 
         if override_rule_check:
 
-            if self.valueLSB is not None:
-                self.fieldValue = self.typeConverter.convertEngineeringToRaw(float(value), self.valueLSB)
+            self.fieldValue = value_to_set
 
-            else:
-                self.fieldValue = int(value)
-
-            return True, "Value Set Successfully"
+            rule_violations = []
 
         else:
-            # add rule checks
-            define_values_rule_objs = []
-            for rule in self.fieldRules:
 
-                if isinstance(rule, DefinedValuesRule):
-                    defined_values_rule = True
-                    define_values_rule_objs.append(rule)
+            rule_violations = self.__validate(value_to_set)
 
+            # if the value is valid, set it
+            if rule_violations == []:
 
-            # in a defined values rule, only one needs to be valid
-            if defined_values_rule:
-
-                field_valid = False
-
-                value_to_set = int(value)
-
-                for rule in self.fieldRules:
-                    if isinstance(rule, DefinedValuesRule):
-
-                        value_is_valid, response_message = rule.checkValidValues(value_to_set)
-                        if value_is_valid:
-                            field_valid = True
-                            break
-
-                # if the definedvalues are not valid, stop here and return message
-                if not value_is_valid:
-                    return False, response_message
-
-            # check every other type of rule
-            for rule in self.fieldRules:
-
-                if isinstance(rule, TimeRule):
-                    print('Time Rule')
-                    value_to_set = int(value)
-                    value_is_valid, response_message = rule.checkValidValues(value_to_set)
-                    print(f'RESPONSE: {value_is_valid, response_message}')
-
-                elif isinstance(rule, RangeRule):
-                    lsb_value_from_rule = rule.lsbValue
-                    self.valueLSB = lsb_value_from_rule
-                    value_to_set = self.typeConverter.convertEngineeringToRaw(float(value), lsb_value_from_rule)
-                    value_is_valid, response_message = rule.checkValidValues(value_to_set)
-
-            if value_is_valid:
-                print(f'setting field {self.name} to {value_to_set}')
                 self.fieldValue = value_to_set
-                self.fieldValueChanged = True
 
+            # otherwise, rule is not valid
             else:
-                print(response_message)
 
-        if value_is_valid:
-            self.ownerCommand.fieldChangeEvent()
+                print(rule_violations)
 
-        i = (value_is_valid, response_message)
-        print(f'type: {type(i)}')
-        print(f'qwe: {i}')
+        return {'fieldName': self.name, 'violations': rule_violations, 'fieldObj': self}
 
-        return i
+    def convertToRawValue(self, value):
+
+        if self.fieldRules == []:
+            value_to_set = int(value)
+
+        else:
+
+            for rule in self.fieldRules:
+
+                if isinstance(rule, TimeRule) or isinstance(rule, DefinedValuesRule):
+
+                    value_to_set = int(value)
+                    break
+
+                elif isinstance(rule, RegexRule):
+                    value_to_set = value
+
+                else:
+
+                    self.valueLSB = rule.lsbValue
+                    value_to_set = self.typeConverter.convertEngineeringToRaw(float(value), self.valueLSB)
+                    break
+
+        return value_to_set
 
     def getFieldValueEngineeringUnits(self):
 
         if self.valueLSB is not None:
+            print(self.fieldValue)
             engineering_value = self.typeConverter.convertRawToEngineering(self.fieldValue, self.valueLSB)
 
         else:
@@ -134,3 +153,18 @@ class Field:
             total_field_length += self.getFieldValueEngineeringUnits()
 
         return total_field_length
+
+    def __determineIfFieldIsSigned(self):
+
+        field_signed = False
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, RangeRule):
+
+                if rule.minValue < 0:
+
+                    field_signed = True
+                    break
+
+        return field_signed
