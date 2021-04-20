@@ -16,7 +16,7 @@ def inputParser(userInput):
 
     elif "insert" in userInput:
 
-        insertCommand(userInput,current_subsystem)
+        insertCommand(userInput)
 
     elif "scenerio" in userInput:
 
