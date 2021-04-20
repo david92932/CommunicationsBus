@@ -43,7 +43,7 @@ class Command:
 
         start_time = self.commandStartField.setFieldValue(value, override_rule_check=True)
         self.calculateLengthTime()
-        # self.setTimelineBox()
+        self.setTimelineBox()
 
         return start_time
 

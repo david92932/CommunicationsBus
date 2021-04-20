@@ -62,7 +62,7 @@ class CommandFile:
 
             if command_exists:
                 new_command = self.subsystemController.createCommand(commandname)
-                # new_command.setTime(commandTime)
+                new_command.setStartTime(commandTime)
                 # handle fields with only start/length values
                 # handle invalid command names
                 # handle command time
@@ -99,7 +99,7 @@ class CommandFile:
 
         for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.commandStartField}, '
+            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, '
             fieldstrings = ""
             for field in command.fields:
                 and_value = ""
