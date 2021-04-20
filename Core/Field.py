@@ -2,6 +2,7 @@ from Core.RangeRule import RangeRule
 from Core.TimeRule import TimeRule
 from Core.DefinedValuesRule import DefinedValuesRule
 from Core.TypeConverter import TypeConverter
+from Core.RegexRule import RegexRule
 
 class Field:
 
@@ -94,20 +95,26 @@ class Field:
 
     def convertToRawValue(self, value):
 
-        value_to_set = int(value)
+        if self.fieldRules == []:
+            value_to_set = int(value)
 
-        for rule in self.fieldRules:
+        else:
 
-            if isinstance(rule, TimeRule) or isinstance(rule, DefinedValuesRule):
+            for rule in self.fieldRules:
 
-                value_to_set = int(value)
-                break
+                if isinstance(rule, TimeRule) or isinstance(rule, DefinedValuesRule):
 
-            else:
+                    value_to_set = int(value)
+                    break
 
-                self.valueLSB = rule.lsbValue
-                value_to_set = self.typeConverter.convertEngineeringToRaw(float(value), self.valueLSB)
-                break
+                elif isinstance(rule, RegexRule):
+                    value_to_set = value
+
+                else:
+
+                    self.valueLSB = rule.lsbValue
+                    value_to_set = self.typeConverter.convertEngineeringToRaw(float(value), self.valueLSB)
+                    break
 
         return value_to_set
 

@@ -9,11 +9,11 @@ from GUI.guitest1 import Ui
 
 class WindowController:
 
-    def __init__(self, application_controller):
+    def __init__(self, scenario_controller):
 
-        self.applicationController = application_controller
+        self.scenarioController = scenario_controller
 
         app = QtWidgets.QApplication(sys.argv)
-        window = Ui(self.applicationController)
+        window = Ui(self.scenarioController)
 
         app.exec_()

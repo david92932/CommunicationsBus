@@ -4,6 +4,7 @@ from Core.TimeRule import TimeRule
 from Core.Command import Command
 from Core.Field import Field
 from Core.Subsystem import Subsystem
+from Core.RegexRule import RegexRule
 
 import json
 
@@ -144,6 +145,11 @@ class SubsystemParser:
 
                 counter += 1
 
+        elif "regex" in field_valid_values.keys():
+
+            regex_expression = field_valid_values.get('regex')
+            regex_rule_obj = RegexRule('0.0.0.0', regex_expression)
+            all_rules.append(regex_rule_obj)
 
         # if valid values are in a range
         elif "min" in field_valid_values.keys() and "max" in field_valid_values.keys() and "lsb" in field_valid_values.keys():

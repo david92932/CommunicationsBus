@@ -9,6 +9,7 @@ from Core.DefinedValuesRule import DefinedValuesRule
 from Core.RangeRule import RangeRule
 from Core.TimeRule import TimeRule
 from GUI.DetailedViewTextBox import DetailedViewTextBox
+from Core.RegexRule import RegexRule
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -119,6 +120,7 @@ class DetailedView(QWidget):
 
             is_defined_value_rule_set = False
             is_time_rule = False
+            is_regex_rule = False
 
             field_value = field.getFieldValueEngineeringUnits()
             field_changed = field.fieldValueChanged
@@ -131,6 +133,9 @@ class DetailedView(QWidget):
 
                 elif isinstance(rule, TimeRule):
                     is_time_rule = True
+
+                elif isinstance(rule, RegexRule):
+                    is_regex_rule = True
 
             # if the field has defined values, create a dropdown for it
             if is_defined_value_rule_set:
@@ -155,6 +160,14 @@ class DetailedView(QWidget):
                               f'Units: {field.fieldUnits}'
 
                 field_display_box = DetailedViewTextBox(self, field.name, description, command_obj.setStartTime, field_value, command_exist)
+
+            elif isinstance(field.fieldRules[0], RegexRule):
+
+                field_rule = field.fieldRules[0]
+                description = f'Field Name: {field.name}\nDescription: {field.fieldDescription} \n Regex Expression: {field_rule.regexExpression} '
+
+                field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_value,
+                                                        command_exist)
 
             # if the field is min, max, lsb, create a text box
             else:

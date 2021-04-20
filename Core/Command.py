@@ -34,7 +34,7 @@ class Command:
 
     def getCommandFieldsTableView(self):
 
-        command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.commandTimeLength,
+        command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.wordSizeBits,
                           self.name, self.rtAddress, self.subAddress, self.wordSizeBits, self.enabled]
 
         return command_fields

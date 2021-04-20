@@ -9,12 +9,15 @@ if __name__ == '__main__':
     all_subsystem_models = []
 
     # load subsystems into application
-    file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json"
-    subsystem_parser = SubsystemParser(file_path)
+    file_paths = ["/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json",
+                 "/Users/David/PycharmProjects/CommunicationsBus/Assets/Recorder.json"]
 
-    x = subsystem_parser.getSubsystem()
+    for path in file_paths:
+        subsystem_parser = SubsystemParser(path)
 
-    all_subsystem_models.append(subsystem_parser.getSubsystem())
+        # x = subsystem_parser.getSubsystem()
+
+        all_subsystem_models.append(subsystem_parser.getSubsystem())
 
     scenario_controller = ScenarioController(all_subsystem_models)
 

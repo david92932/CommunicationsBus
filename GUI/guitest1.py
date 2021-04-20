@@ -31,7 +31,7 @@ class Ui(QtWidgets.QMainWindow):
         self.clearMenuOptions(self.menuOpen)
         self.clearMenuOptions(self.menuFile)
         self.setMenuOptions(self.menuFile, ['Save', 'Save As', 'Save As Scenario'], self.saveMenuHandler)
-        self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.add_new_tab)
+        self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.newSubsystemHandler)
         self.setMenuOptions(self.menuOpen, ['Open Command File', 'Open Scenario'], self.openFile)
 
         self.show()
@@ -53,12 +53,14 @@ class Ui(QtWidgets.QMainWindow):
         for item in options:
             entry_name = item
             menu_obj.addAction(item)
-            menu_obj.triggered.connect(lambda item=item: binding_function(new_subsystem_name=entry_name))
+
+        menu_obj.triggered.connect(binding_function)
 
     def openFile(self):
 
         file_path = self.openFileExplorer()
         file_name = self.getFileNameFromPath(file_path)
+        print('open file')
 
         self.add_new_tab(file_path=file_path, file_name=file_name)
         
@@ -78,6 +80,10 @@ class Ui(QtWidgets.QMainWindow):
     def getFileNameFromPath(self, file_path):
 
         return ntpath.basename(file_path)
+
+    def newSubsystemHandler(self, event):
+
+        self.add_new_tab(new_subsystem_name=event.text())
 
     def add_new_tab(self, new_subsystem_name="None", file_path="None", file_name="No Name Found", opening_scenario=False):
 
@@ -116,7 +122,8 @@ class Ui(QtWidgets.QMainWindow):
             self.tabs.setCurrentIndex(i)
     
     def tab_open_doubleclick(self, i): 
-  
+
+        print('tab open double click')
         # checking index i.e 
         # No tab under the click 
         if i == -1: 

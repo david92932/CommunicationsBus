@@ -63,3 +63,38 @@ GUI.DetailedView <-- Core.Field: Value Is Valid
 
 
 @enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor
+Actor -> GUI.MainWindow: Open Scenario File
+GUI.MainWindow -> Core.ScenarioController: openScenario()
+loop Each Scenario
+            Core.ScenarioController -> Core.SubsystemController: create
+            Core.ScenarioController <-- Core.SubsystemController: return object
+end
+
+Core.ScenarioController --> GUI.MainWindow: tableChangeEvent()
+
+
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor
+Actor -> GUI.MainWindow: Open Command File
+GUI.MainWindow -> Core.ScenarioController: createSubsystem(subsystem_name)
+
+Core.ScenarioController -> Core.SubsystemController: create
+Core.ScenarioController <-- Core.SubsystemController: return object
+
+Core.ScenarioController --> GUI.MainWindow: tableChangeEvent()
+
+
+@enduml
