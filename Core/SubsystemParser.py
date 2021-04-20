@@ -115,6 +115,10 @@ class SubsystemParser:
 
                 defined_value_name = self.__getDictField(defined_value, 'name')
                 defined_value_value = self.__getDictField(defined_value, 'value')
+
+                if isinstance(defined_value_value, str):
+                    defined_value_value = int(defined_value_value, 16)
+
                 defined_rule_time_length = defined_value.get('processingTime')
 
                 defined_value_rule_obj = DefinedValuesRule('0.0.0.0', defined_value_name, defined_value_value, defined_rule_time_length)

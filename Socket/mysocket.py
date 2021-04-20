@@ -84,7 +84,7 @@ def createCamera():
 def insertCommand(input, subsystem_controller):
     #Cuts "insert" from the inputted string
     command = input[6:]
-    print("command ",command)
+    print("command ", command)
 
     # what gets sent to the socket
     send_message = b"inserted command "
@@ -159,7 +159,6 @@ import socket
 
 HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
-
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

@@ -59,14 +59,20 @@ class Ui(QtWidgets.QMainWindow):
     def openFile(self):
 
         file_path = self.openFileExplorer()
-        file_name = self.getFileNameFromPath(file_path)
-        print('open file')
 
-        self.add_new_tab(file_path=file_path, file_name=file_name)
+        if file_path is not None:
+            file_name = self.getFileNameFromPath(file_path)
+            print('open file')
+
+            self.add_new_tab(file_path=file_path, file_name=file_name)
         
     def openFileExplorer(self, caption=''):
+
         file_path = None
         file_path, idk = QFileDialog.getOpenFileName(caption=caption)
+
+        if file_path == '':
+            file_path = None
 
         return file_path
 
@@ -74,6 +80,9 @@ class Ui(QtWidgets.QMainWindow):
 
         file_path = None
         file_path, idk = QFileDialog.getSaveFileName(caption=caption)
+
+        if file_path == '':
+            file_path = None
 
         return file_path
 
@@ -169,19 +178,19 @@ class Ui(QtWidgets.QMainWindow):
 
     def saveAsHandler(self, subsystem_controller):
 
+        print('save as handler')
         subystem_name = subsystem_controller.mySubsystem.subsystemName
         file_path = self.saveFileExplorer(caption=f'Enter file path for {subystem_name} subsystem')
 
         print(f'file path : {type(file_path)}')
-        if file_path != '':
+        if file_path is not None:
 
             subsystem_controller.setFilePath(file_path)
             subsystem_controller.buildCommandFile(subsystem_controller.filePath)
 
         else:
 
-            self.openWarningDialog('File Not Saved', f'Invalid File Path: {file_path}',
-                                   self.saveAsHandler(subsystem_controller))
+            print('file not saved')
 
     def saveHandler(self, subsystem_controller):
 
