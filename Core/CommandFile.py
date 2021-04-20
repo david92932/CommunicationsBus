@@ -22,6 +22,7 @@ class CommandFile:
     def readCommandFile(self):
 
         available_commands = self.subsystemController.getAllAvailableCommands()
+
         inFile = open(self.filePath, 'r')
         Lines = inFile.readlines()
         inFile.close()
@@ -50,7 +51,16 @@ class CommandFile:
             commandstring1 = line.partition(" ")[2]
             hexnumbers = commandstring1.split(", ")
             i = 0
-            if new_command not in self.subsystemController.getAllAvailableCommands():
+
+            # if new ca
+
+            command_exists = False
+            for command in available_commands:
+                if commandname == command.name:
+                    command_exists = True
+                    break
+
+            if command_exists:
                 new_command = self.subsystemController.createCommand(commandname)
                 # new_command.setTime(commandTime)
                 # handle fields with only start/length values
@@ -68,6 +78,9 @@ class CommandFile:
 
                     i = i + 1
                 self.subsystemController.addCommandAtEnd(new_command)
+
+            else:
+                raise Exception('Command does not exist')
 
     # to actually create a command,
     def writeToFile(self, file_string):
