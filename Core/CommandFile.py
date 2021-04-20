@@ -94,8 +94,8 @@ class CommandFile:
                     and_value = "0x"
 
                     for i in range(field.byteSize):
-                      and_value += "ffff"
-                      intformat += 4
+                        and_value += "ff"
+                        intformat += 2
                     string_format = "0" + str(intformat) + "x"
                     fieldstringhex = format(field.fieldValue & int(and_value, 16), string_format)
                 else:
@@ -114,7 +114,7 @@ class CommandFile:
             sum = 0
             count = 0
             for byte in bytes[:bytes.__len__()]:
-                sum = (sum + byte) % 255
+                sum = (sum + byte) % 256
                 count = count + 1
             checksum = hex(sum ^ 0xFF)[2:].zfill(2)
 
@@ -132,13 +132,14 @@ class CommandFile:
             n = 4  # chunk length
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
             for chunks2 in chunks1:
-                if len(chunks2) != 4:
-                    chunks2 = "00" + chunks2
+                if len(chunks2) == 2:
+                    chunks2 = "00" + chunks2 + ", "
                     countbits += 1
                 else:
                     chunks2 = chunks2 + ", "
                     countbits += 1
                 formattedfields += "0x" + chunks2
+            formattedfields = formattedfields[:-2]
             print(formattedfields)
 
             # if len(fieldstrings) %2 ==0:
