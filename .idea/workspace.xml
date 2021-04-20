@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Field.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Field.py" afterDir="false" />
-    </list>
+    <list default="true" id="5b03d3ca-3eeb-44cf-be06-7b4c5d6292f4" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -402,9 +399,5 @@
     <MESSAGE value="Added recorder" />
     <MESSAGE value="reworked readind command files a bit" />
     <option name="LAST_COMMIT_MESSAGE" value="reworked readind command files a bit" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CommunicationsBus$Unittests_for_test_DefinedValuesRule_test_DefinedValuesRule_test_CheckValidValues.coverage" NAME="Unittests for test_DefinedValuesRule.test_DefinedValuesRule.test_CheckValidValues Coverage Results" MODIFIED="1617305285361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests/CoreUnitTests" />
-    <SUITE FILE_PATH="coverage/CommunicationsBus$startUp.coverage" NAME="startUp Coverage Results" MODIFIED="1618941971158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
