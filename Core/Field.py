@@ -21,6 +21,7 @@ class Field:
         self.typeConverter = TypeConverter()
         self.valueLSB = None
         self.ownerCommand = None
+        self.fieldSigned = self.__determineIfFieldIsSigned()
 
     def validateFieldValue(self):
 
@@ -152,3 +153,18 @@ class Field:
             total_field_length += self.getFieldValueEngineeringUnits()
 
         return total_field_length
+
+    def __determineIfFieldIsSigned(self):
+
+        field_signed = False
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, RangeRule):
+
+                if rule.minValue < 0:
+
+                    field_signed = True
+                    break
+
+        return field_signed
