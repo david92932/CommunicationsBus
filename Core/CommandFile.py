@@ -132,13 +132,14 @@ class CommandFile:
             n = 4  # chunk length
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
             for chunks2 in chunks1:
-                if len(chunks2) != 4:
-                    chunks2 = "00" + chunks2
+                if len(chunks2) == 2:
+                    chunks2 = "00" + chunks2 + ", "
                     countbits += 1
                 else:
                     chunks2 = chunks2 + ", "
                     countbits += 1
                 formattedfields += "0x" + chunks2
+            formattedfields = formattedfields[:-2]
             print(formattedfields)
 
             # if len(fieldstrings) %2 ==0:
