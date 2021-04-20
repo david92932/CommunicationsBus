@@ -69,15 +69,15 @@ class CommandFile:
                 y = 0
                 if len(chunks) != 0:
                     for field in new_command.fields:
-                        if field.minimum_value < 0:
-                            field.setFieldValue(
-                                int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
-                        else:
-                            field.setFieldValue(int(bytearray1[y:y + field.byteSize], 16))
+                       # if field.minimum_value < 0:
+                       #     field.setFieldValue(
+                       #         int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
+                       # else:
+                        field.setFieldValue(int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=False))
                         y += field.byteSize
 
                     i = i + 1
-                self.subsystemController.addCommandAtEnd(new_command)
+                #self.subsystemController.addCommandAtEnd(new_command)
 
             else:
                 raise Exception('Command does not exist')
