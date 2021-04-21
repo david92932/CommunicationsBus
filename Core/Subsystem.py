@@ -41,13 +41,14 @@ class Subsystem:
         except:
             pass
 
-    def setTimelineRow(self, row: int):
+    def setTimelineRowAndColor(self, row: int, color: str):
 
         self.timelineRow = row
 
         for command in self.getAllAvailableCommands():
 
             command.setTimelineRow(row)
+            command.setTimelineColor(color)
 
     def clearSchedule(self):
 

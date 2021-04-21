@@ -1,4 +1,5 @@
 from Core.Rule import Rule
+from Core.TypeConverter import TypeConverter
 
 class RangeRule(Rule):
 
@@ -10,6 +11,7 @@ class RangeRule(Rule):
         self.maxValue = max_value
         self.lsbValue = lsb_value
         self.byteSize = byte_size
+        self.typeConverter = TypeConverter()
 
     def checkValidValues(self, new_value):
 
@@ -41,7 +43,7 @@ class RangeRule(Rule):
         value_is_valid = False
 
         # if new value bigger than allowed max value
-        if new_value > self.maxValue:
+        if new_value > self.typeConverter.convertEngineeringToRaw(self.maxValue, self.lsbValue):
 
             value_is_valid = False
             message = f"Field Name: New value {new_value} is larger than max value {self.maxValue}.  " \
@@ -59,7 +61,7 @@ class RangeRule(Rule):
         value_is_valid = False
 
         # if new value smaller than allowed min value
-        if new_value < self.minValue:
+        if new_value < self.typeConverter.convertEngineeringToRaw(self.minValue, self.lsbValue):
 
             value_is_valid = False
             message = f"New value {new_value} is less than min value {self.minValue}. Would you like to" \

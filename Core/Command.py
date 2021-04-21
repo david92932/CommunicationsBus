@@ -21,6 +21,7 @@ class Command:
         self.timelineBox = None
         self.timelineRow = 0
         self.timelineConfiguration = TimelineConfiguration()
+        self.timelineColor = 'red'
 
         self.__assignFieldsToCommand()
 
@@ -49,6 +50,8 @@ class Command:
 
     def calculateLengthTime(self):
 
+        print('calculate total length time')
+
         total_command_length = self.processingTime
 
         for field in self.fields:
@@ -56,6 +59,7 @@ class Command:
             total_command_length += time_length
 
         self.commandTimeLength = total_command_length
+        return total_command_length
 
     def getTimeLength(self):
 
@@ -63,16 +67,19 @@ class Command:
 
     def setTimelineBox(self):
 
-        self.addBox(self.commandStartField.fieldValue, self.commandTimeLength, self.timelineRow, 'red')
+        print(f'set timeline box: {self.name}')
+        self.addBox(self.commandStartField.fieldValue, self.calculateLengthTime(), self.timelineRow, self.timelineColor)
 
     def addBox(self, startTime, endTime, row, color: str):
+
+        print(f'add box color: {color}')
 
         xStartValue = startTime * self.timelineConfiguration.pixelsPerMillisecond
         xEndValue = endTime * self.timelineConfiguration.pixelsPerMillisecond + xStartValue
 
         yValue = row * (self.timelineConfiguration.boxHeight + self.timelineConfiguration.rowSpacing)
 
-        print(f'start {xStartValue}, end {xEndValue}')
+        print(f'start {xStartValue}, end {xEndValue}, y: {yValue}, height: {self.timelineConfiguration.boxHeight}')
         self.timelineBox = GraphicsRectItem(
             QtCore.QRectF(QtCore.QPointF(xStartValue, yValue), QtCore.QSizeF(xEndValue - xStartValue, self.timelineConfiguration.boxHeight)), command=self)
 
@@ -88,6 +95,8 @@ class Command:
 
     def fieldChangeEvent(self):
 
+        print(f'Field change event: {self.name}')
+
         self.calculateLengthTime()
         self.setTimelineBox()
 
@@ -98,3 +107,7 @@ class Command:
             rule_violations.extend(field.validateFieldValue())
 
         return rule_violations
+
+    def setTimelineColor(self, color: str):
+
+        self.timelineColor = color

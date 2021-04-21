@@ -6,6 +6,8 @@ from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem
 
+from Core.TimelineConfiguration import TimelineConfiguration
+
 class MyTimelineWidget(QtWidgets.QGraphicsView):
     def __init__(self, parent, scenario_controller):
         super(MyTimelineWidget, self).__init__(parent)
@@ -21,6 +23,8 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
         self.setBackgroundBrush(brush)
 
         self.scenarioController = scenario_controller
+
+        self.timelineConfiguration = TimelineConfiguration()
 
         for x in range(4):
             for i in range(100):
@@ -39,7 +43,7 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
 
     def setTimeline(self):
 
-        self.clearTimelineBoxes()
+        # self.clearTimelineBoxes()
 
         subsystem_controllers = self.scenarioController.getActiveSubsystems()
 
@@ -49,11 +53,8 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
             for command in schedule:
 
                 timeline_box = command.timelineBox
-                print(f'tB: {timeline_box}')
 
                 self.scene().addItem(timeline_box)
-
-                print(self.scene().items())
 
     def clearTimelineBoxes(self):
 

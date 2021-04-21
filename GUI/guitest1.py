@@ -32,7 +32,7 @@ class Ui(QtWidgets.QMainWindow):
         self.clearMenuOptions(self.menuFile)
         self.setMenuOptions(self.menuFile, ['Save', 'Save As', 'Save As Scenario'], self.saveMenuHandler)
         self.setMenuOptionsWithParams(self.menuNew, all_subsystem_names, self.newSubsystemHandler)
-        self.setMenuOptions(self.menuOpen, ['Open Command File', 'Open Scenario'], self.openFile)
+        self.setMenuOptions(self.menuOpen, ['Open Command File', 'Open Scenario'], self.openMenuHandler)
 
         self.show()
         self.timeline.show()
@@ -105,7 +105,9 @@ class Ui(QtWidgets.QMainWindow):
 
                 browser = TableView(self, subsystem_controller)
 
-                i = self.tabs.addTab(browser, file_name)
+                subsystem_name = subsystem_controller.mySubsystem.subsystemName
+
+                i = self.tabs.addTab(browser, subsystem_name)
                 self.tabs.setCurrentIndex(i)
 
         # if we're creating a new file
@@ -151,6 +153,8 @@ class Ui(QtWidgets.QMainWindow):
         self.scenarioController.removeActiveSubystemAtIndex(i)
         self.tabs.removeTab(i)
 
+        self.timeline.clearTimelineBoxes()
+
     def update_title(self, browser): 
   
         # if signal is not from the current tab 
@@ -164,11 +168,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def setTimeline(self):
 
+        print('guitest set timeline')
         self.timeline.setTimeline()
 
-        print('--------------')
-        print(self.timeline.scene().items())
-
+        self.timeline.show()
         self.timeline.show()
 
     def getCurrentSubsystemController(self):
@@ -178,11 +181,9 @@ class Ui(QtWidgets.QMainWindow):
 
     def saveAsHandler(self, subsystem_controller):
 
-        print('save as handler')
         subystem_name = subsystem_controller.mySubsystem.subsystemName
         file_path = self.saveFileExplorer(caption=f'Enter file path for {subystem_name} subsystem')
 
-        print(f'file path : {type(file_path)}')
         if file_path is not None:
 
             subsystem_controller.setFilePath(file_path)
@@ -241,7 +242,6 @@ class Ui(QtWidgets.QMainWindow):
 
     def warningDialogBinding(self, button_pressed):
 
-        print(f'button pressed: {(button_pressed.text())}')
         if button_pressed.text() == 'Save':
             subsystem_controller = self.getCurrentSubsystemController()
             self.saveHandler(subsystem_controller)
@@ -279,5 +279,6 @@ class Ui(QtWidgets.QMainWindow):
         self.scenarioController.openScenarioFile(file_path)
 
         self.add_new_tab(opening_scenario=True)
+        self.setTimeline()
 
 

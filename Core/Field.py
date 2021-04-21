@@ -122,7 +122,7 @@ class Field:
     def getFieldValueEngineeringUnits(self):
 
         if self.valueLSB is not None:
-            print(self.fieldValue)
+            print(f'Field Value: {self.fieldValue}')
             engineering_value = self.typeConverter.convertRawToEngineering(self.fieldValue, self.valueLSB)
 
         else:

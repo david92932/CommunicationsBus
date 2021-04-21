@@ -79,7 +79,7 @@ class SubsystemController:
         command_file.readCommandFile()
 
         for command in self.getSubsystemSchedule():
-            print(command.name)
+            command.setTimelineBox()
 
         self.setFilePath(file_path)
 

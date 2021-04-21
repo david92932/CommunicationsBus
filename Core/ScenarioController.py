@@ -3,6 +3,8 @@ from Core.SubsystemController import SubsystemController
 
 class ScenarioController:
 
+    TIMELINE_COLORS = ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow']
+
     def __init__(self, all_subsystem_models):
 
         self.subsystemModels = all_subsystem_models
@@ -21,7 +23,11 @@ class ScenarioController:
                 new_subsystem = copy.deepcopy(subsystem)
                 subsystem_controller = SubsystemController(new_subsystem)
                 self.activeSubsystems.append(subsystem_controller)
-                new_subsystem.setTimelineRow(self.activeSubsystems.index(subsystem_controller))
+
+                index = self.activeSubsystems.index(subsystem_controller)
+                color = ScenarioController.TIMELINE_COLORS[index]
+                print(f'COLOR----------------------{color}')
+                new_subsystem.setTimelineRowAndColor(index, color)
 
                 break
 
@@ -43,15 +49,21 @@ class ScenarioController:
 
     def getSubsystemFromFileExtension(self, file_extension: str):
 
+        print(f'function file extension: {file_extension}')
+
         subsystem_name = None
         for subsystem in self.subsystemModels:
 
             subsystem_extension = subsystem.fileExtension
 
+            print(f'looking at {subsystem_extension}')
+
             if subsystem_extension == file_extension:
                 subsystem_name = subsystem.subsystemName
+                print('found')
                 break
 
+        print(subsystem_name)
         if subsystem_name is not None:
             new_subsystem_controller = self.createSubsystem(subsystem_name)
 
@@ -79,8 +91,13 @@ class ScenarioController:
             command_file_paths = inFile.readlines()
         inFile.close()
 
+
+        print(command_file_paths)
+
         for command_file_path in command_file_paths:
 
+            command_file_path = command_file_path.strip('\n')
             file_extension = command_file_path.split('.')[1]
+            print(f'file extension: {file_extension}')
             new_subsystem_controller = self.getSubsystemFromFileExtension(file_extension)
             new_subsystem_controller.readCommandFile(command_file_path)

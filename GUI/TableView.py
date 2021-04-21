@@ -63,6 +63,8 @@ class TableView(QTableWidget):
 
     def setData(self):
 
+        print('table view set data')
+
         schedule_commands = self.subsystemController.getSubsystemSchedule()
         headers = self.subsystemController.headers
 
@@ -99,6 +101,8 @@ class TableView(QTableWidget):
         self.showDetailedView()
 
     def detailedViewChangeEvent(self, rule_violations_list):
+
+        print('Table view - detailed view change event')
 
         for field in rule_violations_list:
 
