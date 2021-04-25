@@ -26,16 +26,20 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
 
         self.timelineConfiguration = TimelineConfiguration()
 
-        for x in range(4):
-            for i in range(100):
-                self.drawLine(100 * i + 100, self.geometry().topLeft().y(), "black")
+        self.setVerticalScrollBarPolicy(2)
+        self.setHorizontalScrollBarPolicy(2)
+
+        for i in range(1000):
+            self.drawLine(self.timelineConfiguration.pixelsPerMillisecond * i * 100, 0, "black")
+            increment_text = self.scene().addText(f"{i * 100}")
+            increment_text.setX(self.timelineConfiguration.pixelsPerMillisecond * i * 100 + 3)
 
         self.setTimeline()
 
     def drawLine(self, xValue, yValue, color):
 
         rect_item = HorizontalItem(
-            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, self.screen.height()/2))
+            QtCore.QRectF(QtCore.QPointF(xValue, yValue), QtCore.QSizeF(2, self.screen.height()))
         )
 
         rect_item.setBrush(QtGui.QBrush(QtGui.QColor(color)))
@@ -50,6 +54,13 @@ class MyTimelineWidget(QtWidgets.QGraphicsView):
         for subsystem_controller in subsystem_controllers:
 
             schedule = subsystem_controller.getSubsystemSchedule()
+
+            sub_row = subsystem_controller.mySubsystem.timelineRow
+            sub_name = subsystem_controller.mySubsystem.subsystemName
+
+            text = self.scene().addText(sub_name)
+            text.setY((self.timelineConfiguration.boxHeight + self.timelineConfiguration.rowSpacing) * sub_row)
+            text.setX(-100)
             for command in schedule:
 
                 timeline_box = command.timelineBox

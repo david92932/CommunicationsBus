@@ -3,6 +3,26 @@
   "fileExtension": "ccmd",
   "commands": [
     {
+      "name": "Update Status",
+      "id": 3,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Capture",
+      "id": 2,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 0,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
       "name": "Mode",
       "id": 1,
       "protocol": "BCRT",
@@ -178,26 +198,6 @@
           "Units": "ms"
         }
       ]
-    },
-    {
-      "name": "Capture",
-      "id": 2,
-      "protocol": "BCRT",
-      "subAddress": 5,
-      "processingTime": 0,
-      "wordSizeInBits": 16,
-      "RTAddress": 8,
-      "fields": []
-    },
-    {
-      "name": "Update Status",
-      "id": 3,
-      "protocol": "BCRT",
-      "subAddress": 5,
-      "processingTime": 10,
-      "wordSizeInBits": 16,
-      "RTAddress": 8,
-      "fields": []
     },
     {
       "name": "Change Power State",

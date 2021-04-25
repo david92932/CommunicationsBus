@@ -154,7 +154,7 @@ class Field:
 
         return total_field_length
 
-    def __determineIfFieldIsSigned(self):
+    def determineIfFieldIsSigned(self):
 
         field_signed = False
 
@@ -167,4 +167,14 @@ class Field:
                     field_signed = True
                     break
 
-        return field_signed
+    def determineIfFieldIsRegex(self):
+
+        field_regex = False
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, RegexRule):
+                field_regex = True
+                break
+
+        return field_regex
