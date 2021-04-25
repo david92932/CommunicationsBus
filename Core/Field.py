@@ -22,6 +22,7 @@ class Field:
         self.valueLSB = None
         self.ownerCommand = None
         self.fieldSigned = self.__determineIfFieldIsSigned()
+        self.fieldRegex = self.__determineIfFieldIsRegex()
 
     def validateFieldValue(self):
 
@@ -154,7 +155,7 @@ class Field:
 
         return total_field_length
 
-    def determineIfFieldIsSigned(self):
+    def __determineIfFieldIsSigned(self):
 
         field_signed = False
 
@@ -167,7 +168,7 @@ class Field:
                     field_signed = True
                     break
 
-    def determineIfFieldIsRegex(self):
+    def __determineIfFieldIsRegex(self):
 
         field_regex = False
 
