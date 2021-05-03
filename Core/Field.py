@@ -22,6 +22,7 @@ class Field:
         self.valueLSB = None
         self.ownerCommand = None
         self.fieldSigned = self.__determineIfFieldIsSigned()
+        self.fieldRegex = self.__determineIfFieldIsRegex()
 
     def validateFieldValue(self):
 
@@ -167,4 +168,14 @@ class Field:
                     field_signed = True
                     break
 
-        return field_signed
+    def __determineIfFieldIsRegex(self):
+
+        field_regex = False
+
+        for rule in self.fieldRules:
+
+            if isinstance(rule, RegexRule):
+                field_regex = True
+                break
+
+        return field_regex

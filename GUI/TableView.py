@@ -25,7 +25,7 @@ class TableView(QTableWidget):
 
         self.createDetailedView()
 
-        self.cellChanged.connect(self.cellUpdated)
+        # self.cellChanged.connect(self.cellUpdated)
         self.doubleClicked.connect(self.detailedViewExistingCommand)
 
         screen = QDesktopWidget().screenGeometry()
@@ -38,28 +38,15 @@ class TableView(QTableWidget):
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        exportCommandsAction = menu.addAction("Export File")
-        importCommandsAction = menu.addAction("Read File")
-        addAboveAction = menu.addAction("Insert Command Above")
-        addBelowAction = menu.addAction("Insert Command Below")
+        addAboveAction = menu.addAction("Insert Command")
         deleteRowAction = menu.addAction("Delete Command")
+
         action = menu.exec_(self.mapToGlobal(event.pos()))
         row = self.rowAt(event.pos().y())
-        if action == importCommandsAction:
-            self.subsystemController.readCommandFile('commands.txt')
-        if action == exportCommandsAction:
-            self.subsystemController.buildCommandFile('commands.txt')
         if action == addAboveAction:
-            pass
-            # do function to add row
-        if action == addBelowAction:
             self.openNewCommandWindow()
         if action == deleteRowAction:
             pass  # do function to delete row
-
-    def testFunc(self):
-
-        pass
 
     def setData(self):
 
@@ -85,12 +72,12 @@ class TableView(QTableWidget):
 
         self.setHorizontalHeaderLabels(headers)
 
-    def cellUpdated(self, row, column):
-
-        new_value = self.item(row, column).text()
-        # print(f'changed: {row} {column} {new_value}')
-
-        # self.subsystemSchedule.updateCommand(row, column, new_value)
+    # def cellUpdated(self, row, column):
+    #
+    #     new_value = self.item(row, column).text()
+    #     # print(f'changed: {row} {column} {new_value}')
+    #
+    #     # self.subsystemSchedule.updateCommand(row, column, new_value)
 
     def openNewCommandWindow(self):
 

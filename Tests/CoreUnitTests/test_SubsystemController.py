@@ -9,7 +9,7 @@ class test_SubsystemController(unittest.TestCase):
     @pytest.fixture(autouse=True)
     def _setup(self):
 
-        file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera.json"
+        file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json"
         subsystem_parser = SubsystemParser(file_path)
 
         self.testSubsystem = subsystem_parser.getSubsystem()

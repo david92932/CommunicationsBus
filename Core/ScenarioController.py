@@ -78,7 +78,8 @@ class ScenarioController:
 
     def writeScenarioFile(self, scenario_file_path: str):
 
-        with open(scenario_file_path, 'w') as outFile:
+        print(self.getActiveSubsystems())
+        with open(scenario_file_path, 'a') as outFile:
             for subsystem_controller in self.getActiveSubsystems():
                 subsystem_file_path = subsystem_controller.filePath
             outFile.write(f'{subsystem_file_path}\n')
@@ -90,7 +91,6 @@ class ScenarioController:
         with open(scenario_file_path, 'r') as inFile:
             command_file_paths = inFile.readlines()
         inFile.close()
-
 
         print(command_file_paths)
 

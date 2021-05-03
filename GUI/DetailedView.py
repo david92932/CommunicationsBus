@@ -49,7 +49,8 @@ class DetailedView(QWidget):
             command_strings.append(command.name)
 
         comboBox = self.createComboBox(command_strings, self.getSelectedCommand)
-        comboBox.setFixedWidth(self.screen.width() / 2)
+        # comboBox.setFixedWidth(self.screen.width()/2)
+        comboBox.setFixedWidth(self.screen.width() - 50)
 
         # self.layout.addWidget(comboBox, 0, 0)
         self.layout.addWidget(comboBox)
@@ -179,7 +180,8 @@ class DetailedView(QWidget):
 
                 field_display_box = DetailedViewTextBox(self, field.name, description, field.setFieldValue, field_value, command_exist)
 
-            field_display_box.setFixedWidth(self.screen.width() / 2)
+            # field_display_box.setFixedWidth(self.screen.width() / 2)
+            field_display_box.setFixedWidth(self.screen.width() - 100)
             self.constructedBoxFieldObjs.append(field)
             self.constructedBoxes.append(field_display_box)
 

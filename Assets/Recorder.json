@@ -32,7 +32,7 @@
       "RTAddress": 8,
       "fields": [
         {
-          "name": "X Direction Units",
+          "name": "File Name",
           "size": 256,
           "validValues": {
             "regex": "^[a-zA-Z0-9\\_\/]*$"
