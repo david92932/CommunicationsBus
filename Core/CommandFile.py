@@ -6,6 +6,7 @@ Created on Tue Feb  9 13:51:43 2021
 """
 from io import StringIO
 import pandas as pd
+import csv
 
 class CommandFile:
     def __init__(self, subsystem_controller, file_path):
@@ -17,6 +18,8 @@ class CommandFile:
 
         subsystem_schedule = self.subsystemController.getSubsystemSchedule()
         file_string = self.makeCommandString(subsystem_schedule)
+        #self.makeCommandCSV(subsystem_schedule)
+        self.readCommandCSV()
         self.writeToFile(file_string)
 
     def readCommandFile(self):
@@ -73,7 +76,11 @@ class CommandFile:
                        #     field.setFieldValue(
                        #         int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
                        # else:
-                       if field.fieldSigned:
+                       if field.fieldRegex:
+
+                           field.setFieldValue(bytearray1[y:y + field.byteSize].decode('utf-8'))
+
+                       elif field.fieldSigned:
                            field.setFieldValue(int.from_bytes(bytearray1[y:y + field.byteSize], byteorder='big', signed=True))
                        else:
                            field.setFieldValue(
@@ -94,6 +101,60 @@ class CommandFile:
         outFile.writelines(file_string)
         outFile.close()
 
+    def makeCommandCSV(self, all_commands):
+        commandMainstring = "\n"
+        #all_commands = self.commands
+        for command in all_commands:
+            fieldstring = ""
+            commandstring = f'{command.name},{command.id},{command.commandStartField.fieldValue},'
+            if len(command.fields) == 0:
+                fieldstring = "no fields; "
+            else:
+                for field in command.fields:
+                    fieldstring += field.name + " = " + str(field.getFieldValueEngineeringUnits()) + "; "
+            commandstring += fieldstring[:-2] + "\n"
+
+
+            commandMainstring += commandstring[:-1] + "\n"
+        #print("command Maind String" + commandMainstring)
+        csv_string = StringIO('\n'+commandMainstring)
+
+        df = pd.read_csv(csv_string, sep=",", names=['Commandname', 'commandID', 'starttime', 'fielddata'])
+        #df.columns = ['Command name', 'command ID', ' starttime', 'field data']
+        #put name value in
+        df.to_csv(r'name2.csv')
+
+    def readCommandCSV(self):
+        #data = pd.read_csv("name3.csv",sep=",", names=['Commandname', 'commandID', 'starttime', 'fielddata'])
+        available_commands = self.subsystemController.getAllAvailableCommands()
+        with open('name3.csv', newline='') as File:
+            reader = csv.reader(File)
+            next(reader)
+            for row in reader:
+                print("---------------------------------this is row[1]------------------------" +row[1])
+                commandname = row[1]
+                id = row[2]
+                commandTime = row[3]
+                fields = row[4]
+                chunks = fields.split("; ")
+                command_exists = False
+                for command in available_commands:
+                    if commandname == command.name:
+                        command_exists = True
+                        break
+
+                if command_exists:
+                    new_command = self.subsystemController.createCommand(commandname)
+                    new_command.setStartTime(commandTime)
+                count = 0
+                for field in new_command.fields:
+                    #field.chunks[count].split(" = ")[1]
+                    field.setFieldValue(chunks[count].split(" = ")[1])
+                    count+=1
+                print(commandname)
+            #print(row['c1'], row['c2'])
+
+
     def makeCommandString(self, all_commands):
         commandMainstring = ""
 
@@ -101,14 +162,20 @@ class CommandFile:
 
             commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, '
             fieldstrings = ""
+            fieldstringhex = ""
             for field in command.fields:
                 and_value = ""
                 formatstring = ""
                 intformat = 0
                 #this should be field.minumvalue or whatever
 
+                if(field.fieldRegex):
+                    s = field.fieldValue.encode('utf-8')
+                    fieldstringhex = s.hex()
+                   # fieldstringhex= ''.join(['{0:x}'.format(ord(x)) for x in chr(int(field.fieldValue, 16)).encode('utf-8')]).upper()
 
-                if(field.fieldSigned):
+                    #fieldstringhex  = str(field.fieldValue.encode(encoding = 'UTF-8'))
+                elif(field.fieldSigned):
                     and_value = "0x"
 
                     for i in range(field.byteSize):
@@ -116,15 +183,18 @@ class CommandFile:
                         intformat += 2
                     string_format = "0" + str(intformat) + "x"
                     fieldstringhex = format(field.fieldValue & int(and_value, 16), string_format)
-                else:
+                elif(field.fieldSigned == False):
                     fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
                 #
+                else:
+                    fieldstringhex = ""
                 fieldstrings += fieldstringhex
                 # commandMainstring = commandMainstring + commandstring[:-2] + "\n"
 
 
             # makechecksum
             remainingByte = None
+            print("this is fieldstrings" + fieldstringhex)
             hexfill = 255
             fieldstrings = hex(int(command.id))[2:].zfill(2) + fieldstrings
             bytes = bytearray.fromhex(fieldstrings)
@@ -167,20 +237,5 @@ class CommandFile:
             # print(commandMainstring)
         return commandMainstring
 
-    def makeCommandCSV(self, all_commands):
-        commandMainstring = ""
-        for command in all_commands:
 
-            commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, {command.wordSizeBits}, '
-            for field in command.fields:
-                #this is where value needs to be raw
-                #fieldstringhex = hex(int(field.fieldValue))[2:].zfill(field.byteSize * 2)
-                field_string = field.getFieldValueEngineeringUnits()
-                # thisfield = bytes(field.byte_size)
-                commandstring += "0x" + field_string + ", "
-
-                commandMainstring = commandMainstring + commandstring[:-2] + "\n"
-            csv_string = StringIO(commandMainstring)
-            df = pd.read_csv(csv_string, sep=", ")
-        df.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
 
