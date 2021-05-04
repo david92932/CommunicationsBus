@@ -21,15 +21,16 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
 
         self.scenarioController = scenario_controller
-        # main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
-        relative_ui_path = 'AssetsV1/MainUI.ui'
+
 
         # determine if application is a script file or frozen exe
-        if getattr(sys, 'frozen', False):
 
+        if getattr(sys, 'frozen', False):
+            relative_ui_path = 'AssetsV1/MainUI.ui'
             main_ui_path = os.path.dirname(sys.executable)
 
         elif __file__:
+            relative_ui_path = 'MainUI.ui'
             main_ui_path = os.path.dirname(__file__)
 
         # needs to point to MainUi.ui file

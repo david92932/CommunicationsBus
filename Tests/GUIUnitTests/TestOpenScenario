@@ -1,0 +1,8 @@
+1) open application
+2) Open -> Open Scenario
+3) Select existing command file (.scn)
+4) press open on File explorer
+5) Assert that expected tabs have been opened
+6) For each tab assert that all commands are present
+7) Double click on a command
+8) Assert that Detailed View appears with correct data

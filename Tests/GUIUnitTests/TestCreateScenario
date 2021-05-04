@@ -1,0 +1,14 @@
+1) Open Application
+2) New -> Camera
+3) Right Click on table
+4) Insert Command
+5) Create 'Change Power State' Command
+6) Insert Command
+7) Repeat 2 - 7 with Recorder
+8) File -> Save As Scenario
+9) Save
+10) Go to file save location
+11) open file
+13) Assert both Camera and Recorder paths are present
+14) Assert Camera file path is valid
+15) Assert Recorder file path is valid

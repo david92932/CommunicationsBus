@@ -15,7 +15,7 @@ class test_Field(unittest.TestCase):
         self.testField = testCommand.getCommandFields()[0]
 
     def test_set_field_value(self):
-        file_path = "/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Camera2.json"
+        file_path = "/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json"
         subsystem_parser = SubsystemParser(file_path)
 
         testSubsystem = subsystem_parser.getSubsystem()
