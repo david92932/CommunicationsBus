@@ -1,33 +1,8 @@
 from Core.ScenarioController import ScenarioController
 from Core.SubsystemParser import SubsystemParser
 from Core.SubsystemController import SubsystemController
-from Core.SubsystemParser import Subsystem
-import json
-
-current_subsystem = None
-
-def inputParser(userInput):
-    if not userInput:
-        return
-
-    if "createCamera" in userInput:
-        current_subsystem = createCamera()
-        return "Camera subsystem created"
-
-    elif "insert" in userInput:
-
-        insertCommand(userInput)
-
-    elif "scenerio" in userInput:
-
-        return scenerio()
-
-    elif "save" in userInput:
-
-        return saveFile(r"C:\Users\Garrett\PycharmProjects\CommunicationsBusApril\Assets\testfile.ccmd")
-
-    elif "exit" in userInput:
-        exit()
+from Core.Command import Command
+import socket
 
 
 def help():
@@ -37,19 +12,41 @@ def help():
     conn.sendall(send_message)
     return("Gave user all possible commands")
 
-def createCamera():
-
+def create(input):
+    # Cuts "create" from the inputted string
+    command = input[6:]
+    print_message = b"made subsystemController "
 
     all_subsystem_models = []
+    all_subsystem_names = []
 
-    file_path = "/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Camera2.json"
-    subsystem_parser = SubsystemParser(file_path)
+    # load subsystems into application
+    file_paths = ["/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Camera2.json",
+                  "/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Recorder.json",
+                  "/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Temperature.json"]
 
-    all_subsystem_models.append(subsystem_parser.getSubsystem())
+    for path in file_paths:
+        #adding all ICDs to list all_subsystem_models
+        subsystem_parser = SubsystemParser(path)
+        all_subsystem_models.append(subsystem_parser.getSubsystem())
+        all_subsystem_names.append(subsystem_parser.getSubsystem().subsystemName)
+
+    if "Camera" in command:
+        subsystem_controller = SubsystemController(all_subsystem_models[0])
+        print_message += b" camera"
+    elif "Temperature" in command:
+        subsystem_controller = SubsystemController(all_subsystem_models[1])
+        print_message += b" Temperature"
+    elif "Recorder" in command:
+        subsystem_controller = SubsystemController(all_subsystem_models[2])
+        print_message += b" recorder"
+    else:
+        print_message = b"Error, invalid system"
 
     scenario_controller = ScenarioController(all_subsystem_models)
 
-    subsystem_controller = SubsystemController(subsystem_parser.getSubsystem())
+
+
     #subsystem_controller.createCommand("Mode")
     # creates camera change power state command, command is added to the subsystem, list of fields are added to array
     # command1 = subsystem_controller.createCommand("Change Power State")
@@ -63,18 +60,10 @@ def createCamera():
     # command1.fields[1].setFieldValue(2000)
 
 
-
-    #returns a list of command objects
-    # print("All commands",subsystem_controller.getAllAvailableCommands())
-
-    #what gets sent to the socket
-    send_message = b"made subsystemController Camera"
     #Sending to socket
-    conn.sendall(send_message)
+    conn.sendall(print_message)
 
-    #subsystem_controller.buildCommandFile(r"C:\Users\Garrett\PycharmProjects\CommunicationsBusApril\Assets\test.ccmd")
-
-    print("create camera called")
+    print(print_message)
 
     return(subsystem_controller)
 
@@ -91,27 +80,26 @@ def insertCommand(input, subsystem_controller):
 
 
     if "Mode" in command:
-        subsystem_controller.createCommand("Mode")
+        return_command = subsystem_controller.createCommand("Mode").getCommandFields()
+
         send_message += b" mode"
     elif "Change" in command:
-        subsystem_controller.createCommand("Change Power State")
+        return_command = subsystem_controller.createCommand("Change Power State")
         send_message += b" Change Power State"
     elif "Update Status" in command:
-        subsystem_controller.createCommand("Update Status")
+        return_command = subsystem_controller.createCommand("Update Status")
         send_message += b" Update Status"
     elif "Capture" in command:
-        subsystem_controller.createCommand("Capture")
+        return_command = subsystem_controller.createCommand("Capture")
         send_message += b" Capture"
 
     # Sending to socket
     conn.sendall(send_message)
-    return "added command " + command, subsystem_controller
+    return "added command " + command, subsystem_controller, return_command
 
 
 def saveFile(subsystem_controller, file_location_name):
 
-    # Saves to test.ccmd
-    #r"C:\Users\Garrett\PycharmProjects\CommunicationsBusApril\Assets\test.ccmd"
     subsystem_controller.buildCommandFile(file_location_name)
 
     send_message =  b"saved file"
@@ -119,15 +107,6 @@ def saveFile(subsystem_controller, file_location_name):
     conn.sendall(send_message)
 
     return "saved"
-
-
-# def openScenarioFile(self):
-#
-#     file_path =
-#     self.scenarioController.openScenarioFile(file_path)
-
-
-
 
 
 def scenerio():
@@ -148,6 +127,15 @@ def scenerio():
     return ("Hello function called from TCL")
 
 
+def field(input, command :Command):
+    input = input[5:].rstrip()
+    field_list = input.split(",")
+    print(field_list)
+    print(command)
+    for command in command:
+        print(command.fields)
+
+
 def exit():
     send_message = b"exit message received, closing socket"
     conn.sendall(send_message)
@@ -155,11 +143,13 @@ def exit():
     return (send_message)
 
 
-import socket
+
 
 HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
 
+current_subsystem = None
+current_command = None
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
@@ -178,13 +168,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
             # inputParser(data)
 
-            if "createCamera" in data:
-                current_subsystem = createCamera()
-                print("Camera subsystem created")
+            if "create" in data:
+                current_subsystem = create(data)
+
 
             elif "insert" in data:
-                print("insert called")
-                insertCommand(data, current_subsystem)
+                current_command = insertCommand(data, current_subsystem)[2]
+
+
+            elif "field" in data:
+                field(data, current_command)
 
             elif "scenerio" in data:
 

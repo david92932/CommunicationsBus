@@ -1,6 +1,6 @@
 {
-  "subsystemName": "Camera",
-  "fileExtension": "ccmd",
+  "subsystemName": "Temperature",
+  "fileExtension": "tcmd",
   "commands": [
     {
       "name": "Start Recording",

@@ -9,7 +9,11 @@ after 250
 puts $server insertCapture
 after 250
 
+
 puts $server insertMode
+after 250
+
+puts $server field0,1,0,45,1,0,45,9,9,1009,4000009
 after 250
 
 puts $server save
