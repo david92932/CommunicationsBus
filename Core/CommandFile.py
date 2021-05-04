@@ -31,7 +31,7 @@ class CommandFile:
         subsystem_schedule = self.subsystemController.getSubsystemSchedule()
         file_string = self.makeCommandString(subsystem_schedule)
         #self.makeCommandCSV(subsystem_schedule)
-        self.readCommandCSV()
+        #self.readCommandCSV()
         self.writeToFile(file_string)
 
     def readCommandFile(self):
@@ -46,9 +46,10 @@ class CommandFile:
         inFile = open(self.filePath, 'r')
         Lines = inFile.readlines()
         inFile.close()
-
+        #read in file from Gui
         for line in Lines:
             # these are all the values separated by commas
+            #get the values that arent the hex string data
             chunks = line.split(", ")
             readInCommand = 0
             # line.replace("\n", "")
@@ -56,14 +57,17 @@ class CommandFile:
             commandID = chunks[1]
             commandTime = chunks[2]
             commandNumWords = chunks[3]
-
+            #remive data from chunks that isnt hex data
             chunks.pop(0)
             chunks.pop(0)
             chunks.pop(0)
             chunks.pop(0)
+            #create a large string with all of the extra characters removed like 0x and commas
             field_values_string = "".join(chunks)
             field_values_string = field_values_string.replace("0x", "")
             field_values_string = field_values_string.replace("\n", "")
+            #create a byte array from the string so you can read through based on the byte size and take that size
+            # from the array
             bytearray1 = bytearray.fromhex(field_values_string)
             #remove commandid and checksum from message.
             bytearray1 = bytearray1[1:-1]
@@ -72,7 +76,9 @@ class CommandFile:
             hexnumbers = commandstring1.split(", ")
             i = 0
 
-            # if new ca
+            # check for a command named this in the list of possible commands for its type
+            #extract field values from the hexstring based on whehter it is utf8 or a signed/unsigned integer
+
 
             command_exists = False
             for command in available_commands:
@@ -130,7 +136,8 @@ class CommandFile:
         :return:
         """
         commandMainstring = "\n"
-        #all_commands = self.commands
+        #similar to building formatted files except the fields are made into a loarger string with their field names
+        #separated by an " = " and are built using engineering values
         for command in all_commands:
             fieldstring = ""
             commandstring = f'{command.name},{command.id},{command.commandStartField.fieldValue},'
@@ -155,6 +162,9 @@ class CommandFile:
         """
         Convert CSV files into Python objects for the appliacation and assign to SubsystemController
         """
+        #Essentially the same as reading from the formatted files excpet this uses the engineering values.
+
+        #
         #data = pd.read_csv("name3.csv",sep=",", names=['Commandname', 'commandID', 'starttime', 'fielddata'])
         available_commands = self.subsystemController.getAllAvailableCommands()
         with open('name3.csv', newline='') as File:
@@ -181,7 +191,7 @@ class CommandFile:
                     #field.chunks[count].split(" = ")[1]
                     field.setFieldValue(chunks[count].split(" = ")[1])
                     count+=1
-                print(commandname)
+                #print(commandname)
             #print(row['c1'], row['c2'])
 
 
@@ -192,7 +202,7 @@ class CommandFile:
         :return: string of data to write to file including all commands
         """
         commandMainstring = ""
-
+        #iterate through all the commands and create formatted strings
         for command in all_commands:
 
             commandstring = f'{command.name}, {command.id}, {command.commandStartField.fieldValue}, '
@@ -202,8 +212,9 @@ class CommandFile:
                 and_value = ""
                 formatstring = ""
                 intformat = 0
-                #this should be field.minumvalue or whatever
 
+                #create hex strings based on field values
+                #currently doesnt take max size into account for regex
                 if(field.fieldRegex):
                     s = field.fieldValue.encode('utf-8')
                     fieldstringhex = s.hex()
