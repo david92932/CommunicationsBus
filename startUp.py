@@ -1,21 +1,39 @@
+import os
+import sys
 
 from Core.SubsystemParser import SubsystemParser
 from GUI.WindowController import WindowController
 
 from Core.ScenarioController import ScenarioController
 
+
+#Starting Point of Application
 if __name__ == '__main__':
 
     all_subsystem_models = []
 
     # load subsystems into application
-    file_paths = ["/Users/David/PycharmProjects/CommunicationsBus/Assets/Camera2.json",
-                 "/Users/David/PycharmProjects/CommunicationsBus/Assets/Recorder.json"]
+    relative_file_paths = ["AssetsV1/Camera2.json",
+                 "AssetsV1/Recorder.json"]
 
-    for path in file_paths:
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
+
+    complete_file_paths = []
+    for asset in relative_file_paths:
+
+        config_path = os.path.join(application_path, asset)
+
+        complete_file_paths.append(config_path)
+
+
+    # build command Subsystem models
+    for path in complete_file_paths:
         subsystem_parser = SubsystemParser(path)
-
-        # x = subsystem_parser.getSubsystem()
 
         all_subsystem_models.append(subsystem_parser.getSubsystem())
 

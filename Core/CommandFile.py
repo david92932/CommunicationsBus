@@ -9,12 +9,24 @@ import pandas as pd
 import csv
 
 class CommandFile:
+    """
+    Responsible for all file I/O
+    """
     def __init__(self, subsystem_controller, file_path):
+        """
+        :param subsystem_controller: SubsystemController obj to build into a file
+        :param file_path: full file location of where to read/write
+        """
 
         self.subsystemController = subsystem_controller
         self.filePath = file_path
 
     def writeCommandFile(self):
+        """
+        takes all Commands in self.subsytemController and builds
+        command files from them
+        :return: writes to a file
+        """
 
         subsystem_schedule = self.subsystemController.getSubsystemSchedule()
         file_string = self.makeCommandString(subsystem_schedule)
@@ -23,6 +35,11 @@ class CommandFile:
         self.writeToFile(file_string)
 
     def readCommandFile(self):
+        """
+        read for an existing command file and convert back into python Objs
+        to use in the application
+
+        """
 
         available_commands = self.subsystemController.getAllAvailableCommands()
 
@@ -96,12 +113,22 @@ class CommandFile:
 
     # to actually create a command,
     def writeToFile(self, file_string):
+        """
+        Write file_string into a file
+        :param file_string: string of data to write to a file
+        :return: N/A
+        """
 
         outFile = open(self.filePath, 'w')
         outFile.writelines(file_string)
         outFile.close()
 
     def makeCommandCSV(self, all_commands):
+        """
+        Convert Python Objs into a CSV file
+        :param all_commands: Commands to include in CSV file
+        :return:
+        """
         commandMainstring = "\n"
         #all_commands = self.commands
         for command in all_commands:
@@ -125,6 +152,9 @@ class CommandFile:
         df.to_csv(r'name2.csv')
 
     def readCommandCSV(self):
+        """
+        Convert CSV files into Python objects for the appliacation and assign to SubsystemController
+        """
         #data = pd.read_csv("name3.csv",sep=",", names=['Commandname', 'commandID', 'starttime', 'fielddata'])
         available_commands = self.subsystemController.getAllAvailableCommands()
         with open('name3.csv', newline='') as File:
@@ -156,6 +186,11 @@ class CommandFile:
 
 
     def makeCommandString(self, all_commands):
+        """
+        Convert Command Objs to hex strings that can be written to file
+        :param all_commands: Command objs to write
+        :return: string of data to write to file including all commands
+        """
         commandMainstring = ""
 
         for command in all_commands:
@@ -212,7 +247,6 @@ class CommandFile:
             #commandID_hex = hex(int(command.id))[2:].zfill(2)
 
             #formatline = commandID_hex + formatline
-            print("checksum and fields  = 0x" + formatline)
             # for i in range(len(formatline)):
             countbits = 0
             # make 0Xseparatedfields here
@@ -228,7 +262,6 @@ class CommandFile:
                     countbits += 1
                 formattedfields += "0x" + chunks2
             formattedfields = formattedfields[:-2]
-            print(formattedfields)
 
             # if len(fieldstrings) %2 ==0:
             # print(fieldstrings)

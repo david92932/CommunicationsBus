@@ -4,9 +4,23 @@ from PyQt5 import QtCore, QtGui
 from Core.TimelineConfiguration import TimelineConfiguration
 
 class Command:
+    """
+    Class represents a single subystem command
+    """
 
     def __init__(self, name: str, id: int, command_start_field, command_processing_time, rt_address: int, sub_address: int, word_size_bits: int, protocol: str, fields: []):
-
+        """
+        Command objs are built by SubsytemParser on startUp
+        :param name: name of command
+        :param id: command ID
+        :param command_start_field: Field obj for start time of command
+        :param command_processing_time: mandatory time to process command
+        :param rt_address: RT address
+        :param sub_address: Sub address
+        :param word_size_bits: Size of command in bits
+        :param protocol: Communication Protocol used by command
+        :param fields: list of Field objs that are included in the Command
+        """
         self.name = name
         self.id = id
         self.commandStartField = command_start_field
@@ -26,6 +40,10 @@ class Command:
         self.__assignFieldsToCommand()
 
     def getCommandFields(self):
+        """
+        returns list of all Fields associated with command
+        :return:
+        """
 
         command_fields = [self.commandStartField]
 
@@ -34,6 +52,9 @@ class Command:
         return command_fields
 
     def getCommandFieldsTableView(self):
+        """
+        returns all values to display on table row for Command
+        """
 
         command_fields = [self.id, self.commandStartField.getFieldValueEngineeringUnits(), self.wordSizeBits,
                           self.name, self.rtAddress, self.subAddress, self.wordSizeBits, self.enabled]
@@ -41,6 +62,10 @@ class Command:
         return command_fields
 
     def setStartTime(self, value):
+        """
+        Set the start time of the command
+        :param value: time in ms
+        """
 
         start_time = self.commandStartField.setFieldValue(value, override_rule_check=True)
         self.calculateLengthTime()
@@ -49,8 +74,11 @@ class Command:
         return start_time
 
     def calculateLengthTime(self):
-
-        print('calculate total length time')
+        """
+        Iterates through all command fields to determine if they
+        affect the command's length
+        :return: returns value of the command's time in ms
+        """
 
         total_command_length = self.processingTime
 
@@ -67,19 +95,24 @@ class Command:
 
     def setTimelineBox(self):
 
-        print(f'set timeline box: {self.name}')
         self.addBox(self.commandStartField.fieldValue, self.calculateLengthTime(), self.timelineRow, self.timelineColor)
 
     def addBox(self, startTime, endTime, row, color: str):
-
-        print(f'add box color: {color}')
+        """
+        Creates a GraphicsRectItem that will appear on the timeline
+        :param startTime: time of command start
+        :param endTime: time of command end
+        :param row: The timeline row to assign to this timeline box (positive integer)
+        (row 0 is top)
+        :param color: Color of timeline box - doesn't work
+        :return: N/A - assigns self.timelineBox to the created obj
+        """
 
         xStartValue = startTime * self.timelineConfiguration.pixelsPerMillisecond
         xEndValue = endTime * self.timelineConfiguration.pixelsPerMillisecond + xStartValue
 
         yValue = row * (self.timelineConfiguration.boxHeight + self.timelineConfiguration.rowSpacing)
 
-        print(f'start {xStartValue}, end {xEndValue}, y: {yValue}, height: {self.timelineConfiguration.boxHeight}')
         self.timelineBox = GraphicsRectItem(
             QtCore.QRectF(QtCore.QPointF(xStartValue, yValue), QtCore.QSizeF(xEndValue - xStartValue, self.timelineConfiguration.boxHeight)), command=self)
 
@@ -94,13 +127,21 @@ class Command:
             field.ownerCommand = self
 
     def fieldChangeEvent(self):
-
-        print(f'Field change event: {self.name}')
+        """
+        When a field is changed, an event is cascaded from Field
+        to handle the event and display updated info on the GUI
+        :return:
+        """
 
         self.calculateLengthTime()
         self.setTimelineBox()
 
     def validateFields(self):
+        """
+        Function calls validateFieldValue for all Fields
+        associated with this Command
+        :return: list of dict rule violations (see Field)
+        """
 
         rule_violations = []
         for field in self.fields:

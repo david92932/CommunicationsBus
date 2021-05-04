@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+   </widget>
+   <widget class="QMenu" name="menuOpen">
+    <property name="title">
+     <string>Open</string>
+    </property>
+    <addaction name="actionTempCommand"/>
+    <addaction name="actionVideoCommand"/>
+    <addaction name="actionRecorderCommand"/>
+    <addaction name="actionScenario_2"/>
+   </widget>
+   <widget class="QMenu" name="menuNew">
+    <property name="title">
+     <string>New</string>
+    </property>
+    <addaction name="actionTemp_Command"/>
+    <addaction name="actionVideo_Command"/>
+    <addaction name="actionRecorder_Command"/>
+    <addaction name="actionScenario"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuOpen"/>
+   <addaction name="menuNew"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionTemp_Command">
+   <property name="text">
+    <string>Temp Command</string>
+   </property>
+  </action>
+  <action name="actionVideo_Command">
+   <property name="text">
+    <string>Video Command</string>
+   </property>
+  </action>
+  <action name="actionRecorder_Command">
+   <property name="text">
+    <string>Recorder Command</string>
+   </property>
+  </action>
+  <action name="actionTempCommand">
+   <property name="text">
+    <string>TempCommand</string>
+   </property>
+  </action>
+  <action name="actionVideoCommand">
+   <property name="text">
+    <string>VideoCommand</string>
+   </property>
+  </action>
+  <action name="actionRecorderCommand">
+   <property name="text">
+    <string>RecorderCommand</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>SaveAs</string>
+   </property>
+  </action>
+  <action name="actionScenario">
+   <property name="text">
+    <string>Scenario</string>
+   </property>
+  </action>
+  <action name="actionScenario_2">
+   <property name="text">
+    <string>Scenario</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

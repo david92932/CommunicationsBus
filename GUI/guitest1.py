@@ -10,13 +10,32 @@ from GUI.MyTimelineWidget import MyTimelineWidget
 from GUI.TableView import TableView
 
 class Ui(QtWidgets.QMainWindow):
+    """
+    Main UI window
+    """
     def __init__(self, scenario_controller):
+        """
+        Initialize Main GUI Window
+        :param scenario_controller: ScenarioController Object with all
+        """
         super(Ui, self).__init__()
 
         self.scenarioController = scenario_controller
         # main_ui_path = os.path.join(os.path.dirname(__file__), 'MainUI.ui')
-        main_ui_path = r'/Users/David/PycharmProjects/CommunicationsBus/GUI/MainUI.ui'
-        uic.loadUi(main_ui_path, self)
+        relative_ui_path = 'AssetsV1/MainUI.ui'
+
+        # determine if application is a script file or frozen exe
+        if getattr(sys, 'frozen', False):
+
+            main_ui_path = os.path.dirname(sys.executable)
+
+        elif __file__:
+            main_ui_path = os.path.dirname(__file__)
+
+        # needs to point to MainUi.ui file
+        complete_ui_path = os.path.join(main_ui_path, relative_ui_path)
+
+        uic.loadUi(complete_ui_path, self)
 
         self.timeline = MyTimelineWidget(self, self.scenarioController)
         self.tabWidget.setTabsClosable(True)
@@ -38,9 +57,15 @@ class Ui(QtWidgets.QMainWindow):
         self.timeline.show()
 
     def clearMenuOptions(self, menu_obj):
+
         menu_obj.clear()
 
     def setMenuOptions(self, menu_obj, options: [], binding_function):
+        """
+        set menu_obj to a list of options and when a menu object is called,
+        trigger binding_function
+
+        """
 
         for item in options:
             menu_obj.addAction(item)
@@ -57,6 +82,9 @@ class Ui(QtWidgets.QMainWindow):
         menu_obj.triggered.connect(binding_function)
 
     def openFile(self):
+        """
+        Open file handler - calls add_new_tab to create a tab with the opened file
+        """
 
         file_path = self.openFileExplorer()
 
@@ -67,6 +95,12 @@ class Ui(QtWidgets.QMainWindow):
             self.add_new_tab(file_path=file_path, file_name=file_name)
         
     def openFileExplorer(self, caption=''):
+        """
+        Open OS file explorer
+        :param caption: string to display to user with file
+        explorer
+        :return: File Path selected by user
+        """
 
         file_path = None
         file_path, idk = QFileDialog.getOpenFileName(caption=caption)
@@ -77,6 +111,12 @@ class Ui(QtWidgets.QMainWindow):
         return file_path
 
     def saveFileExplorer(self, caption=''):
+        """
+        Open OS file explorer for saving
+        :param caption: string to display to user with file
+        explorer
+        :return: File Path selected by user
+        """
 
         file_path = None
         file_path, idk = QFileDialog.getSaveFileName(caption=caption)
@@ -91,11 +131,24 @@ class Ui(QtWidgets.QMainWindow):
         return ntpath.basename(file_path)
 
     def newSubsystemHandler(self, event):
+        """
+        When a user creates a new subsystem
+        """
 
         self.add_new_tab(new_subsystem_name=event.text())
 
     def add_new_tab(self, new_subsystem_name="None", file_path="None", file_name="No Name Found", opening_scenario=False):
+        """
+        Adds a tab with a new tableView on the GUI
+        :param new_subsystem_name: Name of new subystem to add - required for new subsystems
 
+        Only required for opening existing:
+        :param file_path: File path if user is opening existing file
+        :param file_name: Name of file, excluding the path
+
+        If user is opening existing scenario
+        :param opening_scenario: Boolean flagging that the user is opening a sceario
+        """
         # if we're opening a scenario
         if opening_scenario:
 
@@ -134,7 +187,6 @@ class Ui(QtWidgets.QMainWindow):
     
     def tab_open_doubleclick(self, i): 
 
-        print('tab open double click')
         # checking index i.e 
         # No tab under the click 
         if i == -1: 
@@ -167,8 +219,10 @@ class Ui(QtWidgets.QMainWindow):
         title = 'test'
 
     def setTimeline(self):
-
-        print('guitest set timeline')
+        """
+        Calls self.timeline object's setTimeline() function
+        :return: N/A
+        """
         self.timeline.setTimeline()
 
         self.timeline.show()
@@ -180,6 +234,11 @@ class Ui(QtWidgets.QMainWindow):
         return self.scenarioController.activeSubsystems[current_index]
 
     def saveAsHandler(self, subsystem_controller):
+        """
+        Handler for Save as requests
+        :param subsystem_controller: SubsystemController obj for subsystem to save
+
+        """
 
         subystem_name = subsystem_controller.mySubsystem.subsystemName
         file_path = self.saveFileExplorer(caption=f'Enter file path for {subystem_name} subsystem')
@@ -194,6 +253,10 @@ class Ui(QtWidgets.QMainWindow):
             print('file not saved')
 
     def saveHandler(self, subsystem_controller):
+        """
+        Handler for save requests
+        :param subsystem_controller: SubsystemController obj for subsystem to save
+        """
 
         if subsystem_controller.filePath == None:
             self.saveAsHandler(subsystem_controller)
@@ -202,6 +265,10 @@ class Ui(QtWidgets.QMainWindow):
             subsystem_controller.buildCommandFile(subsystem_controller.filePath)
 
     def saveScenarioHandler(self):
+        """
+        Handler for saving all open files under 1 scenario
+        :return:
+        """
 
         file_path = self.saveFileExplorer(caption="Enter File Path for Scenario")
 
@@ -250,6 +317,12 @@ class Ui(QtWidgets.QMainWindow):
             pass
 
     def saveMenuHandler(self, action):
+        """
+        Catches events for when a user selects an option from
+        the save menu
+        :param action: QT event
+
+        """
         button_text = action.text()
 
         if button_text == 'Save As':
@@ -264,6 +337,12 @@ class Ui(QtWidgets.QMainWindow):
             self.saveScenarioHandler()
 
     def openMenuHandler(self, action):
+        """
+        Catches events for when a user selects an option from
+        the open menu
+        :param action: QT event
+
+        """
 
         button_text = action.text()
 
@@ -274,6 +353,10 @@ class Ui(QtWidgets.QMainWindow):
             self.openScenarioFile()
 
     def openScenarioFile(self):
+        """
+        Handler for opening all subsystems in a scenario
+        :return: N/A
+        """
 
         file_path = self.openFileExplorer(caption=f'Select scenario file to open')
         self.scenarioController.openScenarioFile(file_path)

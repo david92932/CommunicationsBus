@@ -6,6 +6,9 @@ from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem
 
 class GraphicsRectItem(QGraphicsRectItem):
+    """
+    QT object that is a single Command's timeline box
+    """
 
     handleMiddleLeft = 4
     handleMiddleRight = 5
@@ -175,6 +178,10 @@ class GraphicsRectItem(QGraphicsRectItem):
         super().setToolTip(self.buildToolTip())
 
     def buildToolTip(self):
+        """
+        build string to include when a user hovers over a command
+        :return:
+        """
 
         command_name = self.ownerCommand.name
         start_time = self.ownerCommand.commandStartField.getFieldValueEngineeringUnits()
