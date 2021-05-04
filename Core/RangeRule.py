@@ -2,6 +2,15 @@ from Core.Rule import Rule
 from Core.TypeConverter import TypeConverter
 
 class RangeRule(Rule):
+    """
+    a RangeRule is a rule where the Field value must be within a specific range of values
+    EX: field must be between 1 and 10 and LSB is 1
+    so
+    min=1
+    max=10
+    lsb=1
+    byte_size=1
+    """
 
     def __init__(self, version_added: str, min_value, max_value, lsb_value, byte_size):
 
@@ -14,6 +23,14 @@ class RangeRule(Rule):
         self.typeConverter = TypeConverter()
 
     def checkValidValues(self, new_value):
+        """
+          Check if new_value is valid according to this rule
+          :param new_value: value attempting to set to Field
+          :return: rule_violations list with dicts of form
+          {'Valid': value_is_valid, 'attemptedValue': new_value, 'overridable': False, 'message': message}
+          if a rule has been violated.
+          If the rule is valid, rule_violations will be empty
+          """
 
         value_is_valid = False
 
@@ -40,6 +57,9 @@ class RangeRule(Rule):
         return rule_violations
 
     def __checkMaxValue(self, new_value):
+        """
+        check if new_value is over the allowed max
+        """
 
         value_is_valid = False
         engineering_value = self.typeConverter.convertRawToEngineering(new_value, self.lsbValue)
@@ -61,12 +81,14 @@ class RangeRule(Rule):
         return {'Valid': value_is_valid, 'attemptedValue': engineering_value, 'overridable': True, 'message': message}
 
     def __checkMinValue(self, new_value):
+        """
+        check if new_value is under the allowed min
+        """
 
         value_is_valid = False
 
         engineering_value = self.typeConverter.convertRawToEngineering(new_value, self.lsbValue)
 
-        print(f'NEW VALUE: {new_value}, {engineering_value}')
         # if new value smaller than allowed min value
         if new_value < self.typeConverter.convertEngineeringToRaw(self.minValue, self.lsbValue):
         # if new_value < self.minValue:
@@ -83,6 +105,12 @@ class RangeRule(Rule):
         return {'Valid': value_is_valid, 'attemptedValue': engineering_value, 'overridable': True, 'message': message}
 
     def __checkDivisible(self, new_value):
+        """
+        check if new_value is divisible by LSB
+        Note: if new_value is not divisisble, dict response
+        'attemptedValue': will be a valid value rounded
+        to nearest value divisible by the LSB
+        """
 
         value_is_valid = False
         roundedValue = 0.00
@@ -109,6 +137,15 @@ class RangeRule(Rule):
         return {'Valid': value_is_valid, 'attemptedValue': roundedValue, 'overridable': True, 'message': message}
 
     def __checkValueFitsInField(self, new_value):
+        """
+        check if new_value fits in the allotted space
+        a value can be over the max, but still fit in the
+        field, so this function checks if the new_value fits
+        in the field
+
+        if this check fails, the value is not overridable because
+        it's too big and will throw errors once converted into file
+        """
 
         value_is_valid = False
 

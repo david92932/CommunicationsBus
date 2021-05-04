@@ -9,8 +9,16 @@ from Core.RegexRule import RegexRule
 import json
 
 class SubsystemParser:
+    """
+    Responsible for reading JSON file and converting into Subsystem/Command/Field/Rule objects
+    that are usable by the application
+    """
 
     def __init__(self, file_path):
+        """
+
+        :param file_path: location to read JSON command model from
+        """
 
         self.path = file_path
         file_json = self.__readFile()
@@ -24,6 +32,9 @@ class SubsystemParser:
         return self.subsystemObject
 
     def __readFile(self) -> dict:
+        """
+        read JSON config file and return python dict obj
+        """
 
         with open(self.path, "r") as inFile:
 
@@ -32,6 +43,9 @@ class SubsystemParser:
         return config_json
 
     def __parseJSON(self, config_json):
+        """
+        read 1st level dict objs
+        """
 
         subsystem_name = self.__getDictField(config_json, "subsystemName")
         file_extension = self.__getDictField(config_json, "fileExtension")
@@ -52,6 +66,9 @@ class SubsystemParser:
         return field_value
 
     def __parseCommands(self, all_subsystem_commands):
+        """
+        Parse Command objs into Commands
+        """
 
         all_command_objects = []
 

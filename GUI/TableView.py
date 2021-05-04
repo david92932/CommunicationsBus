@@ -80,13 +80,6 @@ class TableView(QTableWidget):
 
         self.setHorizontalHeaderLabels(headers)
 
-    # def cellUpdated(self, row, column):
-    #
-    #     new_value = self.item(row, column).text()
-    #     # print(f'changed: {row} {column} {new_value}')
-    #
-    #     # self.subsystemSchedule.updateCommand(row, column, new_value)
-
     def openNewCommandWindow(self):
 
         """ Opens a new command Window """

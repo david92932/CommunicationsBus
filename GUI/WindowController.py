@@ -8,6 +8,9 @@ import ntpath
 from GUI.guitest1 import Ui
 
 class WindowController:
+    """
+    Responsible for running GUI
+    """
 
     def __init__(self, scenario_controller):
 

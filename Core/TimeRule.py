@@ -1,6 +1,9 @@
 from Core.Rule import Rule
 
 class TimeRule(Rule):
+    """
+    Rule class to validate the processing time is greater than the required time
+    """
 
     def __init__(self, processing_time):
 
@@ -9,6 +12,11 @@ class TimeRule(Rule):
         self.processingTime = processing_time
 
     def checkValidValues(self, new_value):
+        """
+        validate new_value is longer than required processing time
+        :param new_value:
+        :return:
+        """
 
         rule_violations = []
 

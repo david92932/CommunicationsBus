@@ -1,0 +1,401 @@
+{
+  "subsystemName": "Camera",
+  "fileExtension": "ccmd",
+  "commands": [
+    {
+      "name": "Update Status",
+      "id": 3,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Capture",
+      "id": 2,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 0,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": []
+    },
+    {
+      "name": "Mode",
+      "id": 1,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 265,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "X Direction Units",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Select The Units For Y Direction Angles"
+        },
+        {
+          "name": "X Direction Radians",
+          "size": 4,
+          "validValues": {
+            "min": -1.570,
+            "max": 1.570,
+            "lsb": 0.00025
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "Radians"
+        },
+        {
+          "name": "X Direction Degrees",
+          "size": 4,
+          "validValues": {
+            "min": -90,
+            "max": 90,
+            "lsb": 0.005
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Number of degrees in X direction to point",
+          "Units": "Degrees"
+        },
+        {
+          "name": "Y Direction Radians",
+          "size": 4,
+          "validValues": {
+            "min": -1.570,
+            "max": 1.570,
+            "lsb": 0.00025
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Number of radians in the X direction to point",
+          "Units": "Radians"
+        },
+        {
+          "name": "Y Direction Degrees",
+          "size": 4,
+          "validValues": {
+            "min": -90,
+            "max": 90,
+            "lsb": 0.005
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Number of degrees in Y direction to point",
+          "Units": "Degrees"
+        },
+        {
+          "name": "Y Direction Units",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Radians",
+                "value": 0
+              },
+              {
+                "name": "Degrees",
+                "value": 1
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Red And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "iterator": {
+              "value1": 9,
+              "value2": 255
+            }
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Green And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "iterator": {
+              "value1": 9,
+              "value2": 255
+            }
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Blue And Alpha Modifier",
+          "size": 4,
+          "validValues": {
+            "iterator": {
+              "value1": 9,
+              "value2": 255
+            }
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI"
+        },
+        {
+          "name": "Exposure Delay",
+          "size": 4,
+          "validValues": {
+          "min": 1000,
+          "max": 3000,
+          "lsb": 0.250
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "ms"
+        },
+        {
+          "name": "Exposure Time",
+          "size": 8,
+          "validValues": {
+          "min": 4000000,
+          "max": 2199023255551,
+          "lsb": 0.5
+          },
+          "time": {
+            "affectsTime": false
+          },
+          "description": "Temp Description for the GUI",
+          "Units": "ms"
+        }
+      ]
+    },
+    {
+      "name": "Change Power State",
+      "id": 4,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 10,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "State",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Shutdown",
+                "value": 0,
+                "processingTime": 250
+              },
+              {
+                "name": "Standby",
+                "value": 1,
+                "processingTime": 500
+              },
+              {
+                "name": "Operate",
+                "value": 2,
+                "processingTime": 770
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Select The Units For Y Direction Angles"
+        },
+        {
+          "name": "Delay",
+          "size": 2,
+          "validValues": {
+            "min": 0,
+            "max": 20000,
+            "lsb": 1
+          },
+          "description": "Temp Description for the GUI",
+          "time": {
+            "affectsTime": true
+          },
+          "Units": "Radians"
+        }
+
+      ]
+    },
+    {
+      "name": "Built in Test",
+      "id": 5,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 0,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "State",
+          "size": 1,
+          "validValues": {
+            "defined": [
+              {
+                "name": "Basic BIT",
+                "value": 0,
+                "processingTime": 500
+              },
+              {
+                "name": "Advanced BIT",
+                "value": 1,
+                "processingTime": 2000
+              },
+              {
+                "name": "Full BIT",
+                "value": 2,
+                "processingTime": 30000
+              }
+            ]
+          },
+          "time": {
+            "affectsTime": true
+          },
+          "description": "Type of test suite to run"
+        }
+
+      ]
+    },
+    {
+      "name": "Compression Parameters",
+      "id": 6,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 30,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "Collection Speed",
+          "size": 4,
+          "validValues": {
+            "min": 1000,
+            "max": 8000000000,
+            "lsb": 25
+          },
+          "description": "Collection speed for camera",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "bits/sec"
+        },
+        {
+          "name": "Compressed Speed",
+          "size": 4,
+          "validValues": {
+            "min": 1000,
+            "max": 8000000000,
+            "lsb": 25
+          },
+          "description": "Output speed for camera",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "bits/sec"
+        },
+        {
+          "name": "Acceptable Data Loss",
+          "size": 1,
+          "validValues": {
+            "min": 0,
+            "max": 60,
+            "lsb": 2
+          },
+          "description": "Percentage of allowable data loss",
+          "time": {
+            "affectsTime": false
+          },
+          "Units": "percent"
+        }
+      ]
+    },
+    {
+      "name": "Shutter Test",
+      "id": 7,
+      "protocol": "BCRT",
+      "subAddress": 5,
+      "processingTime": 135,
+      "wordSizeInBits": 16,
+      "RTAddress": 8,
+      "fields": [
+        {
+          "name": "Open Speed",
+          "size": 4,
+          "validValues": {
+            "min": 5,
+            "max": 35,
+            "lsb": 0.25
+          },
+          "description": "Percentage of the shutter to open per second.",
+          "time": {
+            "affectsTime": true
+          },
+          "Units": "%/sec"
+        },
+        {
+          "name": "Remain Open time",
+          "size": 4,
+          "validValues": {
+            "min": 1,
+            "max": 3000,
+            "lsb": 0.5
+          },
+          "description": "Amount of time to keep the shutter open. Should be displayed in seconds.",
+          "time": {
+            "affectsTime": true
+          },
+          "Units": "bits/sec"
+        },
+        {
+          "name": "Close Speed",
+          "size": 4,
+          "validValues": {
+            "min": 5,
+            "max": 35,
+            "lsb": 0.25
+          },
+          "description": "Percentage of the shutter to close per second",
+          "time": {
+            "affectsTime": true
+          },
+          "Units": "%/sec"
+        }
+      ]
+    }
+  ]
+}

@@ -91,7 +91,7 @@ class Field:
             # otherwise, rule is not valid
             else:
 
-                print(rule_violations)
+                pass
 
         return {'fieldName': self.name, 'violations': rule_violations, 'fieldObj': self}
 
@@ -123,7 +123,6 @@ class Field:
     def getFieldValueEngineeringUnits(self):
 
         if self.valueLSB is not None:
-            print(f'Field Value: {self.fieldValue}')
             engineering_value = self.typeConverter.convertRawToEngineering(self.fieldValue, self.valueLSB)
 
         else:

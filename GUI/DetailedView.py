@@ -49,10 +49,8 @@ class DetailedView(QWidget):
             command_strings.append(command.name)
 
         comboBox = self.createComboBox(command_strings, self.getSelectedCommand)
-        # comboBox.setFixedWidth(self.screen.width()/2)
         comboBox.setFixedWidth(self.screen.width() - 50)
 
-        # self.layout.addWidget(comboBox, 0, 0)
         self.layout.addWidget(comboBox)
 
         self.setLayout(self.layout)
@@ -203,7 +201,6 @@ class DetailedView(QWidget):
 
     def detailedViewChangeEvent(self, rule_violations_list):
 
-        print('detailed view change event')
         self.tableView.detailedViewChangeEvent(rule_violations_list)
 
     def clearDetailedView(self):
@@ -217,7 +214,6 @@ class DetailedView(QWidget):
     def confirmDetailedView(self, command_exists: bool):
 
         selected_command_name = self.selectedCommandObj.name
-        print(f'confirm detailed view - Command: {selected_command_name}')
 
         all_rule_violations = []
 
