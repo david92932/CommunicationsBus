@@ -1,0 +1,6 @@
+Create a command
+enter field and time data
+----------------Assert total time is correct
+----------------Assert command appears on Timeline Start and Timeline end
+
+

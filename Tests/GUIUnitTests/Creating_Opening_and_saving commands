@@ -1,0 +1,9 @@
+Left click new then select which type of command
+--------------Assert new tab is open
+enter the values on the right
+click confirm
+--------------Assert new command should appear in table and on timeline
+click save as and enter file name in box with appropriate extension
+click open command filw
+select file you just saved
+--------------Assert a new tab should open with the same appearance and values as the one you saved
