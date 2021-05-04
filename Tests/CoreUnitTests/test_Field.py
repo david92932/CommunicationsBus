@@ -15,5 +15,25 @@ class test_Field(unittest.TestCase):
         self.testField = testCommand.getCommandFields()[0]
 
     def test_set_field_value(self):
+        file_path = "/Users/Garrett/PycharmProjects/CommunicationsBusApril/Assets/Camera2.json"
+        subsystem_parser = SubsystemParser(file_path)
 
-        assert True
+        testSubsystem = subsystem_parser.getSubsystem()
+        testCommand = testSubsystem.getAllAvailableCommands()[0]
+        testField = testCommand.getCommandFields()[0]
+
+        # valid
+        isValid = testField.validateFieldValue()
+        print( isValid)
+        assert isValid == []
+
+
+
+        testSubsystem = subsystem_parser.getSubsystem()
+        testCommand = testSubsystem.getAllAvailableCommands()[3]
+        testField = testCommand.getCommandFields()[1]
+
+        # invalid State out of range
+        isValid = testField.setFieldValue(232322323)
+        print("valid",isValid)
+        assert isValid["violations"][0]["Valid"] == False
