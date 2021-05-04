@@ -37,6 +37,12 @@ class TableView(QTableWidget):
         self.show()
 
     def contextMenuEvent(self, event):
+        """
+        Insertion or Deletion being done
+
+         Keyword arguments: event -- The insert or Delete that is happenning
+         """
+
         menu = QMenu(self)
         addAboveAction = menu.addAction("Insert Command")
         deleteRowAction = menu.addAction("Delete Command")
@@ -49,6 +55,8 @@ class TableView(QTableWidget):
             pass  # do function to delete row
 
     def setData(self):
+
+        """ Sets the Data in the Table view"""
 
         print('table view set data')
 
@@ -81,6 +89,9 @@ class TableView(QTableWidget):
 
     def openNewCommandWindow(self):
 
+        """ Opens a new command Window """
+
+
         self.clearDetailedView()
         self.createDetailedView()
 
@@ -88,6 +99,12 @@ class TableView(QTableWidget):
         self.showDetailedView()
 
     def detailedViewChangeEvent(self, rule_violations_list):
+
+        """
+        Updated the detail view from an event changing
+
+        Keyword arguments: rule_violations_list -- A list of any and all rule violations
+        """
 
         print('Table view - detailed view change event')
 
@@ -116,9 +133,16 @@ class TableView(QTableWidget):
 
     def showDetailedView(self):
 
+        """Displays the detailed view"""
+
         self.detailedView.show()
 
     def detailedViewExistingCommand(self, event):
+
+        """Displays the detailed View of an existing Command
+
+        Keyword arguments: event -- The command that this function will show the detailed view for
+        """
 
         self.clearDetailedView()
         self.createDetailedView()
@@ -132,15 +156,28 @@ class TableView(QTableWidget):
 
     def createDetailedView(self):
 
+        """Creates a mew detailed View"""
+
         self.detailedView = DetailedView(self.parentObj, self, self.subsystemController)
 
     def clearDetailedView(self):
+
+        """Clears the Detailed View"""
 
         # if self.detailedView is not None:
         self.detailedView.clearDetailedView()
             # self.detailedView = None
 
     def InvalidErrorBox(self, field_name, field_obj, attempted_value, overridable, message):
+
+        """Creates an error box describing what went wrong
+
+               Keyword arguments: field_name -- The Field that is having the error
+               field_obj -- The object connected to the field in question
+               attempted_value -- The value the user inputted
+               overridable -- Is this value able to be input anyways?
+               message -- What is displayed to the user
+               """
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
@@ -160,6 +197,14 @@ class TableView(QTableWidget):
             print('selected cancel')
 
     def errorBoxHandler(self, msg_button, attempted_value, overridable, field_obj):
+        """The handler for the error box
+
+                     Keyword arguments: msg_button -- the button to accept or deny
+                     field_obj -- The object connected to the field in question
+                     attempted_value -- The value the user inputted
+                     overridable -- Is this value able to be input anyways?
+
+                     """
 
         retval = msg_button.exec_()
         print('error Box Handler')
