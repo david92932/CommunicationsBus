@@ -213,11 +213,12 @@ class CommandFile:
                 formatstring = ""
                 intformat = 0
 
-                #create hex strings based on field values
-                #currently doesnt take max size into account for regex
+                #create hex strings based on field values and wheter they are string signed or unsigned
+
                 if(field.fieldRegex):
                     s = field.fieldValue.encode('utf-8')
                     fieldstringhex = s.hex()
+                    fieldstringhex.zfill(field.byteSize*2)
                    # fieldstringhex= ''.join(['{0:x}'.format(ord(x)) for x in chr(int(field.fieldValue, 16)).encode('utf-8')]).upper()
 
                     #fieldstringhex  = str(field.fieldValue.encode(encoding = 'UTF-8'))
@@ -244,7 +245,7 @@ class CommandFile:
             hexfill = 255
             fieldstrings = hex(int(command.id))[2:].zfill(2) + fieldstrings
             bytes = bytearray.fromhex(fieldstrings)
-
+            #create checksum and make byte array so you can separate into 2 byte chunks
             sum = 0
             count = 0
             for byte in bytes[:bytes.__len__()]:
@@ -263,6 +264,7 @@ class CommandFile:
             # make 0Xseparatedfields here
             formattedfields = ""
             n = 4  # chunk length
+            #create data string and fill if last byte isnt full
             chunks1 = [formatline[i:i + n] for i in range(0, len(formatline), n)]
             for chunks2 in chunks1:
                 if len(chunks2) == 2:
